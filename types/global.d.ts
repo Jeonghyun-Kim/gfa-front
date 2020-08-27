@@ -6,6 +6,7 @@ declare interface Artwork {
 
 declare interface Artist {
   id: number;
+  artistName: string;
   thumbFileName?: string;
   landscapeFileName?: string;
   portraitFileName?: string;

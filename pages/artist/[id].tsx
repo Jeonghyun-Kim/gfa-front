@@ -5,22 +5,20 @@ import styled from 'styled-components';
 import fetcher from '../../lib/fetcher';
 import useMobileOrientation from '../../lib/hooks/useMobileOrientation';
 
-import Header from '../../components/Header';
+import Layout from '../../components/Layout';
 
 import { API_URL, BUCKET_URL } from '../../defines';
+
+const MOBILE_BREAKPOINT = 500;
 
 interface RootProps {
   ratio: number;
 }
 
-const ViewingRoomRoot = styled.div<RootProps>`
-  width: 100vw;
+const Root = styled.div<RootProps>`
+  width: 100%;
   height: 100%;
-  min-height: 100%;
   box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  position: fixed;
 
   img.rendered {
     object-fit: cover;
@@ -28,12 +26,12 @@ const ViewingRoomRoot = styled.div<RootProps>`
     width: 100%;
     height: 100%;
 
-    @media screen and (max-width: 500px) and (orientation: portrait) {
+    @media screen and (max-width: ${MOBILE_BREAKPOINT}px) and (orientation: portrait) {
       object-fit: cover;
       object-position: center top;
     }
 
-    @media screen and (max-width: 500px) and (orientation: portrait) and (min-aspect-ratio: 2/3) {
+    @media screen and (max-width: ${MOBILE_BREAKPOINT}px) and (orientation: portrait) and (min-aspect-ratio: 2/3) {
       object-position: center ${(props) => (2 - props.ratio) * (50 / 3)}%;
     }
   }
@@ -53,25 +51,25 @@ const ViewingRoomPage: React.FC<Props> = ({ artistData }) => {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </Head>
-      <Header />
-      <ViewingRoomRoot ratio={ratio}>
-        {/* <div>artwork: {JSON.stringify(artworkData)}</div> */}
-        {artistData.portraitFileName && artistData.landscapeFileName ? (
-          <picture onTouchStart={(e) => e.preventDefault()}>
-            <source
-              media="(max-width: 500px) and (orientation: portrait)"
-              srcSet={`${BUCKET_URL}/rendered/${artistData.portraitFileName}`}
-            />
-            <img
-              alt="artwork"
-              src={`${BUCKET_URL}/rendered/${artistData.landscapeFileName}`}
-              className="rendered"
-            />
-          </picture>
-        ) : (
-          <h3>NO DATA YET</h3>
-        )}
-      </ViewingRoomRoot>
+      <Layout>
+        <Root ratio={ratio}>
+          {artistData.portraitFileName && artistData.landscapeFileName ? (
+            <picture onTouchStart={(e) => e.preventDefault()}>
+              <source
+                media={`(max-width: ${MOBILE_BREAKPOINT}px) and (orientation: portrait)`}
+                srcSet={`${BUCKET_URL}/rendered/${artistData.portraitFileName}`}
+              />
+              <img
+                alt="artwork"
+                src={`${BUCKET_URL}/rendered/${artistData.landscapeFileName}`}
+                className="rendered"
+              />
+            </picture>
+          ) : (
+            <h3>NO DATA YET</h3>
+          )}
+        </Root>
+      </Layout>
     </>
   );
 };

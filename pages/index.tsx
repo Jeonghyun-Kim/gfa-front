@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Head from 'next/head';
 import Link from 'next/link';
 
-import Layout from '../components/CounterLayout';
+import Layout from '../components/Layout';
 import Header from '../components/Header';
 import Modal from '../components/Modal';
 
