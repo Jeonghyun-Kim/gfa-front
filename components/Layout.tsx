@@ -6,7 +6,7 @@ import PlayBar from './PlayBar';
 
 // import { logPageView } from '../utils/analytics';
 
-import { sendCounter } from '../lib/utils';
+// import { sendCounter } from '../lib/utils';
 import { MOBILE_BREAKPOINT, PLAYBAR_HEIGHT, NAVBAR_WIDTH } from '../defines';
 
 const Root = styled.div`
@@ -31,7 +31,7 @@ const Root = styled.div`
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   React.useEffect(() => {
     // logPageView();
-    if (process.env.NODE_ENV === 'production') sendCounter();
+    // if (process.env.NODE_ENV === 'production') sendCounter();
   }, []);
   return (
     <Root>
