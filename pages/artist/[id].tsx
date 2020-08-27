@@ -6,6 +6,7 @@ import fetcher from '../../lib/fetcher';
 import useMobileOrientation from '../../lib/hooks/useMobileOrientation';
 
 import Layout from '../../components/Layout';
+import Header from '../../components/Header';
 
 import { API_URL, BUCKET_URL } from '../../defines';
 
@@ -42,6 +43,7 @@ interface Props {
 }
 
 const ViewingRoomPage: React.FC<Props> = ({ artistData }) => {
+  const [flag, setFlag] = React.useState<boolean>(true);
   const { ratio } = useMobileOrientation();
   return (
     <>
@@ -52,9 +54,10 @@ const ViewingRoomPage: React.FC<Props> = ({ artistData }) => {
         />
       </Head>
       <Layout>
+        <Header visible={flag} />
         <Root ratio={ratio}>
           {artistData.portraitFileName && artistData.landscapeFileName ? (
-            <picture onTouchStart={(e) => e.preventDefault()}>
+            <picture onClick={() => setFlag(!flag)} className="unselectable">
               <source
                 media={`(max-width: ${MOBILE_BREAKPOINT}px) and (orientation: portrait)`}
                 srcSet={`${BUCKET_URL}/rendered/${artistData.portraitFileName}`}

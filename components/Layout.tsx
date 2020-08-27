@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import NavBar from './NavBar';
-import PlayBar from './playBar';
+import PlayBar from './PlayBar';
 
 // import { logPageView } from '../utils/analytics';
 

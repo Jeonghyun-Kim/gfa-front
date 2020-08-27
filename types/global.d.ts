@@ -13,3 +13,8 @@ declare interface Artist {
   hitCount: number;
   seeMoreCount: number;
 }
+
+declare module '*.svg' {
+  const content: any;
+  export default content;
+}
