@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Head from 'next/head';
 
-import Layout from '../components/Layout';
+import Header from '../components/Header';
 import Modal from '../components/Modal';
 
 import { sendCounter } from '../lib/utils';
@@ -10,15 +10,15 @@ import { sendCounter } from '../lib/utils';
 const Root = styled.div``;
 
 interface Props {}
-
 const HomePage: React.FC<Props> = ({}) => {
   const [flag, setFlag] = React.useState<boolean>(false);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>관악미술협회 15주년 기념전</title>
       </Head>
+      <Header />
       <Root>
         <div>Home</div>
         <button onClick={() => setFlag(!flag)}>click me</button>
@@ -34,7 +34,7 @@ const HomePage: React.FC<Props> = ({}) => {
           </button>
         </Modal>
       </Root>
-    </Layout>
+    </>
   );
 };
 

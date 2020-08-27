@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import fetcher from '../../lib/fetcher';
 import useMobileOrientation from '../../lib/hooks/useMobileOrientation';
 
-import Layout from '../../components/Layout';
 import Header from '../../components/Header';
 
 import { API_URL, BUCKET_URL } from '../../defines';
@@ -53,26 +52,24 @@ const ViewingRoomPage: React.FC<Props> = ({ artistData }) => {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </Head>
-      <Layout>
-        <Header visible={flag} />
-        <Root ratio={ratio}>
-          {artistData.portraitFileName && artistData.landscapeFileName ? (
-            <picture onClick={() => setFlag(!flag)} className="unselectable">
-              <source
-                media={`(max-width: ${MOBILE_BREAKPOINT}px) and (orientation: portrait)`}
-                srcSet={`${BUCKET_URL}/rendered/${artistData.portraitFileName}`}
-              />
-              <img
-                alt="artwork"
-                src={`${BUCKET_URL}/rendered/${artistData.landscapeFileName}`}
-                className="rendered"
-              />
-            </picture>
-          ) : (
-            <h3>NO DATA YET</h3>
-          )}
-        </Root>
-      </Layout>
+      <Header visible={flag} />
+      <Root ratio={ratio}>
+        {artistData.portraitFileName && artistData.landscapeFileName ? (
+          <picture onClick={() => setFlag(!flag)} className="unselectable">
+            <source
+              media={`(max-width: ${MOBILE_BREAKPOINT}px) and (orientation: portrait)`}
+              srcSet={`${BUCKET_URL}/rendered/${artistData.portraitFileName}`}
+            />
+            <img
+              alt="artwork"
+              src={`${BUCKET_URL}/rendered/${artistData.landscapeFileName}`}
+              className="rendered"
+            />
+          </picture>
+        ) : (
+          <h3>NO DATA YET</h3>
+        )}
+      </Root>
     </>
   );
 };

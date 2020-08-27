@@ -8,12 +8,14 @@ const LoadingRoot = styled.div`
   place-items: center;
 `;
 
-interface Props {}
+interface Props {
+  children?: React.ReactNode;
+}
 
-const Loading: React.FC<Props> = ({ ...props }) => {
+const Loading: React.FC<Props> = ({ children, ...props }) => {
   return (
     <LoadingRoot {...props}>
-      <div>loading...</div>
+      <div>{children ?? 'loading...'}</div>
     </LoadingRoot>
   );
 };

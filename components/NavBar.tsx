@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import Logo from './Logo/OneLineLogo';
 
-import { MOBILE_BREAKPOINT } from '../defines';
+import { COLORS, MOBILE_BREAKPOINT } from '../defines';
 
 const Root = styled.div`
   grid-column: 1 / 2;
@@ -34,12 +34,12 @@ interface MenuProps {
 
 const MenuItem = styled.a<MenuProps>`
   margin: 1rem 0;
-  color: ${(props) => (props.current ? '#17BABC' : '#7D7D7D')};
+  color: ${(props) => (props.current ? COLORS.primary : '#7D7D7D')};
   font-size: ${(props) => (props.current ? 1 : 0.8)}rem;
   font-weight: ${(props) => (props.current ? 'bolder' : 'normal')};
   &:hover {
     cursor: pointer;
-    color: ${(props) => (props.current ? '#17BABC' : 'white')};
+    color: ${(props) => (props.current ? COLORS.primary : 'white')};
   }
 `;
 
@@ -60,7 +60,7 @@ const NavBar: React.FC<Props> = ({ ...props }) => {
           나의 이야기
         </MenuItem>
       </Link>
-      <Link href="/artist/11">
+      <Link href="/artist">
         <MenuItem current={router.pathname === '/artist/[id]'}>전시장</MenuItem>
       </Link>
       <Link href="/video">

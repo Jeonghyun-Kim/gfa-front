@@ -7,6 +7,8 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 // import { initGA, logPageView } from '../utils/analytics';
 
+import Layout from '../components/Layout';
+
 import fetcher from '../lib/fetcher';
 
 import '../public/css/global.css';
@@ -50,7 +52,9 @@ export default class MyApp extends App {
             },
           }}
         >
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </SWRConfig>
       </ThemeProvider>
     );

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@types/nprogress": "^0.2.0",
     "@types/react-slick": "^0.23.4",
     "next": "latest",
