@@ -16,7 +16,7 @@ const Root = styled.div`
   height: 100%;
   grid-template: 1fr ${PLAYBAR_HEIGHT}px / ${NAVBAR_WIDTH}px 1fr;
 
-  .root {
+  .main {
     position: relative;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
@@ -36,7 +36,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Root>
       <NavBar />
-      <div className="root">{children}</div>
+      <div className="main">{children}</div>
       <PlayBar />
     </Root>
   );
