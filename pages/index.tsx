@@ -16,7 +16,7 @@ const HomePage: React.FC<Props> = ({}) => {
   return (
     <>
       <Head>
-        <title>관악미술협회 15주년 기념전</title>
+        <title>onDisplay - 관악미술협회 15주년 기념전</title>
       </Head>
       <Header />
       <Root>

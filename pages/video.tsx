@@ -9,7 +9,7 @@ const VideoPage: React.FC<Props> = ({}) => {
   return (
     <>
       <Head>
-        <title>onDisplay - 비디오</title>
+        <title>onDisplay - 관악미술협회 이야기</title>
       </Head>
       <Root>
         <></>

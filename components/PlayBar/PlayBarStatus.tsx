@@ -21,9 +21,11 @@ const Root = styled.div`
   }
 `;
 
-interface Props {}
+interface Props {
+  index?: number;
+}
 
-const Status: React.FC<Props> = ({ ...props }) => {
+const Status: React.FC<Props> = ({ index, ...props }) => {
   const router = useRouter();
   const { pathname } = router;
   let content: React.ReactNode = <></>;
@@ -33,7 +35,7 @@ const Status: React.FC<Props> = ({ ...props }) => {
         <>
           <p>전시장</p>
           <p>
-            {router.query.id ?? ''} / {NUM_ARTISTS}
+            {index} / {NUM_ARTISTS}
           </p>
         </>
       );

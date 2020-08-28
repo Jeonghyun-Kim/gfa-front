@@ -61,7 +61,7 @@ const NavBar: React.FC<Props> = ({ ...props }) => {
         </MenuItem>
       </Link>
       <Link href="/artist">
-        <MenuItem current={router.pathname === '/artist/[id]'}>전시장</MenuItem>
+        <MenuItem current={router.pathname === '/artist'}>전시장</MenuItem>
       </Link>
       <Link href="/video">
         <MenuItem current={router.pathname === '/video'}>

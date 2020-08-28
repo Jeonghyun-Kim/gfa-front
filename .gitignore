@@ -45,3 +45,6 @@ yarn-error.log*
 
 # template tsx
 TEMPLATE.tsx
+
+# trash bin
+trashBin

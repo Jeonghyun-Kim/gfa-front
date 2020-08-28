@@ -7,7 +7,7 @@ export const NUM_ARTISTS = 64;
 export const COLORS = {
   primary: '#17babc',
 };
-export const PAGE_ARRAY = ['/', '/artist/[id]', '/video', '/visitor', '/about'];
+export const PAGE_ARRAY = ['/', '/artist', '/video', '/visitor', '/about'];
 
 const DEFINES = {
   API_URL,

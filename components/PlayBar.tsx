@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import Status from './PlayBar/PlayBarStatus';
@@ -8,6 +7,8 @@ import SimpleInfo from './PlayBar/SimpleInfo';
 import ListGroup from './PlayBar/ListGroup';
 
 import { COLORS, MOBILE_BREAKPOINT, NUM_ARTISTS } from '../defines';
+
+import IndexContext from '../IndexContext';
 
 import ArtworkData from '../artworks.json';
 
@@ -41,35 +42,35 @@ const ProgressBar = styled.div<ProgressBarProps>`
 
 interface Props {}
 const PlayBar: React.FC<Props> = ({ ...props }) => {
-  const router = useRouter();
-  const { id } = router.query;
-  const numId = id ? Number(id) : 0;
+  const { index, setIndex, refSlider } = React.useContext(IndexContext);
   const { artist: artistName, title } = ArtworkData.find((artwork) => {
-    return artwork.artistId === numId;
+    return artwork.artistId === index;
   }) || { artist: '', title: '' };
 
   const handleLeft = () => {
-    if (numId > 1) {
-      router.push(`/artist/${numId - 1}`);
-      sessionStorage.setItem('@artistId', `${numId - 1}`);
+    if (index > 1) {
+      setIndex(index - 1);
+      refSlider.current?.slickPrev();
+      sessionStorage.setItem('@artistId', `${index - 1}`);
     }
   };
 
   const handleRight = () => {
-    if (numId < NUM_ARTISTS) {
-      router.push(`/artist/${numId + 1}`);
-      sessionStorage.setItem('@artistId', `${numId + 1}`);
+    if (index < NUM_ARTISTS) {
+      setIndex(index + 1);
+      refSlider.current?.slickNext();
+      sessionStorage.setItem('@artistId', `${index + 1}`);
     }
   };
 
   return (
     <Root {...props}>
-      <ProgressBar index={numId} />
-      <Status />
+      <ProgressBar index={index} />
+      <Status index={index} />
       <ButtonGroup
         handleLeft={handleLeft}
         handleRight={handleRight}
-        id={numId}
+        id={index}
       />
       <SimpleInfo artworkData={{ artistName, title }} />
       <ListGroup />
