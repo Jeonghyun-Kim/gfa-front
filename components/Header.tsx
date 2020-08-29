@@ -2,9 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 
-import Logo from './Logo/TwoLineLogo';
+import Logo from './Logo/SquaredLogo';
+import MenuItem from './Header/MenuItem';
 
-import { MOBILE_BREAKPOINT } from '../defines';
+import useWindowSize from '../lib/hooks/useWindowSize';
+
+import { PAGE_ARRAY } from '../defines';
 
 const HEADER_HEIGHT = 56;
 const TRANSITION = 300;
@@ -24,10 +27,6 @@ const Root = styled.div`
     top: -${HEADER_HEIGHT}px;
     transition: ${TRANSITION * 1.5}ms;
   }
-
-  @media screen and (min-width: ${MOBILE_BREAKPOINT + 1}px) {
-    display: none;
-  }
 `;
 
 const FixedHeader = styled.div`
@@ -37,17 +36,18 @@ const FixedHeader = styled.div`
   width: 100%;
   height: ${HEADER_HEIGHT}px;
   background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.117647) 0 1px 3px;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px;
+  padding-left: 1rem;
+  padding-right: 1rem;
   z-index: 2;
 `;
 
 interface Props {
   visible?: boolean;
 }
-
 const Header: React.FC<Props> = ({ visible = true, ...props }) => {
+  const { isMobile, isTablet, isPortrait } = useWindowSize();
+  if (!isMobile && (!isTablet || !isPortrait)) return <></>;
   return (
     <Root>
       <CSSTransition
@@ -59,6 +59,9 @@ const Header: React.FC<Props> = ({ visible = true, ...props }) => {
         <FixedHeader {...props}>
           <Logo />
           <div className="grow" />
+          <MenuItem href={PAGE_ARRAY[1]}>전시장</MenuItem>
+          <MenuItem href={PAGE_ARRAY[2]}>협회</MenuItem>
+          <MenuItem href={PAGE_ARRAY[3]}>방명록</MenuItem>
         </FixedHeader>
       </CSSTransition>
     </Root>

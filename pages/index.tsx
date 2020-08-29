@@ -1,13 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
 import Head from 'next/head';
+import Link from 'next/link';
+import styled from 'styled-components';
 
 import Header from '../components/Header';
 import Modal from '../components/Modal';
 
 import { sendCounter } from '../lib/utils';
 
-const Root = styled.div``;
+const Root = styled.div`
+  width: 100%;
+  height: 100vh;
+  margin-top: 100px;
+`;
 
 interface Props {}
 const HomePage: React.FC<Props> = ({}) => {
@@ -21,6 +26,9 @@ const HomePage: React.FC<Props> = ({}) => {
       <Header />
       <Root>
         <div>Home</div>
+        <Link href="/artist">
+          <a>artist</a>
+        </Link>
         <button onClick={() => setFlag(!flag)}>click me</button>
         <Modal visible={flag}>
           <div>hello World!</div>

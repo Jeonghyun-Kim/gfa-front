@@ -6,7 +6,7 @@ import ButtonGroup from './PlayBar/PlayButtonGroup';
 import SimpleInfo from './PlayBar/SimpleInfo';
 import ListGroup from './PlayBar/ListGroup';
 
-import { COLORS, MOBILE_BREAKPOINT, NUM_ARTISTS } from '../defines';
+import { COLORS, NUM_ARTISTS } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -20,10 +20,6 @@ const Root = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #222222f7;
-
-  @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
-    display: none;
-  }
 `;
 
 interface ProgressBarProps {
@@ -40,12 +36,16 @@ const ProgressBar = styled.div<ProgressBarProps>`
   width: ${(props) => (100 * props.index) / NUM_ARTISTS}%;
 `;
 
-interface Props {}
-const PlayBar: React.FC<Props> = ({ ...props }) => {
+interface Props {
+  visible?: boolean;
+}
+const PlayBar: React.FC<Props> = ({ visible = true, ...props }) => {
   const { index, setIndex, refSlider } = React.useContext(IndexContext);
   const { artist: artistName, title } = ArtworkData.find((artwork) => {
     return artwork.artistId === index;
   }) || { artist: '', title: '' };
+
+  if (!visible) return <></>;
 
   const handleLeft = () => {
     if (index > 1) {

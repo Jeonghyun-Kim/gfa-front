@@ -1,11 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import useMobileOrientation from '../lib/hooks/useMobileOrientation';
+import useMobileOrientation from '../lib/hooks/useWindowSize';
 
-import { BUCKET_URL } from '../defines';
-
-const MOBILE_BREAKPOINT = 500;
+import { BUCKET_URL, TABLET_BREAKPOINT } from '../defines';
 
 interface PictureProps {
   ratio: number;
@@ -20,12 +18,7 @@ const Picture = styled.picture<PictureProps>`
     width: 100%;
     height: 100%;
 
-    @media screen and (max-width: ${MOBILE_BREAKPOINT}px) and (orientation: portrait) {
-      object-fit: cover;
-      object-position: center top;
-    }
-
-    @media screen and (max-width: ${MOBILE_BREAKPOINT}px) and (orientation: portrait) and (min-aspect-ratio: 2/3) {
+    @media screen and (max-width: ${TABLET_BREAKPOINT}px) and (orientation: portrait) {
       object-position: center ${(props) => (2 - props.ratio) * (50 / 3)}%;
     }
   }
@@ -36,11 +29,31 @@ interface Props {
   onClick?: () => void;
 }
 const RenderedImage: React.FC<Props> = ({
-  artistData,
+  artistData = { id: 0, artistName: 'UNKNOWN' },
   onClick = () => {},
   ...props
 }) => {
-  const { ratio } = useMobileOrientation();
+  const { isMobile, isTablet, isPortrait, ratio } = useMobileOrientation();
+  const { portraitFileName, landscapeFileName } = artistData;
+  if (isPortrait && (isMobile || isTablet))
+    return (
+      <Picture
+        onClick={() => onClick()}
+        className="unselectable"
+        ratio={ratio}
+        {...props}
+      >
+        <img
+          alt="artwork"
+          src={
+            portraitFileName
+              ? `${BUCKET_URL}/rendered/${artistData.portraitFileName}`
+              : '/images/empty_portrait.png'
+          }
+          className="rendered"
+        />
+      </Picture>
+    );
   return (
     <Picture
       onClick={() => onClick()}
@@ -48,13 +61,21 @@ const RenderedImage: React.FC<Props> = ({
       ratio={ratio}
       {...props}
     >
-      <source
-        media={`(max-width: ${MOBILE_BREAKPOINT}px) and (orientation: portrait)`}
-        srcSet={`${BUCKET_URL}/rendered/${artistData.portraitFileName}`}
-      />
+      {/* <source
+        media={`(max-width: ${TABLET_BREAKPOINT}px) and (orientation: portrait)`}
+        srcSet={
+          portraitFileName
+            ? `${BUCKET_URL}/rendered/${artistData.portraitFileName}`
+            : '/images/empty_portrait.png'
+        }
+      /> */}
       <img
         alt="artwork"
-        src={`${BUCKET_URL}/rendered/${artistData.landscapeFileName}`}
+        src={
+          landscapeFileName
+            ? `${BUCKET_URL}/rendered/${artistData.landscapeFileName}`
+            : '/images/empty_landscape.png'
+        }
         className="rendered"
       />
     </Picture>

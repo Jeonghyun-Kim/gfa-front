@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-// import Header from '../components/Header';
+import Header from '../components/Header';
 import RenderedImage from '../components/RenderedImage';
 
 import fetcher from '../lib/fetcher';
-import useMobileOrientation from '../lib/hooks/useMobileOrientation';
+import useMobileOrientation from '../lib/hooks/useWindowSize';
 
 import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
 
@@ -32,36 +32,18 @@ const Root = styled.div`
       height: 100%;
     }
   }
-
-  /* button {
-    position: absolute;
-    top: 20px;
-    z-index: 999;
-
-    &.left {
-      left: 20px;
-    }
-
-    &.right {
-      right: 20px;
-    }
-  }
-
-  .index {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 999;
-  } */
 `;
 
 interface Props {
   artists: Artist[];
 }
 const ArtistPage: React.FC<Props> = ({ artists }) => {
-  // const [headerFlag, setHeaderFlag] = React.useState<boolean>(true);
+  const [headerFlag, setHeaderFlag] = React.useState<boolean>(true);
+  const [slideChangedFlag, setSlideChangedFlag] = React.useState<boolean>(
+    false,
+  );
   const { index, setIndex, refSlider } = React.useContext(IndexContext);
-  const { isMobile, isPortrait } = useMobileOrientation();
+  const { isMobile, isTablet, isPortrait } = useMobileOrientation();
 
   React.useEffect(() => {
     refSlider.current?.slickGoTo(index - 1);
@@ -70,40 +52,20 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   React.useEffect(() => {
     const prevImg = new Image();
     const nextImg = new Image();
-    if (isMobile && isPortrait) {
-      prevImg.src = `${BUCKET_URL}/rendered/${
-        artists[index - 1 >= 0 ? index - 1 : 0].portraitFileName
-      }`;
-      nextImg.src = `${BUCKET_URL}/rendered/${
-        artists[index + 1 < NUM_ARTISTS ? index + 1 : NUM_ARTISTS - 1]
-          .portraitFileName
-      }`;
+    const prevIndex = index !== 1 ? index - 1 - 1 : null;
+    const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
+    if ((isMobile || isTablet) && isPortrait) {
+      if (prevIndex && artists[prevIndex].portraitFileName)
+        prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].portraitFileName}`;
+      if (nextIndex && artists[nextIndex].portraitFileName)
+        nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].portraitFileName}`;
     } else {
-      prevImg.src = `${BUCKET_URL}/rendered/${
-        artists[index - 1 >= 0 ? index - 1 : 0].landscapeFileName
-      }`;
-      nextImg.src = `${BUCKET_URL}/rendered/${
-        artists[index + 1 < NUM_ARTISTS ? index + 1 : NUM_ARTISTS - 1]
-          .landscapeFileName
-      }`;
+      if (prevIndex && artists[prevIndex].landscapeFileName)
+        prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].landscapeFileName}`;
+      if (nextIndex && artists[nextIndex].landscapeFileName)
+        nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
     }
   }, [index]);
-
-  // const handleLeft = () => {
-  //   if (index > 1) {
-  //     setIndex(index - 1);
-  //     refSlider.current?.slickPrev();
-  //     sessionStorage.setItem('@artistId', `${index - 1}`);
-  //   }
-  // };
-
-  // const handleRight = () => {
-  //   if (index < NUM_ARTISTS) {
-  //     setIndex(index + 1);
-  //     refSlider.current?.slickNext();
-  //     sessionStorage.setItem('@artistId', `${index + 1}`);
-  //   }
-  // };
 
   return (
     <>
@@ -121,17 +83,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
         />
       </Head>
-      {/* <Header visible={headerFlag} /> */}
+      <Header visible={headerFlag} />
       <Root>
-        {/* <>
-          <button className="left" type="button" onClick={() => handleLeft()}>
-            left
-          </button>
-          <button className="right" type="button" onClick={() => handleRight()}>
-            right
-          </button>
-        </>
-        <h3 className="index">{index}</h3> */}
         {index && index > 0 && (
           <Slider
             ref={(slider) => (refSlider.current = slider)}
@@ -139,30 +92,33 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
             arrows={false}
             infinite={false}
             lazyLoad="ondemand"
-            focusOnSelect={false}
-            useCSS={isMobile}
-            // initialSlide={index - 1}
-            swipe={isMobile}
+            focusOnSelect
+            useCSS={isMobile || (isTablet && isPortrait)}
+            swipe={isMobile || (isTablet && isPortrait)}
             beforeChange={(_, newIndex) => {
               sessionStorage.setItem('@artistId', `${newIndex + 1}`);
               setIndex(newIndex + 1);
+              setSlideChangedFlag(false);
             }}
+            onSwipe={() => setSlideChangedFlag(true)}
           >
             {artists.map((artist) => {
-              if (artist.portraitFileName)
-                return <RenderedImage key={artist.id} artistData={artist} />;
-              return <h3 key={artist.id}>NO DATA YET</h3>;
+              return (
+                <RenderedImage
+                  key={artist.id}
+                  artistData={artist}
+                  onClick={() => {
+                    if (
+                      (isMobile || (isTablet && isPortrait)) &&
+                      !slideChangedFlag
+                    )
+                      setHeaderFlag(!headerFlag);
+                  }}
+                />
+              );
             })}
           </Slider>
         )}
-        {/* {index && artists[index].portraitFileName ? (
-          <RenderedImage
-            artistData={artists[index]}
-            onClick={() => setHeaderFlag(!headerFlag)}
-          />
-        ) : (
-          <h3>Loading...</h3>
-        )} */}
       </Root>
     </>
   );
