@@ -70,6 +70,7 @@ const PlayButtonGroup: React.FC<Props> = ({
   id = 0,
 }) => {
   const router = useRouter();
+  const [blocker, setBlocker] = React.useState<boolean>(false);
   const pageIndex =
     PAGE_ARRAY.findIndex((elem) => router.pathname === elem) || 0;
 
@@ -96,7 +97,11 @@ const PlayButtonGroup: React.FC<Props> = ({
       <IconButton
         className="left"
         onClick={() => {
-          handleLeft();
+          if (!blocker) {
+            setBlocker(true);
+            handleLeft();
+            setTimeout(() => setBlocker(false), 100);
+          }
         }}
       >
         <ChevronLeft />
@@ -104,7 +109,11 @@ const PlayButtonGroup: React.FC<Props> = ({
       <IconButton
         className="right"
         onClick={() => {
-          handleRight();
+          if (!blocker) {
+            setBlocker(true);
+            handleRight();
+            setTimeout(() => setBlocker(false), 100);
+          }
         }}
       >
         <ChevronRight />

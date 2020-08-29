@@ -65,7 +65,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
 
   React.useEffect(() => {
     refSlider.current?.slickGoTo(index - 1);
-  }, [refSlider, index]);
+  }, []);
 
   React.useEffect(() => {
     setTimeout(() => {

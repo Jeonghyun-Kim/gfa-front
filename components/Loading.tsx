@@ -14,8 +14,8 @@ const Root = styled.div`
 `;
 
 const FullRoot = styled(Root)`
-  width: 100vw;
-  height: 100vh;
+  grid-row: 1 / 3;
+  grid-column: 1 / 3;
 `;
 
 interface Props {
