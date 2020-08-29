@@ -2,14 +2,19 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-const Root = styled.div`
-  width: 250px;
+interface RootProps {
+  animation: boolean;
+}
+const Root = styled.div<RootProps>`
+  width: 200px;
   margin-left: 1rem;
   text-align: left;
+  overflow: hidden;
   p {
     font-size: 1rem;
     line-height: 1.5;
     margin: 0;
+    white-space: nowrap;
   }
   .name {
     color: white;
@@ -18,27 +23,41 @@ const Root = styled.div`
     color: #b1b1b1;
   }
 
-  @media screen and (max-width: 1000px) {
-    width: 150px;
-    p {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+  ${(props) =>
+    props.animation &&
+    `
+    p.title {
+      display: inline-block;
+      animation: marquee 5s linear infinite;
     }
-  }
+
+    @keyframes marquee {
+      0% {
+        transform: translate(100%, 0);
+      }
+      100% {
+        transform: translate(-100%, 0);
+      }
+    }
+  `}
 `;
 
 interface Props {
-  artworkData: { artistName: string; title: string };
+  artworkData: ArtworkData;
+  animation?: boolean;
 }
-const SimpleInfo: React.FC<Props> = ({ artworkData, ...props }) => {
+const SimpleInfo: React.FC<Props> = ({
+  artworkData,
+  animation = false,
+  ...props
+}) => {
   const router = useRouter();
-  const { artistName, title } = artworkData;
+  const { artist, title } = artworkData;
   return (
-    <Root {...props}>
+    <Root animation={animation} {...props}>
       {router.pathname === '/artist' && (
         <>
-          <p className="name">{artistName}</p>
+          <p className="name">{artist}</p>
           <p className="title">{title}</p>
         </>
       )}

@@ -31,7 +31,7 @@ interface MenuProps {
 const MenuItem = styled.a<MenuProps>`
   margin: 1rem 0;
   color: ${(props) => (props.current ? COLORS.primary : '#7D7D7D')};
-  font-size: ${(props) => (props.current ? 1 : 0.8)}rem;
+  font-size: ${(props) => (props.current ? 0.9 : 0.8)}rem;
   font-weight: ${(props) => (props.current ? 'bolder' : 'normal')};
   &:hover {
     cursor: pointer;

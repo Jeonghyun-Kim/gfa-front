@@ -11,7 +11,22 @@ export const sendCounter = () => {
   });
 };
 
+export const checkLength = (input: string, maxLength: number) => {
+  let totalLength = 0;
+  for (let i = 0; i < input.length; i++) {
+    const oneChar = input.charAt(i);
+    if (escape(oneChar).length > 4) {
+      totalLength += 2;
+    } else {
+      totalLength++;
+    }
+    if (totalLength > maxLength) return false;
+  }
+  return true;
+};
+
 export default {
   checkSameObject,
   sendCounter,
+  checkLength,
 };

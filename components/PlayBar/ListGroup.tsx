@@ -24,13 +24,19 @@ const Root = styled.div`
   }
 `;
 
-interface Props {}
+interface Props {
+  iconOnly?: boolean;
+}
 
-const ListGroup: React.FC<Props> = ({ ...props }) => {
+const ListGroup: React.FC<Props> = ({ iconOnly = false, ...props }) => {
   return (
     <Root {...props}>
-      작품목록
-      <IconButton>
+      {!iconOnly && <p>작품목록</p>}
+      <IconButton
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+      >
         <Apps />
       </IconButton>
     </Root>

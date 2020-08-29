@@ -15,7 +15,7 @@ const Root = styled.a<RootProps>`
   font-weight: ${(props) => (props.current ? 'bolder' : 'normal')};
   color: ${(props) => (props.current ? COLORS.primary : '#676F7F')};
   border-color: ${COLORS.primary} !important;
-  border-bottom: ${(props) => (props.current ? '3px solid' : 'none')};
+  border-bottom: ${(props) => (props.current ? '5px solid' : 'none')};
 
   &:hover {
     cursor: ${(props) => (props.current ? 'default' : 'pointer')};

@@ -19,7 +19,7 @@ interface RootProps {
 }
 const Root = styled.div<RootProps>`
   position: fixed;
-  width: 100vw;
+  width: 100%;
   height: 100%;
 
   ${(props) => props.grid && 'display: grid'};

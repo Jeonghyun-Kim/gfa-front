@@ -23,6 +23,11 @@ declare interface Artist {
   seeMoreCount: number;
 }
 
+declare interface ArtworkData {
+  artist: string;
+  title: string;
+}
+
 declare module '*.svg' {
   const content: any;
   export default content;

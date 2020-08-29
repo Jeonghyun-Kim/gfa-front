@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { PAGE_ARRAY, NUM_ARTISTS } from '../../defines';
 
 const Root = styled.div`
-  width: 250px;
+  width: 200px;
   margin-right: 1rem;
   text-align: right;
 
@@ -14,10 +14,6 @@ const Root = styled.div`
     font-size: 1rem;
     color: white;
     margin-left: 1rem;
-  }
-
-  @media screen and (max-width: 1000px) {
-    width: 150px;
   }
 `;
 

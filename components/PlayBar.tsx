@@ -6,6 +6,8 @@ import ButtonGroup from './PlayBar/PlayButtonGroup';
 import SimpleInfo from './PlayBar/SimpleInfo';
 import ListGroup from './PlayBar/ListGroup';
 
+import { checkLength } from '../lib/utils';
+
 import { COLORS, NUM_ARTISTS } from '../defines';
 
 import IndexContext from '../IndexContext';
@@ -41,7 +43,7 @@ interface Props {
 }
 const PlayBar: React.FC<Props> = ({ visible = true, ...props }) => {
   const { index, setIndex, refSlider } = React.useContext(IndexContext);
-  const { artist: artistName, title } = ArtworkData.find((artwork) => {
+  const { artist, title } = ArtworkData.find((artwork) => {
     return artwork.artistId === index;
   }) || { artist: '', title: '' };
 
@@ -72,7 +74,10 @@ const PlayBar: React.FC<Props> = ({ visible = true, ...props }) => {
         handleRight={handleRight}
         id={index}
       />
-      <SimpleInfo artworkData={{ artistName, title }} />
+      <SimpleInfo
+        artworkData={{ artist, title }}
+        animation={!checkLength(title, 25)}
+      />
       <ListGroup />
     </Root>
   );

@@ -9,9 +9,10 @@ import Modal from '../components/Modal';
 import { sendCounter } from '../lib/utils';
 
 const Root = styled.div`
+  display: grid;
   width: 100%;
   height: 100%;
-  margin-top: 100px;
+  place-items: center;
 `;
 
 interface Props {}
@@ -25,22 +26,24 @@ const HomePage: React.FC<Props> = ({}) => {
       </Head>
       <Header />
       <Root>
-        <div>Home</div>
-        <Link href="/artist">
-          <a>artist</a>
-        </Link>
-        <button onClick={() => setFlag(!flag)}>click me</button>
-        <Modal visible={flag}>
-          <div>hello World!</div>
-          <button
-            onClick={() => {
-              setFlag(false);
-              if (process.env.NODE_ENV === 'production') sendCounter();
-            }}
-          >
-            OK
-          </button>
-        </Modal>
+        <div>
+          <div>Home</div>
+          <Link href="/artist">
+            <a>artist</a>
+          </Link>
+          <button onClick={() => setFlag(!flag)}>click me</button>
+          <Modal visible={flag}>
+            <div>hello World!</div>
+            <button
+              onClick={() => {
+                setFlag(false);
+                if (process.env.NODE_ENV === 'production') sendCounter();
+              }}
+            >
+              OK
+            </button>
+          </Modal>
+        </div>
       </Root>
     </>
   );
