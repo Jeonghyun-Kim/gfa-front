@@ -3,8 +3,11 @@ import styled from 'styled-components';
 
 import SimpleInfo from './PlayBar/SimpleInfo';
 import ListGroup from './PlayBar/ListGroup';
+import ProgressBar from './ProgressBar';
 
 import { checkLength } from '../lib/utils';
+
+import IndexContext from '../IndexContext';
 
 const Root = styled.div`
   position: absolute;
@@ -40,6 +43,11 @@ const MyListGroup = styled(ListGroup)`
   }
 `;
 
+const MyProgressBar = styled(ProgressBar)`
+  top: initial;
+  bottom: 0;
+`;
+
 interface Props {
   artworkData?: ArtworkJson;
   visible?: boolean;
@@ -51,6 +59,7 @@ const MobileFooter: React.FC<Props> = ({
   onClick = () => {},
   ...props
 }) => {
+  const { index } = React.useContext(IndexContext);
   if (!visible) return <></>;
   return (
     <>
@@ -60,6 +69,7 @@ const MobileFooter: React.FC<Props> = ({
           animation={!checkLength(artworkData.title, 10)}
         />
       </Root>
+      <MyProgressBar index={index} />
       <MyListGroup iconOnly />
     </>
   );

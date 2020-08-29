@@ -5,10 +5,11 @@ import Status from './PlayBar/PlayBarStatus';
 import ButtonGroup from './PlayBar/PlayButtonGroup';
 import SimpleInfo from './PlayBar/SimpleInfo';
 import ListGroup from './PlayBar/ListGroup';
+import ProgressBar from './ProgressBar';
 
 import { checkLength } from '../lib/utils';
 
-import { COLORS, NUM_ARTISTS } from '../defines';
+import { NUM_ARTISTS } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -22,20 +23,6 @@ const Root = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #222222f7;
-`;
-
-interface ProgressBarProps {
-  index: number;
-}
-const ProgressBar = styled.div<ProgressBarProps>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 5px;
-  border-radius: 10px;
-  background-color: ${COLORS.primary};
-  transition: width 300ms ease;
-  width: ${(props) => (100 * props.index) / NUM_ARTISTS}%;
 `;
 
 interface Props {
