@@ -15,8 +15,7 @@ const Root = styled.div`
   place-items: center;
 `;
 
-interface Props {}
-const HomePage: React.FC<Props> = ({}) => {
+const HomePage: React.FC = () => {
   const [flag, setFlag] = React.useState<boolean>(false);
 
   return (
@@ -31,10 +30,13 @@ const HomePage: React.FC<Props> = ({}) => {
           <Link href="/artist">
             <a>artist</a>
           </Link>
-          <button onClick={() => setFlag(!flag)}>click me</button>
+          <button type="button" onClick={() => setFlag(!flag)}>
+            click me
+          </button>
           <Modal visible={flag}>
             <div>hello World!</div>
             <button
+              type="button"
               onClick={() => {
                 setFlag(false);
                 if (process.env.NODE_ENV === 'production') sendCounter();

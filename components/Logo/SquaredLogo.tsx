@@ -15,13 +15,11 @@ const Root = styled.div`
   }
 `;
 
-interface Props {}
-
-const OneLineLogo: React.FC<Props> = ({ ...props }) => {
+const OneLineLogo: React.FC = ({ ...props }) => {
   return (
     <Root {...props}>
       <Link href="/">
-        <img alt="onDisplay" src="/logo/logo-squared.svg" />
+        <img alt="onDP" src="/logo/logo-squared.svg" />
       </Link>
     </Root>
   );

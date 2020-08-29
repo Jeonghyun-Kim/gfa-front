@@ -15,9 +15,7 @@ const Root = styled.div`
   }
 `;
 
-interface Props {}
-
-const OneLineLogo: React.FC<Props> = ({ ...props }) => {
+const OneLineLogo: React.FC = ({ ...props }) => {
   return (
     <Root {...props}>
       <Link href="/">

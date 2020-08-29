@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import ReactGA from 'react-ga';
 
 export const initGA = () => {

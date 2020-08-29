@@ -6,8 +6,7 @@ import Header from '../components/Header';
 
 const Root = styled.div``;
 
-interface Props {}
-const VideoPage: React.FC<Props> = ({}) => {
+const VideoPage: React.FC = () => {
   return (
     <>
       <Head>

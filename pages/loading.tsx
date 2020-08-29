@@ -8,8 +8,7 @@ const Root = styled.div`
   height: 100%;
 `;
 
-interface Props {}
-const TemplatePage: React.FC<Props> = ({}) => {
+const TemplatePage: React.FC = () => {
   return (
     <>
       <Head>

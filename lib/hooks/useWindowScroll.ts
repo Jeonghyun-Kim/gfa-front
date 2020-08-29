@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 
-export default function useWindowScroll() {
+export default function useWindowScroll(): {
+  x: number;
+  y: number;
+} {
   const [scroll, setScroll] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,

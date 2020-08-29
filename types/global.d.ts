@@ -28,7 +28,7 @@ declare interface ArtworkData {
   title: string;
 }
 
-declare module '*.svg' {
-  const content: any;
-  export default content;
+declare interface User {
+  userId: string;
+  createdAt: Date;
 }

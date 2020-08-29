@@ -24,11 +24,11 @@ const theme = {
 };
 
 export default class MyApp extends App {
-  componentDidMount() {
+  componentDidMount(): void {
     // initGA();
   }
 
-  render() {
+  render(): JSX.Element {
     const { Component, pageProps } = this.props;
     return (
       <ThemeProvider theme={theme}>

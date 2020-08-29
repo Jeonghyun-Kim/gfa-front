@@ -35,65 +35,6 @@ const RenderedImage: React.FC<Props> = ({
 }) => {
   const { ratio } = useMobileOrientation();
   const { portraitFileName, landscapeFileName } = artistData;
-
-  // return (
-  //   <>
-  //     {isPortrait && (isMobile || isTablet) ? (
-  //       <Picture
-  //         onClick={() => onClick()}
-  //         className="unselectable"
-  //         ratio={ratio}
-  //         {...props}
-  //       >
-  //         <img
-  //           alt="artwork"
-  //           src={
-  //             portraitFileName
-  //               ? `${BUCKET_URL}/rendered/${artistData.portraitFileName}`
-  //               : '/images/empty_portrait.png'
-  //           }
-  //           className="rendered"
-  //         />
-  //       </Picture>
-  //     ) : (
-  //       <Picture
-  //         onClick={() => onClick()}
-  //         className="unselectable"
-  //         ratio={ratio}
-  //         {...props}
-  //       >
-  //         <img
-  //           alt="artwork"
-  //           src={
-  //             landscapeFileName
-  //               ? `${BUCKET_URL}/rendered/${artistData.landscapeFileName}`
-  //               : '/images/empty_landscape.png'
-  //           }
-  //           className="rendered"
-  //         />
-  //       </Picture>
-  //     )}
-  //   </>
-  // );
-  // if (isPortrait && (isMobile || isTablet))
-  //   return (
-  //     <Picture
-  //       onClick={() => onClick()}
-  //       className="unselectable"
-  //       ratio={ratio}
-  //       {...props}
-  //     >
-  //       <img
-  //         alt="artwork"
-  //         src={
-  //           portraitFileName
-  //             ? `${BUCKET_URL}/rendered/${artistData.portraitFileName}`
-  //             : '/images/empty_portrait.png'
-  //         }
-  //         className="rendered"
-  //       />
-  //     </Picture>
-  //   );
   return (
     <Picture
       onClick={() => onClick()}

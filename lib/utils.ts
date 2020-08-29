@@ -1,5 +1,8 @@
-export const checkSameObject = (obj1: object, obj2: object) =>
-  JSON.stringify(obj1) === JSON.stringify(obj2);
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+export const checkSameObject = (
+  obj1: Record<string, unknown>,
+  obj2: Record<string, unknown>,
+) => JSON.stringify(obj1) === JSON.stringify(obj2);
 
 export const sendCounter = () => {
   fetch(`api/counter`, {
@@ -13,12 +16,12 @@ export const sendCounter = () => {
 
 export const checkLength = (input: string, maxLength: number) => {
   let totalLength = 0;
-  for (let i = 0; i < input.length; i++) {
+  for (let i = 0; i < input.length; i += 1) {
     const oneChar = input.charAt(i);
     if (escape(oneChar).length > 4) {
       totalLength += 2;
     } else {
-      totalLength++;
+      totalLength += 1;
     }
     if (totalLength > maxLength) return false;
   }

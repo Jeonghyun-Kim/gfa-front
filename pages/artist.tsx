@@ -65,7 +65,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
 
   React.useEffect(() => {
     refSlider.current?.slickGoTo(index - 1);
-  }, []);
+  }, [refSlider, index]);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -73,18 +73,17 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         setOri(isPortrait);
       } else if (ori !== isPortrait) {
         setOri(isPortrait);
-        console.log('changed!', isPortrait);
         router.reload();
       }
     }, 0);
-  }, [isPortrait]);
+  }, [ori, router, isPortrait]);
 
   React.useEffect(() => {
     if (headerFlag) {
       if (timer) clearTimeout(timer);
       setTimer(setTimeout(() => setHeaderFlag(false), 3000));
     }
-  }, [headerFlag]);
+  }, [timer, headerFlag]);
 
   React.useEffect(() => {
     const prevImg = new Image();
@@ -106,7 +105,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
       }
     }
-  }, [index]);
+  }, [index, artists, isMobile, isTablet, isPortrait]);
 
   const toggleHeader = () => {
     if ((isMobile || (isTablet && isPortrait)) && !slideChangedFlag)
@@ -134,7 +133,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         {index ? (
           <>
             <Slider
-              ref={(slider) => (refSlider.current = slider)}
+              ref={(slider) => {
+                refSlider.current = slider;
+              }}
               dots={false}
               arrows={false}
               infinite={false}
@@ -180,7 +181,11 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
 
 export default ArtistPage;
 
-export async function getStaticProps() {
+export async function getStaticProps(): Promise<{
+  props: {
+    artists: Artist[];
+  };
+}> {
   try {
     const { artists } = await fetcher(`${API_URL}/artist`);
 

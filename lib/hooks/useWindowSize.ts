@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react';
 
 import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../../defines';
 
-export default function useWindowSize() {
+export default function useWindowSize(): {
+  isMobile: boolean;
+  isTablet: boolean;
+  isPortrait: boolean;
+  innerWidth: number;
+  innerHeight: number;
+  ratio: number;
+} {
   const [windowInfo, setWindowInfo] = useState<{
     isMobile: boolean;
     isTablet: boolean;

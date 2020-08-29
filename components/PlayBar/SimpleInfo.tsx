@@ -36,7 +36,7 @@ const Root = styled.div<RootProps>`
         transform: translate(100%, 0);
       }
       100% {
-        transform: translate(-100%, 0);
+        transform: translate(-s100%, 0);
       }
     }
   `}

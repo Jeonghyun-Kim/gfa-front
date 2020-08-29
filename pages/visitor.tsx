@@ -6,8 +6,7 @@ import Header from '../components/Header';
 
 const Root = styled.div``;
 
-interface Props {}
-const VisitorPage: React.FC<Props> = ({}) => {
+const VisitorPage: React.FC = () => {
   return (
     <>
       <Head>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface ErrorWithResponse extends Error {
   response: Response;
   data: any;
