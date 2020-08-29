@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import Logo from './Logo/OneLineLogo';
 
-import { COLORS, MOBILE_BREAKPOINT, PAGE_ARRAY } from '../defines';
+import { COLORS, PAGE_ARRAY } from '../defines';
 
 const Root = styled.div`
   grid-column: 1 / 2;

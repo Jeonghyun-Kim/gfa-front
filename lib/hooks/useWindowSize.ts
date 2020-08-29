@@ -22,7 +22,7 @@ export default function useWindowSize() {
   useEffect(() => {
     const handler = () => {
       if (window.innerWidth < window.innerHeight) {
-        if (window.innerWidth < MOBILE_BREAKPOINT) {
+        if (window.innerWidth <= MOBILE_BREAKPOINT) {
           setWindowInfo({
             isMobile: true,
             isTablet: false,
@@ -31,7 +31,7 @@ export default function useWindowSize() {
             innerHeight: window.innerHeight,
             ratio: window.innerHeight / window.innerWidth,
           });
-        } else if (window.innerWidth < TABLET_BREAKPOINT) {
+        } else if (window.innerWidth <= TABLET_BREAKPOINT) {
           setWindowInfo({
             isMobile: false,
             isTablet: true,
@@ -50,7 +50,7 @@ export default function useWindowSize() {
             ratio: window.innerHeight / window.innerWidth,
           });
         }
-      } else if (window.innerHeight < MOBILE_BREAKPOINT) {
+      } else if (window.innerHeight <= MOBILE_BREAKPOINT) {
         setWindowInfo({
           isMobile: true,
           isTablet: false,
@@ -59,7 +59,7 @@ export default function useWindowSize() {
           innerHeight: window.innerHeight,
           ratio: window.innerHeight / window.innerWidth,
         });
-      } else if (window.innerHeight < TABLET_BREAKPOINT) {
+      } else if (window.innerHeight <= TABLET_BREAKPOINT) {
         setWindowInfo({
           isMobile: false,
           isTablet: true,

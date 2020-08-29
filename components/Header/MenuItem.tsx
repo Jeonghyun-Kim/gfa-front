@@ -18,7 +18,7 @@ const Root = styled.a<RootProps>`
   border-bottom: ${(props) => (props.current ? '3px solid' : 'none')};
 
   &:hover {
-    cursor: pointer;
+    cursor: ${(props) => (props.current ? 'default' : 'pointer')};
     opacity: 0.7;
   }
 `;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 const Root = styled.div`
@@ -31,11 +32,16 @@ interface Props {
   artworkData: { artistName: string; title: string };
 }
 const SimpleInfo: React.FC<Props> = ({ artworkData, ...props }) => {
+  const router = useRouter();
   const { artistName, title } = artworkData;
   return (
     <Root {...props}>
-      <p className="name">{artistName}</p>
-      <p className="title">{title}</p>
+      {router.pathname === '/artist' && (
+        <>
+          <p className="name">{artistName}</p>
+          <p className="title">{title}</p>
+        </>
+      )}
     </Root>
   );
 };

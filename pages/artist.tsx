@@ -6,6 +6,7 @@ import Slider from 'react-slick';
 
 import Header from '../components/Header';
 import RenderedImage from '../components/RenderedImage';
+import Loading from '../components/Loading';
 
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
@@ -27,6 +28,10 @@ const Root = styled.div`
     outline: none;
   }
 
+  .slick-track {
+    position: absolute;
+  }
+
   .slick-slide {
     div {
       height: 100%;
@@ -39,6 +44,7 @@ interface Props {
 }
 const ArtistPage: React.FC<Props> = ({ artists }) => {
   const [headerFlag, setHeaderFlag] = React.useState<boolean>(true);
+  const [timer, setTimer] = React.useState<NodeJS.Timeout | null>(null);
   const [slideChangedFlag, setSlideChangedFlag] = React.useState<boolean>(
     false,
   );
@@ -48,6 +54,13 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   React.useEffect(() => {
     refSlider.current?.slickGoTo(index - 1);
   }, []);
+
+  React.useEffect(() => {
+    if (headerFlag) {
+      if (timer) clearTimeout(timer);
+      setTimer(setTimeout(() => setHeaderFlag(false), 3000));
+    }
+  }, [headerFlag]);
 
   React.useEffect(() => {
     const prevImg = new Image();
@@ -85,20 +98,23 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       </Head>
       <Header visible={headerFlag} />
       <Root>
-        {index && index > 0 && (
+        {index ? (
           <Slider
             ref={(slider) => (refSlider.current = slider)}
             dots={false}
             arrows={false}
             infinite={false}
             lazyLoad="ondemand"
+            initialSlide={index - 1}
             focusOnSelect
             useCSS={isMobile || (isTablet && isPortrait)}
             swipe={isMobile || (isTablet && isPortrait)}
             beforeChange={(_, newIndex) => {
-              sessionStorage.setItem('@artistId', `${newIndex + 1}`);
-              setIndex(newIndex + 1);
-              setSlideChangedFlag(false);
+              setTimeout(() => {
+                sessionStorage.setItem('@artistId', `${newIndex + 1}`);
+                setSlideChangedFlag(false);
+                setIndex(newIndex + 1);
+              }, 500);
             }}
             onSwipe={() => setSlideChangedFlag(true)}
           >
@@ -115,9 +131,12 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                       setHeaderFlag(!headerFlag);
                   }}
                 />
+                // <h1>Hello World {artist.artistName}</h1>
               );
             })}
           </Slider>
+        ) : (
+          <Loading />
         )}
       </Root>
     </>
