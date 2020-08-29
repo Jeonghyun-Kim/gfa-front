@@ -20,6 +20,7 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 1,
     'react/jsx-props-no-spreading': 0,
     '@typescript-eslint/no-empty-function': 0,
+    'react-hooks/exhaustive-deps': 1,
   },
   settings: {
     'import/resolver': {

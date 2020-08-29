@@ -76,14 +76,14 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         router.reload();
       }
     }, 0);
-  }, [ori, router, isPortrait]);
+  }, [router, isPortrait]);
 
   React.useEffect(() => {
     if (headerFlag) {
       if (timer) clearTimeout(timer);
       setTimer(setTimeout(() => setHeaderFlag(false), 3000));
     }
-  }, [timer, headerFlag]);
+  }, [headerFlag]);
 
   React.useEffect(() => {
     const prevImg = new Image();
