@@ -7,6 +7,7 @@ export const PLAYBAR_HEIGHT = 82;
 export const NUM_ARTISTS = 64;
 export const COLORS = {
   primary: '#17babc',
+  disabled: '#7d7d7d',
 };
 export const PAGE_ARRAY = ['/', '/artist', '/video', '/visitor', '/about'];
 

@@ -8,7 +8,7 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
 
-import { NUM_ARTISTS, PAGE_ARRAY } from '../../defines';
+import { NUM_ARTISTS, PAGE_ARRAY, COLORS } from '../../defines';
 
 interface RootProps {
   isFirst: boolean;
@@ -28,7 +28,7 @@ const Root = styled.div<RootProps>`
   .left {
     svg {
       color: ${(props) =>
-        props.isFirst || props.pageIndex !== 1 ? '#7D7D7D' : 'white'};
+        props.isFirst || props.pageIndex !== 1 ? COLORS.disabled : 'white'};
     }
     &:hover {
       cursor: ${(props) => (props.isFirst ? 'default' : 'pointer')};
@@ -37,7 +37,7 @@ const Root = styled.div<RootProps>`
   .right {
     svg {
       color: ${(props) =>
-        props.isLast || props.pageIndex !== 1 ? '#7D7D7D' : 'white'};
+        props.isLast || props.pageIndex !== 1 ? COLORS.disabled : 'white'};
     }
     &:hover {
       cursor: ${(props) => (props.isLast ? 'default' : 'pointer')};
@@ -45,7 +45,7 @@ const Root = styled.div<RootProps>`
   }
   .prevPage {
     svg {
-      color: ${(props) => (props.pageIndex === 0 ? '#7D7D7D' : 'white')};
+      color: ${(props) => (props.pageIndex === 0 ? COLORS.disabled : 'white')};
     }
     &:hover {
       cursor: ${(props) => (props.pageIndex === 0 ? 'default' : 'pointer')};
@@ -53,7 +53,7 @@ const Root = styled.div<RootProps>`
   }
   .nextPage {
     svg {
-      color: ${(props) => (props.pageIndex === 4 ? '#7D7D7D' : 'white')};
+      color: ${(props) => (props.pageIndex === 4 ? COLORS.disabled : 'white')};
     }
     &:hover {
       cursor: ${(props) => (props.pageIndex === 4 ? 'default' : 'pointer')};
