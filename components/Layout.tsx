@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 
@@ -38,16 +39,34 @@ const Root = styled.div<RootProps>`
 `;
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const router = useRouter();
   const { isMobile, isTablet, isPortrait } = useWindowSize();
   const withLayout = !isMobile && (!isTablet || !isPortrait);
   const [index, setIndex] = React.useState<number>(0);
   const refSlider = React.createRef<Slider | null>();
 
+  // Set initial index with router.query.id if exists.
   React.useEffect(() => {
-    const item = sessionStorage.getItem('@artistId');
-    if (item && JSON.parse(item) >= 1 && JSON.parse(item) <= NUM_ARTISTS)
-      setIndex(JSON.parse(item));
-    else setIndex(1);
+    if (router.query) {
+      const { id } = router.query;
+      if (id) {
+        setIndex(Number(id));
+        sessionStorage.setItem('@artistId', `${id}`);
+        if (refSlider.current) refSlider.current.slickGoTo(Number(id) - 1);
+        // if (process.env.NODE_ENV === 'production') sendCounter();
+        router.replace(router.pathname.split('?')[0]);
+      } else {
+        const item = sessionStorage.getItem('@artistId');
+        if (item && JSON.parse(item) >= 1 && JSON.parse(item) <= NUM_ARTISTS)
+          setIndex(JSON.parse(item));
+        else setIndex(1);
+        // TODO: Prefetch initial slide's image. (useContext or fetch to server to get links)
+        // or at the index page..?
+      }
+    }
+  }, [router, refSlider]);
+
+  React.useEffect(() => {
     // logPageView();
     // if (process.env.NODE_ENV === 'production') sendCounter();
   }, []);

@@ -12,7 +12,8 @@ import MobileFooter from '../components/MobileFooter';
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
 
-import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
+// import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
+import { API_URL } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -113,28 +114,28 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   }, [headerFlag]);
 
   // Prefetching images for enhancement of speed.
-  React.useEffect(() => {
-    const prevImg = new Image();
-    const nextImg = new Image();
-    // Artist's index starts from 1, javascript array index starts from 0.
-    const prevIndex = index !== 1 ? index - 1 - 1 : null;
-    const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
-    if ((isMobile || isTablet) && isPortrait) {
-      if (prevIndex && artists[prevIndex].portraitFileName) {
-        prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].portraitFileName}`;
-      }
-      if (nextIndex && artists[nextIndex].portraitFileName) {
-        nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].portraitFileName}`;
-      }
-    } else {
-      if (prevIndex && artists[prevIndex].landscapeFileName) {
-        prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].landscapeFileName}`;
-      }
-      if (nextIndex && artists[nextIndex].landscapeFileName) {
-        nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
-      }
-    }
-  }, [index, artists, isMobile, isTablet, isPortrait]);
+  // React.useEffect(() => {
+  //   const prevImg = new Image();
+  //   const nextImg = new Image();
+  //   // Artist's index starts from 1, javascript array index starts from 0.
+  //   const prevIndex = index !== 1 ? index - 1 - 1 : null;
+  //   const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
+  //   if ((isMobile || isTablet) && isPortrait) {
+  //     if (prevIndex && artists[prevIndex].portraitFileName) {
+  //       prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].portraitFileName}`;
+  //     }
+  //     if (nextIndex && artists[nextIndex].portraitFileName) {
+  //       nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].portraitFileName}`;
+  //     }
+  //   } else {
+  //     if (prevIndex && artists[prevIndex].landscapeFileName) {
+  //       prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].landscapeFileName}`;
+  //     }
+  //     if (nextIndex && artists[nextIndex].landscapeFileName) {
+  //       nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
+  //     }
+  //   }
+  // }, [index, artists, isMobile, isTablet, isPortrait]);
 
   // Toggle Header on custom conditions.
   const toggleHeader = () => {
@@ -168,7 +169,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               dots={false}
               arrows={false}
               infinite={false}
-              lazyLoad="ondemand"
+              lazyLoad="progressive"
               initialSlide={index - 1}
               focusOnSelect
               useCSS={isMobile || (isTablet && isPortrait)}
@@ -178,7 +179,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   sessionStorage.setItem('@artistId', `${newIndex + 1}`);
                   setSlideChangedFlag(false);
                   setIndex(newIndex + 1);
-                }, 500);
+                }, 300);
               }}
               onSwipe={() => setSlideChangedFlag(true)}
             >

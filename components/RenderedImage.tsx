@@ -48,7 +48,7 @@ const RenderedImage: React.FC<Props> = ({
         srcSet={
           portraitFileName
             ? `${BUCKET_URL}/rendered/${artistData.portraitFileName}`
-            : '/images/empty_portrait.png'
+            : '/images/empty_portrait.jpg'
         }
       />
       <img
@@ -56,7 +56,7 @@ const RenderedImage: React.FC<Props> = ({
         src={
           landscapeFileName
             ? `${BUCKET_URL}/rendered/${artistData.landscapeFileName}`
-            : '/images/empty_landscape.png'
+            : '/images/empty_landscape.jpg'
         }
         className="rendered"
       />

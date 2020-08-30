@@ -64,24 +64,16 @@ const Root = styled.div<RootProps>`
 interface Props {
   handleLeft: () => void;
   handleRight: () => void;
-  id?: number;
+  id: number;
 }
-const PlayButtonGroup: React.FC<Props> = ({
-  handleLeft,
-  handleRight,
-  id = 0,
-}) => {
+const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
   const router = useRouter();
   const [blocker, setBlocker] = React.useState<boolean>(false);
   const pageIndex =
     PAGE_ARRAY.findIndex((elem) => router.pathname === elem) || 0;
 
   return (
-    <Root
-      isFirst={!id || id === 1}
-      isLast={!id || id === NUM_ARTISTS}
-      pageIndex={pageIndex}
-    >
+    <Root isFirst={id === 1} isLast={id === NUM_ARTISTS} pageIndex={pageIndex}>
       <IconButton
         className="prevPage"
         onClick={() => {
@@ -100,7 +92,7 @@ const PlayButtonGroup: React.FC<Props> = ({
             setTimeout(() => setBlocker(false), 100);
           }
         }}
-        disabled={pageIndex !== 1}
+        disabled={pageIndex !== 1 || id === 1}
       >
         <ChevronLeft />
       </IconButton>
@@ -113,7 +105,7 @@ const PlayButtonGroup: React.FC<Props> = ({
             setTimeout(() => setBlocker(false), 100);
           }
         }}
-        disabled={pageIndex !== 1}
+        disabled={pageIndex !== 1 || id === NUM_ARTISTS}
       >
         <ChevronRight />
       </IconButton>
