@@ -26,7 +26,7 @@ const Root = styled.div`
 const ArtworkInfo = styled(SimpleInfo)`
   position: absolute;
   bottom: 3.5rem;
-  left: 0.5rem;
+  left: 0rem;
   transform: translate(0, 50%);
   width: 100px;
 
@@ -36,7 +36,7 @@ const ArtworkInfo = styled(SimpleInfo)`
 `;
 
 const MyListGroup = styled(ListGroup)`
-  right: 0.5rem;
+  right: 0rem;
   bottom: 0.5rem;
   svg {
     font-size: 2.1rem;
