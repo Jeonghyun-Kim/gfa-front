@@ -12,7 +12,7 @@ const TemplatePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>onDisplay Loading...</title>
+        <title>onDisplay - Loading...</title>
       </Head>
       <Root>
         <Loading />

@@ -128,7 +128,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   return (
     <>
       <Head>
-        <title>onDisplay - 전시장</title>
+        <title>온라인 전시 - {artists[index - 1].artistName}</title>
         <link
           rel="stylesheet"
           type="text/css"

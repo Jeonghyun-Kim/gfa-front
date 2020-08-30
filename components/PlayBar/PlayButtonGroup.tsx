@@ -27,7 +27,8 @@ const Root = styled.div<RootProps>`
   }
   .left {
     svg {
-      color: ${(props) => (props.isFirst ? '#7D7D7D' : 'white')};
+      color: ${(props) =>
+        props.isFirst || props.pageIndex !== 1 ? '#7D7D7D' : 'white'};
     }
     &:hover {
       cursor: ${(props) => (props.isFirst ? 'default' : 'pointer')};
@@ -35,13 +36,14 @@ const Root = styled.div<RootProps>`
   }
   .right {
     svg {
-      color: ${(props) => (props.isLast ? '#7D7D7D' : 'white')};
+      color: ${(props) =>
+        props.isLast || props.pageIndex !== 1 ? '#7D7D7D' : 'white'};
     }
     &:hover {
       cursor: ${(props) => (props.isLast ? 'default' : 'pointer')};
     }
   }
-  .firstPage {
+  .prevPage {
     svg {
       color: ${(props) => (props.pageIndex === 0 ? '#7D7D7D' : 'white')};
     }
@@ -49,7 +51,7 @@ const Root = styled.div<RootProps>`
       cursor: ${(props) => (props.pageIndex === 0 ? 'default' : 'pointer')};
     }
   }
-  .lastPage {
+  .nextPage {
     svg {
       color: ${(props) => (props.pageIndex === 4 ? '#7D7D7D' : 'white')};
     }
@@ -81,16 +83,11 @@ const PlayButtonGroup: React.FC<Props> = ({
       pageIndex={pageIndex}
     >
       <IconButton
-        className="firstPage"
+        className="prevPage"
         onClick={() => {
-          if (pageIndex > 0) {
-            if (pageIndex === 2) {
-              router.push('/artist');
-            } else {
-              router.push(PAGE_ARRAY[pageIndex - 1]);
-            }
-          }
+          router.push(PAGE_ARRAY[pageIndex - 1]);
         }}
+        disabled={pageIndex === 0}
       >
         <FirstPage />
       </IconButton>
@@ -103,6 +100,7 @@ const PlayButtonGroup: React.FC<Props> = ({
             setTimeout(() => setBlocker(false), 100);
           }
         }}
+        disabled={pageIndex !== 1}
       >
         <ChevronLeft />
       </IconButton>
@@ -115,20 +113,16 @@ const PlayButtonGroup: React.FC<Props> = ({
             setTimeout(() => setBlocker(false), 100);
           }
         }}
+        disabled={pageIndex !== 1}
       >
         <ChevronRight />
       </IconButton>
       <IconButton
-        className="lastPage"
+        className="nextPage"
         onClick={() => {
-          if (pageIndex < 4) {
-            if (pageIndex === 0) {
-              router.push('/artist');
-            } else {
-              router.push(PAGE_ARRAY[pageIndex + 1]);
-            }
-          }
+          router.push(PAGE_ARRAY[pageIndex + 1]);
         }}
+        disabled={pageIndex === PAGE_ARRAY.length - 1}
       >
         <LastPage />
       </IconButton>
