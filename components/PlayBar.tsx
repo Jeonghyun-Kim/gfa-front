@@ -25,29 +25,24 @@ const Root = styled.div`
   background-color: #222222f7;
 `;
 
-interface Props {
-  visible?: boolean;
-}
-const PlayBar: React.FC<Props> = ({ visible = true, ...props }) => {
+const PlayBar: React.FC = ({ ...props }) => {
   const { index, setIndex, refSlider } = React.useContext(IndexContext);
   const { artist, title } = ArtworkData.find((artwork) => {
     return artwork.artistId === index;
   }) || { artist: '', title: '' };
 
-  if (!visible) return <></>;
-
   const handleLeft = () => {
-    if (index > 1) {
+    if (refSlider.current && index > 1) {
       setIndex(index - 1);
-      refSlider.current?.slickPrev();
+      refSlider.current.slickPrev();
       sessionStorage.setItem('@artistId', `${index - 1}`);
     }
   };
 
   const handleRight = () => {
-    if (index < NUM_ARTISTS) {
+    if (refSlider.current && index < NUM_ARTISTS) {
       setIndex(index + 1);
-      refSlider.current?.slickNext();
+      refSlider.current.slickNext();
       sessionStorage.setItem('@artistId', `${index + 1}`);
     }
   };

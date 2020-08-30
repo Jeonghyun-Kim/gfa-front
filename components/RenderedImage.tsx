@@ -35,6 +35,7 @@ const RenderedImage: React.FC<Props> = ({
 }) => {
   const { ratio } = useMobileOrientation();
   const { portraitFileName, landscapeFileName } = artistData;
+
   return (
     <Picture
       onClick={() => onClick()}

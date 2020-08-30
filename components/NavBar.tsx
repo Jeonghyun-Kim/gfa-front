@@ -39,13 +39,9 @@ const MenuItem = styled.a<MenuProps>`
   }
 `;
 
-interface Props {
-  visible?: boolean;
-}
-
-const NavBar: React.FC<Props> = ({ visible = true, ...props }) => {
+const NavBar: React.FC = ({ ...props }) => {
   const router = useRouter();
-  if (!visible) return <></>;
+
   return (
     <Root {...props}>
       <Logo />

@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { ThemeProvider } from 'styled-components';
 import Router from 'next/router';
 import NProgress from 'nprogress';
-// import { initGA, logPageView } from '../utils/analytics';
+// import { initGA, logPageView } from '../lib/analytics';
 
 import Layout from '../components/Layout';
 

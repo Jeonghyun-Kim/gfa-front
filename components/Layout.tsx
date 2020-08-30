@@ -6,11 +6,11 @@ import NavBar from './NavBar';
 import PlayBar from './PlayBar';
 import Loading from './Loading';
 
-// import { logPageView } from '../utils/analytics';
+// import { logPageView } from '../lib/analytics';
 // import { sendCounter } from '../lib/utils';
 import useWindowSize from '../lib/hooks/useWindowSize';
 
-import { PLAYBAR_HEIGHT, NAVBAR_WIDTH } from '../defines';
+import { PLAYBAR_HEIGHT, NAVBAR_WIDTH, NUM_ARTISTS } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -39,23 +39,28 @@ const Root = styled.div<RootProps>`
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isMobile, isTablet, isPortrait } = useWindowSize();
+  const withLayout = !isMobile && (!isTablet || !isPortrait);
   const [index, setIndex] = React.useState<number>(0);
   const refSlider = React.createRef<Slider | null>();
+
   React.useEffect(() => {
     const item = sessionStorage.getItem('@artistId');
-    if (item) setIndex(JSON.parse(item));
+    if (item && JSON.parse(item) >= 1 && JSON.parse(item) <= NUM_ARTISTS)
+      setIndex(JSON.parse(item));
     else setIndex(1);
     // logPageView();
     // if (process.env.NODE_ENV === 'production') sendCounter();
   }, []);
-  const grid = !isMobile && (!isTablet || !isPortrait);
+
   return (
-    <Root grid={grid}>
+    <Root grid={withLayout}>
       {index > 0 ? (
-        <IndexContext.Provider value={{ index, setIndex, refSlider }}>
-          <NavBar visible={grid} />
+        <IndexContext.Provider
+          value={{ index, setIndex, refSlider, withLayout }}
+        >
+          {withLayout && <NavBar />}
           <div className="main">{children}</div>
-          <PlayBar visible={grid} />
+          {withLayout && <PlayBar />}
         </IndexContext.Provider>
       ) : (
         <Loading full />

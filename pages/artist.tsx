@@ -32,6 +32,7 @@ const Root = styled.div`
   }
 
   .slick-track {
+    /* macOS safari */
     position: absolute;
   }
 
@@ -54,33 +55,45 @@ interface Props {
 }
 const ArtistPage: React.FC<Props> = ({ artists }) => {
   const router = useRouter();
+  // For Header toggle
   const [headerFlag, setHeaderFlag] = React.useState<boolean>(true);
   const [headerTimer, setHeaderTimer] = React.useState<NodeJS.Timeout | null>(
     null,
   );
+  // Don't toggle Header when swiping sliders
   const [slideChangedFlag, setSlideChangedFlag] = React.useState<boolean>(
     false,
   );
-  const { index, setIndex, refSlider } = React.useContext(IndexContext);
+  // Artist Index from sessionStorage, IndexContext from Layout.tsx
+  const { index, setIndex, refSlider, withLayout } = React.useContext(
+    IndexContext,
+  );
+  // Use screen size and orientation (hooks)
   const { isMobile, isTablet, isPortrait } = useMobileOrientation();
+  // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
 
-  const clearFunc = () => {
-    let timeoutId = (setTimeout(() => {}, 0) as unknown) as number;
-    while (timeoutId) {
-      timeoutId -= 1;
-      clearTimeout(timeoutId);
-    }
-  };
-
+  // Same as componentDidMount()
   React.useEffect(() => {
+    // Set initial slide (react-slick's initialSlide property is now working properly.)
     if (refSlider.current) refSlider.current.slickGoTo(index - 1);
+
+    // Clear all setTimeout() function, excecuting on page unmount event.
+    const clearFunc = () => {
+      let timeoutId = (setTimeout(() => {}, 0) as unknown) as number;
+      while (timeoutId) {
+        timeoutId -= 1;
+        clearTimeout(timeoutId);
+      }
+    };
 
     return clearFunc;
   }, []);
 
+  // Reload page on orientation change event
   React.useEffect(() => {
     setTimeout(() => {
+      // useWindowSize hook's default setting is mobile portrait, so set ori's initial value manually.
       if (ori === null) {
         setOri(isPortrait);
       } else if (ori !== isPortrait) {
@@ -90,6 +103,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     }, 0);
   }, [router, isPortrait]);
 
+  // Auto-hide Header 3 seconds later.
   React.useEffect(() => {
     if (headerFlag) {
       if (headerTimer) clearTimeout(headerTimer);
@@ -98,9 +112,11 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     }
   }, [headerFlag]);
 
+  // Prefetching images for enhancement of speed.
   React.useEffect(() => {
     const prevImg = new Image();
     const nextImg = new Image();
+    // Artist's index starts from 1, javascript array index starts from 0.
     const prevIndex = index !== 1 ? index - 1 - 1 : null;
     const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
     if ((isMobile || isTablet) && isPortrait) {
@@ -120,9 +136,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     }
   }, [index, artists, isMobile, isTablet, isPortrait]);
 
+  // Toggle Header on custom conditions.
   const toggleHeader = () => {
-    if ((isMobile || (isTablet && isPortrait)) && !slideChangedFlag)
-      setHeaderFlag(!headerFlag);
+    if (!withLayout && !slideChangedFlag) setHeaderFlag(!headerFlag);
   };
 
   return (
@@ -176,13 +192,14 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 );
               })}
             </Slider>
-            <MobileFooter
-              artworkData={artworks.find(
-                (artwork: ArtworkJson) => artwork.artistId === index,
-              )}
-              visible={isMobile || (isTablet && isPortrait)}
-              onClick={() => toggleHeader()}
-            />
+            {!withLayout && (
+              <MobileFooter
+                artworkData={artworks.find(
+                  (artwork: ArtworkJson) => artwork.artistId === index,
+                )}
+                onClick={() => toggleHeader()}
+              />
+            )}
           </>
         ) : (
           <Loading />

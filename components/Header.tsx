@@ -5,9 +5,9 @@ import { CSSTransition } from 'react-transition-group';
 import Logo from './Logo/SquaredLogo';
 import MenuItem from './Header/MenuItem';
 
-import useWindowSize from '../lib/hooks/useWindowSize';
-
 import { PAGE_ARRAY } from '../defines';
+
+import IndexContext from '../IndexContext';
 
 const HEADER_HEIGHT = 56;
 const TRANSITION = 300;
@@ -46,8 +46,9 @@ interface Props {
   visible?: boolean;
 }
 const Header: React.FC<Props> = ({ visible = true, ...props }) => {
-  const { isMobile, isTablet, isPortrait } = useWindowSize();
-  if (!isMobile && (!isTablet || !isPortrait)) return <></>;
+  const { withLayout } = React.useContext(IndexContext);
+  if (withLayout) return <></>;
+
   return (
     <Root>
       <CSSTransition

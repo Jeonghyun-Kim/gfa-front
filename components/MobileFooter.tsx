@@ -50,17 +50,14 @@ const MyProgressBar = styled(ProgressBar)`
 
 interface Props {
   artworkData?: ArtworkJson;
-  visible?: boolean;
   onClick?: () => void;
 }
 const MobileFooter: React.FC<Props> = ({
   artworkData = { artist: '', title: '' },
-  visible = false,
   onClick = () => {},
   ...props
 }) => {
   const { index } = React.useContext(IndexContext);
-  if (!visible) return <></>;
   return (
     <>
       <Root onClick={() => onClick()} {...props}>
