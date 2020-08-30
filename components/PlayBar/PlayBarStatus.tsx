@@ -42,9 +42,6 @@ const Status: React.FC<Props> = ({ index, ...props }) => {
     case PAGE_ARRAY[3]:
       content = <p>방명록</p>;
       break;
-    case PAGE_ARRAY[4]:
-      content = <p>onDisplay</p>;
-      break;
     default:
       content = <></>;
       break;

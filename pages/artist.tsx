@@ -55,9 +55,7 @@ interface Props {
 const ArtistPage: React.FC<Props> = ({ artists }) => {
   const router = useRouter();
   const [headerFlag, setHeaderFlag] = React.useState<boolean>(true);
-  const [headerTimer, setHeaderTimer] = React.useState<NodeJS.Timeout | null>(
-    null,
-  );
+  const [timer, setTimer] = React.useState<NodeJS.Timeout | null>(null);
   const [slideChangedFlag, setSlideChangedFlag] = React.useState<boolean>(
     false,
   );
@@ -65,18 +63,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   const { isMobile, isTablet, isPortrait } = useMobileOrientation();
   const [ori, setOri] = React.useState<boolean | null>(null);
 
-  const clearFunc = () => {
-    let timeoutId = (setTimeout(() => {}, 0) as unknown) as number;
-    while (timeoutId) {
-      timeoutId -= 1;
-      clearTimeout(timeoutId);
-    }
-  };
-
   React.useEffect(() => {
-    if (refSlider.current) refSlider.current.slickGoTo(index - 1);
-
-    return clearFunc;
+    refSlider.current?.slickGoTo(index - 1);
   }, []);
 
   React.useEffect(() => {
@@ -92,9 +80,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
 
   React.useEffect(() => {
     if (headerFlag) {
-      if (headerTimer) clearTimeout(headerTimer);
-      const newTimer = setTimeout(() => setHeaderFlag(false), 3000);
-      setHeaderTimer(newTimer);
+      if (timer) clearTimeout(timer);
+      setTimer(setTimeout(() => setHeaderFlag(false), 3000));
     }
   }, [headerFlag]);
 
