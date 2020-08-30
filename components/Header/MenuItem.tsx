@@ -19,7 +19,7 @@ const Root = styled.a<RootProps>`
 
   &:hover {
     cursor: ${(props) => (props.current ? 'default' : 'pointer')};
-    opacity: 0.7;
+    opacity: ${(props) => (props.current ? 1 : 0.7)};
   }
 `;
 

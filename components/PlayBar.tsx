@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Status from './PlayBar/PlayBarStatus';
 import ButtonGroup from './PlayBar/PlayButtonGroup';
 import SimpleInfo from './PlayBar/SimpleInfo';
-import ListGroup from './PlayBar/ListGroup';
+import ListGroup from './ListGroup';
 import ProgressBar from './ProgressBar';
 
 import { checkLength } from '../lib/utils';
@@ -61,7 +61,7 @@ const PlayBar: React.FC<Props> = ({ className = undefined, ...props }) => {
       />
       <SimpleInfo
         artworkData={{ artist, title }}
-        animation={!checkLength(title, 25)}
+        animation={!checkLength(title, 35)}
       />
       <ListGroup />
     </Root>

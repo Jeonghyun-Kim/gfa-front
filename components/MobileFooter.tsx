@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { CSSTransition } from 'react-transition-group';
 
 import SimpleInfo from './PlayBar/SimpleInfo';
-import ListGroup from './PlayBar/ListGroup';
 import ProgressBar from './ProgressBar';
+import ListGroup from './ListGroup';
+import ArtistsModal from './ArtistsModal';
 
 import { checkLength } from '../lib/utils';
 
@@ -25,14 +27,19 @@ const Root = styled.div`
 
 const ArtworkInfo = styled(SimpleInfo)`
   position: absolute;
-  bottom: 3.5rem;
+  bottom: 3rem;
   left: 0rem;
   transform: translate(0, 50%);
-  width: 100px;
+  width: 300px;
 
   p.title {
     font-size: 1.2rem;
   }
+`;
+
+const MyProgressBar = styled(ProgressBar)`
+  top: initial;
+  bottom: 0;
 `;
 
 const MyListGroup = styled(ListGroup)`
@@ -43,31 +50,37 @@ const MyListGroup = styled(ListGroup)`
   }
 `;
 
-const MyProgressBar = styled(ProgressBar)`
-  top: initial;
-  bottom: 0;
-`;
-
 interface Props {
+  artists: Artist[];
   artworkData?: ArtworkJson;
   onClick?: () => void;
 }
 const MobileFooter: React.FC<Props> = ({
+  artists,
   artworkData = { artist: '', title: '' },
   onClick = () => {},
   ...props
 }) => {
-  const { index } = React.useContext(IndexContext);
+  const { index, listModalFlag } = React.useContext(IndexContext);
+
   return (
     <>
       <Root onClick={() => onClick()} {...props}>
         <ArtworkInfo
           artworkData={artworkData as ArtworkData}
-          animation={!checkLength(artworkData.title, 10)}
+          animation={!checkLength(artworkData.title, 30)}
         />
       </Root>
       <MyProgressBar index={index} />
       <MyListGroup iconOnly />
+      <CSSTransition
+        in={listModalFlag}
+        timeout={300}
+        unmountOnExit
+        classNames="list-modal"
+      >
+        <ArtistsModal artists={artists} />
+      </CSSTransition>
     </>
   );
 };

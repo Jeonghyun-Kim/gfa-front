@@ -43,14 +43,19 @@ const FixedHeader = styled.div`
 `;
 
 interface Props {
+  className?: string | undefined;
   visible?: boolean;
 }
-const Header: React.FC<Props> = ({ visible = true, ...props }) => {
+const Header: React.FC<Props> = ({
+  className = undefined,
+  visible = true,
+  ...props
+}) => {
   const { withLayout } = React.useContext(IndexContext);
   if (withLayout) return <></>;
 
   return (
-    <Root>
+    <Root className={`unselectable ${className}`}>
       <CSSTransition
         in={visible}
         timeout={TRANSITION}

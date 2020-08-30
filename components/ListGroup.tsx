@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import IconButton from '@material-ui/core/IconButton';
 import Apps from '@material-ui/icons/Apps';
 
-import { PAGE_ARRAY, COLORS } from '../../defines';
+import { PAGE_ARRAY, COLORS } from '../defines';
+
+import IndexContext from '../IndexContext';
 
 interface RootProps {
   disabled: boolean;
@@ -17,6 +19,12 @@ const Root = styled.div<RootProps>`
   align-items: center;
   right: 1rem;
   color: ${(props) => (props.disabled ? COLORS.disabled : 'white')};
+
+  p.listText {
+    @media screen and (max-width: 1000px) {
+      display: none;
+    }
+  }
 
   button {
     transition: none;
@@ -36,18 +44,19 @@ interface Props {
 }
 const ListGroup: React.FC<Props> = ({ iconOnly = false, ...props }) => {
   const router = useRouter();
+  const { setListModalFlag } = React.useContext(IndexContext);
   const disabled = router.pathname !== PAGE_ARRAY[1];
 
   return (
-    <Root disabled={disabled} {...props}>
-      {!iconOnly && <p>작품목록</p>}
-      <IconButton
-        onClick={(e) => {
-          e.preventDefault();
-          console.log('hello world!');
-        }}
-        disabled={disabled}
-      >
+    <Root
+      onClick={() => {
+        setListModalFlag(true);
+      }}
+      disabled={disabled}
+      {...props}
+    >
+      {!iconOnly && <p className="listText">작품목록</p>}
+      <IconButton>
         <Apps />
       </IconButton>
     </Root>

@@ -6,7 +6,7 @@ interface RootProps {
   animation: boolean;
 }
 const Root = styled.div<RootProps>`
-  width: 200px;
+  width: 250px;
   margin-left: 1rem;
   text-align: left;
   overflow: hidden;

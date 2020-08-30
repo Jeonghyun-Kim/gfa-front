@@ -11,7 +11,12 @@ import Loading from './Loading';
 // import { sendCounter } from '../lib/utils';
 import useWindowSize from '../lib/hooks/useWindowSize';
 
-import { PLAYBAR_HEIGHT, NAVBAR_WIDTH, NUM_ARTISTS } from '../defines';
+import {
+  PLAYBAR_HEIGHT,
+  NAVBAR_WIDTH,
+  NUM_ARTISTS,
+  TABLET_BREAKPOINT,
+} from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -35,6 +40,17 @@ const Root = styled.div<RootProps>`
     width: 100%;
     ${(props) => props.grid && 'grid-column: 2 / 3'};
     ${(props) => props.grid && 'grid-row: 1 / 2'};
+
+    @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
+      /* Hide scrollbar for IE, Edge and Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
   }
 `;
 
@@ -44,6 +60,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const withLayout = !isMobile && (!isTablet || !isPortrait);
   const [index, setIndex] = React.useState<number>(0);
   const refSlider = React.createRef<Slider | null>();
+  const refMain = React.createRef<HTMLDivElement>();
+  // For listModal toggle
+  const [listModalFlag, setListModalFlag] = React.useState<boolean>(false);
 
   // Set initial index with router.query.id if exists.
   React.useEffect(() => {
@@ -75,10 +94,20 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <Root grid={withLayout}>
       {index > 0 ? (
         <IndexContext.Provider
-          value={{ index, setIndex, refSlider, withLayout }}
+          value={{
+            index,
+            setIndex,
+            refSlider,
+            withLayout,
+            listModalFlag,
+            setListModalFlag,
+            refMain,
+          }}
         >
           {withLayout && <NavBar />}
-          <div className="main">{children}</div>
+          <div className="main" ref={refMain}>
+            {children}
+          </div>
           {withLayout && <PlayBar />}
         </IndexContext.Provider>
       ) : (

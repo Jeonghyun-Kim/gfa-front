@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { PAGE_ARRAY, NUM_ARTISTS } from '../../defines';
 
 const Root = styled.div`
-  width: 200px;
+  width: 250px;
   margin-right: 1rem;
   text-align: right;
 
