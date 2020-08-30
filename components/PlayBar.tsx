@@ -25,7 +25,10 @@ const Root = styled.div`
   background-color: #222222f7;
 `;
 
-const PlayBar: React.FC = ({ ...props }) => {
+interface Props {
+  className?: string | undefined;
+}
+const PlayBar: React.FC<Props> = ({ className = undefined, ...props }) => {
   const { index, setIndex, refSlider } = React.useContext(IndexContext);
   const { artist, title } = ArtworkData.find((artwork) => {
     return artwork.artistId === index;
@@ -48,7 +51,7 @@ const PlayBar: React.FC = ({ ...props }) => {
   };
 
   return (
-    <Root {...props}>
+    <Root {...props} className={`unselectable ${className}`}>
       <ProgressBar index={index} />
       <Status index={index} />
       <ButtonGroup

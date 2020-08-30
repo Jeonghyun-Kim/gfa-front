@@ -23,12 +23,19 @@ const Root = styled.div<RootProps>`
     color: #b1b1b1;
   }
 
+  &:hover {
+    p.title {
+      animation-play-state: paused;
+    }
+  }
+
   ${(props) =>
     props.animation &&
     `
     p.title {
       display: inline-block;
       animation: marquee 5s linear infinite;
+      animation-delay: -2s;
     }
 
     @keyframes marquee {
