@@ -13,12 +13,22 @@ const Root = styled.div`
 
   display: grid;
   place-items: center;
+
+  img.nowPlaying {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+  }
 `;
 
 const CurrentArtistBackground: React.FC = ({ ...props }) => {
   return (
     <Root {...props}>
-      <p>Now Playing</p>
+      <img
+        className="nowPlaying"
+        alt="Now Playing"
+        src="/images/now_playing.png"
+      />
     </Root>
   );
 };

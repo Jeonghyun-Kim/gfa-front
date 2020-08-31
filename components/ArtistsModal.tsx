@@ -82,7 +82,7 @@ const AristsModal: React.FC<Props> = ({ artists, ...props }) => {
           >
             <Close />
           </IconButton>
-          <h4>작품 목록 - 전시순</h4>
+          <h4>작품 목록</h4>
         </div>
         <MyArtistLists artists={artists} size={baseSize} gap={`${GAP}px`} />
       </div>

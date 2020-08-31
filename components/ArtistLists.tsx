@@ -27,12 +27,14 @@ interface Props {
   size?: number;
   gap?: string;
   hoverEffect?: boolean;
+  withName?: boolean;
 }
 const ArtistLists: React.FC<Props> = ({
   artists,
   size = 150,
   gap = '5px',
   hoverEffect = false,
+  withName = false,
   ...props
 }) => {
   const { index } = React.useContext(IndexContext);
@@ -40,12 +42,13 @@ const ArtistLists: React.FC<Props> = ({
     <Root base={size} gap={gap} {...props}>
       {artists.map((artist) => (
         <ArtistGridItem
+          key={artist.id}
           artistData={artist}
           size={size}
           gap={gap}
           current={artist.id === index}
           hoverEffect={hoverEffect}
-          key={artist.id}
+          withName={withName}
         />
       ))}
     </Root>

@@ -28,7 +28,7 @@ const Root = styled.div<RootProps>`
     }
   `}
 
-  img {
+  img.thumbArtwork {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -41,10 +41,12 @@ const Root = styled.div<RootProps>`
 
   .artistName {
     position: absolute;
-    bottom: 1rem;
-    left: 1rem;
+    bottom: 0.3rem;
+    left: 0.5rem;
+    margin: 0;
+    letter-spacing: 0.5rem;
     color: #ffffff;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 `;
 
@@ -87,10 +89,13 @@ const ArtistGridItem: React.FC<Props> = ({
       {...props}
     >
       <img
+        className="thumbArtwork"
         src={`${BUCKET_URL}/thumb/${artistData.thumbFileName}`}
         alt={artistData.artistName}
       />
-      {withName && <p className="artistName">{artistData.artistName}</p>}
+      {!current && withName && (
+        <p className="artistName">{artistData.artistName}</p>
+      )}
       {current && <CurrentBackground />}
     </Root>
   );
