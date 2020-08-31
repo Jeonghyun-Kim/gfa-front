@@ -29,8 +29,11 @@ const Root = styled.div`
   }
 `;
 
-const FixedHeader = styled.div`
-  position: fixed;
+interface HeaderProps {
+  fixed: boolean;
+}
+const FixedHeader = styled.div<HeaderProps>`
+  position: ${(props) => (props.fixed ? 'relative' : 'fixed')};
   display: flex;
   align-items: center;
   width: 100%;
@@ -44,10 +47,12 @@ const FixedHeader = styled.div`
 
 interface Props {
   className?: string | undefined;
+  fixed?: boolean;
   visible?: boolean;
 }
 const Header: React.FC<Props> = ({
   className = undefined,
+  fixed = true,
   visible = true,
   ...props
 }) => {
@@ -62,7 +67,7 @@ const Header: React.FC<Props> = ({
         unmountOnExit
         classNames="header"
       >
-        <FixedHeader {...props}>
+        <FixedHeader fixed={fixed} {...props}>
           <Logo />
           <div className="grow" />
           <MenuItem href={PAGE_ARRAY[1]}>전시장</MenuItem>

@@ -184,7 +184,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
         />
       </Head>
-      <Header visible={headerFlag} />
+      <Header fixed={false} visible={headerFlag} />
       <Root>
         {index ? (
           <>
