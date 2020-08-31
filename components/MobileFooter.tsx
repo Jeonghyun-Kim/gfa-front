@@ -1,11 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CSSTransition } from 'react-transition-group';
 
 import SimpleInfo from './PlayBar/SimpleInfo';
 import ProgressBar from './ProgressBar';
 import ListGroup from './ListGroup';
-import ArtistsModal from './ArtistsModal';
 
 import { checkLength } from '../lib/utils';
 
@@ -51,17 +49,15 @@ const MyListGroup = styled(ListGroup)`
 `;
 
 interface Props {
-  artists: Artist[];
   artworkData?: ArtworkJson;
   onClick?: () => void;
 }
 const MobileFooter: React.FC<Props> = ({
-  artists,
   artworkData = { artist: '', title: '' },
   onClick = () => {},
   ...props
 }) => {
-  const { index, listModalFlag } = React.useContext(IndexContext);
+  const { index } = React.useContext(IndexContext);
 
   return (
     <>
@@ -73,14 +69,6 @@ const MobileFooter: React.FC<Props> = ({
       </Root>
       <MyProgressBar index={index} />
       <MyListGroup iconOnly />
-      <CSSTransition
-        in={listModalFlag}
-        timeout={300}
-        unmountOnExit
-        classNames="list-modal"
-      >
-        <ArtistsModal artists={artists} />
-      </CSSTransition>
     </>
   );
 };

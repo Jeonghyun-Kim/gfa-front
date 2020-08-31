@@ -17,7 +17,7 @@ const Root = styled.div<RootProps>`
   position: relative;
   width: ${(props) => props.base}px;
   height: ${(props) => props.base}px;
-  border: 1px solid #eee;
+  /* border: 1px solid #eee; */
   transition: 0.5s ease;
 
   ${(props) =>

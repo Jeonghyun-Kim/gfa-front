@@ -3,17 +3,19 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import styled from 'styled-components';
 import Slider from 'react-slick';
+import { CSSTransition } from 'react-transition-group';
 
 import Header from '../components/Header';
 import RenderedImage from '../components/RenderedImage';
 import Loading from '../components/Loading';
 import MobileFooter from '../components/MobileFooter';
+import ArtistsModal from '../components/ArtistsModal';
 
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
 
-import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
-// import { API_URL } from '../defines';
+// import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
+import { API_URL } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -56,19 +58,19 @@ const Root = styled.div`
       opacity: 1;
     }
   }
-  .list-modal-exit {
-    top: 0;
+  /* .list-modal-exit {
+    opacity: 1;
     .modalHeader {
       opacity: 1;
     }
   }
   .list-modal-exit-active {
-    top: 100%;
-    transition: opacity 300ms;
+    transition: 100ms;
+    opacity: 0;
     .modalHeader {
       opacity: 0;
     }
-  }
+  } */
 `;
 
 interface Props {
@@ -86,9 +88,13 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     false,
   );
   // Artist Index from sessionStorage, IndexContext from Layout.tsx
-  const { index, setIndex, refSlider, withLayout } = React.useContext(
-    IndexContext,
-  );
+  const {
+    index,
+    setIndex,
+    refSlider,
+    withLayout,
+    listModalFlag,
+  } = React.useContext(IndexContext);
   // Use screen size and orientation (hooks)
   const { isMobile, isTablet, isPortrait } = useMobileOrientation();
   // For detecting orientation change
@@ -134,28 +140,28 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   }, [headerFlag]);
 
   // Prefetching images for enhancement of speed.
-  React.useEffect(() => {
-    const prevImg = new Image();
-    const nextImg = new Image();
-    // Artist's index starts from 1, javascript array index starts from 0.
-    const prevIndex = index !== 1 ? index - 1 - 1 : null;
-    const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
-    if ((isMobile || isTablet) && isPortrait) {
-      if (prevIndex && artists[prevIndex].portraitFileName) {
-        prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].portraitFileName}`;
-      }
-      if (nextIndex && artists[nextIndex].portraitFileName) {
-        nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].portraitFileName}`;
-      }
-    } else {
-      if (prevIndex && artists[prevIndex].landscapeFileName) {
-        prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].landscapeFileName}`;
-      }
-      if (nextIndex && artists[nextIndex].landscapeFileName) {
-        nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
-      }
-    }
-  }, [index, artists, isMobile, isTablet, isPortrait]);
+  // React.useEffect(() => {
+  //   const prevImg = new Image();
+  //   const nextImg = new Image();
+  //   // Artist's index starts from 1, javascript array index starts from 0.
+  //   const prevIndex = index !== 1 ? index - 1 - 1 : null;
+  //   const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
+  //   if ((isMobile || isTablet) && isPortrait) {
+  //     if (prevIndex && artists[prevIndex].portraitFileName) {
+  //       prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].portraitFileName}`;
+  //     }
+  //     if (nextIndex && artists[nextIndex].portraitFileName) {
+  //       nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].portraitFileName}`;
+  //     }
+  //   } else {
+  //     if (prevIndex && artists[prevIndex].landscapeFileName) {
+  //       prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].landscapeFileName}`;
+  //     }
+  //     if (nextIndex && artists[nextIndex].landscapeFileName) {
+  //       nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
+  //     }
+  //   }
+  // }, [index, artists, isMobile, isTablet, isPortrait]);
 
   // Toggle Header on custom conditions.
   const toggleHeader = () => {
@@ -189,7 +195,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               dots={false}
               arrows={false}
               infinite={false}
-              lazyLoad="ondemand"
+              lazyLoad="progressive"
               initialSlide={index - 1}
               focusOnSelect
               useCSS={isMobile || (isTablet && isPortrait)}
@@ -214,13 +220,22 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               })}
             </Slider>
             {!withLayout && (
-              <MobileFooter
-                artists={artists}
-                artworkData={artworks.find(
-                  (artwork: ArtworkJson) => artwork.artistId === index,
-                )}
-                onClick={() => toggleHeader()}
-              />
+              <>
+                <MobileFooter
+                  artworkData={artworks.find(
+                    (artwork: ArtworkJson) => artwork.artistId === index,
+                  )}
+                  onClick={() => toggleHeader()}
+                />
+                <CSSTransition
+                  in={listModalFlag}
+                  timeout={300}
+                  unmountOnExit
+                  classNames="list-modal"
+                >
+                  <ArtistsModal artists={artists} />
+                </CSSTransition>
+              </>
             )}
           </>
         ) : (

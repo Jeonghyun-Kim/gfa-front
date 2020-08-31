@@ -10,7 +10,7 @@ import useWindowSize from '../lib/hooks/useWindowSize';
 
 import IndexContext from '../IndexContext';
 
-const GAP = 5;
+const GAP = 3;
 
 const Root = styled.div`
   position: absolute;
@@ -57,16 +57,19 @@ interface Props {
 const AristsModal: React.FC<Props> = ({ artists, ...props }) => {
   const { innerWidth } = useWindowSize();
   const { index, setListModalFlag, refMain } = React.useContext(IndexContext);
+  const [flag, setFlag] = React.useState<boolean>(true);
   const baseSize = Math.floor((innerWidth - 2 * GAP) / 3);
 
   React.useEffect(() => {
-    if (refMain.current) {
+    if (flag && refMain.current) {
       refMain.current.scroll(
         0,
         Math.floor((index - 1) / 3 - 1) * (baseSize + GAP),
       );
+      // make autoscroll active only once (first mounted)
+      setTimeout(() => setFlag(false), 0);
     }
-  }, [refMain, baseSize, index]);
+  }, [refMain.current]);
 
   return (
     <Root {...props}>
