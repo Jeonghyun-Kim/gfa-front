@@ -195,17 +195,17 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               dots={false}
               arrows={false}
               infinite={false}
-              lazyLoad="progressive"
+              // lazyLoad="progressive"
               initialSlide={index - 1}
               focusOnSelect
               useCSS={isMobile || (isTablet && isPortrait)}
               swipe={isMobile || (isTablet && isPortrait)}
-              beforeChange={(_, newIndex) => {
+              afterChange={(currentSlide) => {
+                sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
+                setSlideChangedFlag(false);
                 setTimeout(() => {
-                  sessionStorage.setItem('@artistId', `${newIndex + 1}`);
-                  setSlideChangedFlag(false);
-                  setIndex(newIndex + 1);
-                }, 300);
+                  setIndex(currentSlide + 1);
+                }, 50);
               }}
               onSwipe={() => setSlideChangedFlag(true)}
             >

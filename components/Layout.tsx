@@ -73,7 +73,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         sessionStorage.setItem('@artistId', `${id}`);
         if (refSlider.current) refSlider.current.slickGoTo(Number(id) - 1);
         // if (process.env.NODE_ENV === 'production') sendCounter();
-        router.replace(router.pathname.split('?')[0]);
+        router.replace(router.pathname.split('?')[0], undefined, {
+          shallow: true,
+        });
       } else {
         const item = sessionStorage.getItem('@artistId');
         if (item && JSON.parse(item) >= 1 && JSON.parse(item) <= NUM_ARTISTS)
