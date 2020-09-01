@@ -5,12 +5,9 @@ import { CSSTransition } from 'react-transition-group';
 import Logo from './Logo/SquaredLogo';
 import MenuItem from './Header/MenuItem';
 
-import { PAGE_ARRAY } from '../defines';
+import { PAGE_ARRAY, HEADER_HEIGHT, TRANSITION } from '../defines';
 
 import IndexContext from '../IndexContext';
-
-const HEADER_HEIGHT = 56;
-const TRANSITION = 300;
 
 const Root = styled.div`
   .header-enter {

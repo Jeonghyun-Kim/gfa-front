@@ -5,6 +5,10 @@ export const TABLET_BREAKPOINT = 800;
 export const NAVBAR_WIDTH = 225;
 export const PLAYBAR_HEIGHT = 82;
 export const NUM_ARTISTS = 64;
+
+export const HEADER_HEIGHT = 56;
+export const TRANSITION = 300;
+
 export const COLORS = {
   primary: '#17babc',
   disabled: '#7d7d7d',
@@ -19,6 +23,8 @@ const DEFINES = {
   NAVBAR_WIDTH,
   PLAYBAR_HEIGHT,
   NUM_ARTISTS,
+  HEADER_HEIGHT,
+  TRANSITION,
   COLORS,
 };
 
