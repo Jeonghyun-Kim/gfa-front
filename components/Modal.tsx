@@ -42,7 +42,7 @@ const Dialog = styled.div`
   button {
     margin-left: 10px;
   }
-  z-index: 3;
+  z-index: 999;
 `;
 
 interface Props {

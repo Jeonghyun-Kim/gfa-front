@@ -2,13 +2,15 @@ import React from 'react';
 // import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import Modal from '../Modal';
 
 import fetcher from '../../lib/fetcher';
 
-import { API_URL, COLORS } from '../../defines';
+import { API_URL, HEADER_HEIGHT, COLORS } from '../../defines';
+
+import IndexContext from '../../IndexContext';
 
 const Root = styled.div`
   position: relative;
@@ -57,7 +59,31 @@ const Container = styled.div<ContainerProps>`
   }
 `;
 
-const MyInput = styled(TextField)`
+const ExitHeader = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: ${HEADER_HEIGHT}px;
+  background-color: white;
+  /* box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px; */
+  z-index: 2;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  svg {
+    font-size: 2rem;
+  }
+`;
+
+interface InputProps {
+  focused: boolean;
+}
+const MyInput = styled(TextField)<InputProps>`
   width: 100%;
   background-color: #f6f5f6;
   border-radius: 6px;
@@ -68,12 +94,20 @@ const MyInput = styled(TextField)`
   }
 
   fieldset {
-    display: none;
+    border-color: ${(props) =>
+      props.focused ? COLORS.primary : '#eee'} !important;
   }
 
   .MuiOutlinedInput-multiline {
     /* padding: 18.5px 14px; */
     padding: 9px 7px;
+  }
+
+  &:hover {
+    fieldset {
+      opacity: ${(props) => (props.focused ? 1 : 0.5)} !important;
+      transition: 300ms;
+    }
   }
 `;
 
@@ -93,6 +127,11 @@ const ResModal = styled(Modal)`
   }
 `;
 
+interface MyInputProps {
+  name: boolean;
+  content: boolean;
+}
+
 interface Props {
   mutateData: (
     data?: any,
@@ -100,11 +139,17 @@ interface Props {
   ) => Promise<any>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  inputFocuses: MyInputProps;
+  setInputFocuses: React.Dispatch<React.SetStateAction<MyInputProps>>;
+  handleClose: () => void;
 }
 const VisitorForm: React.FC<Props> = ({
   mutateData,
   open,
   setOpen,
+  inputFocuses,
+  setInputFocuses,
+  handleClose,
   ...props
 }) => {
   // const router = useRouter();
@@ -113,15 +158,12 @@ const VisitorForm: React.FC<Props> = ({
   const [timer, setTimer] = React.useState<NodeJS.Timeout | null>(null);
   const [enabled, setEnabled] = React.useState<boolean>(false);
   const [res, setRes] = React.useState<number | null>(null);
-  // const [contentFocused, setContentFocused] = React.useState<boolean>(false);
 
-  const inputRefs = {
-    name: React.useRef<HTMLInputElement>(null),
-    content: React.useRef<HTMLTextAreaElement>(null),
-  };
+  const { withLayout } = React.useContext(IndexContext);
 
   const sendData = async () => {
     try {
+      // TODO: VALIDATION
       const { error } = await fetcher('/api/signature', {
         method: 'POST',
         headers: {
@@ -129,16 +171,9 @@ const VisitorForm: React.FC<Props> = ({
         },
         body: JSON.stringify({
           name,
-          content: content.trim().replace('\n\n', '\n'),
+          content: content.trim(),
         }),
       });
-      // TODO: ####
-      console.log(
-        JSON.stringify({
-          name,
-          content: content.trim().replace('\n\n', '\n'),
-        }),
-      );
 
       setRes(error);
     } catch (err) {
@@ -160,6 +195,13 @@ const VisitorForm: React.FC<Props> = ({
   // TODO: input maxlength.
   return (
     <Root {...props}>
+      {open && !withLayout && (
+        <ExitHeader>
+          <Button variant="text" onClick={() => handleClose()}>
+            취소
+          </Button>
+        </ExitHeader>
+      )}
       <ResModal visible={res !== null}>
         <h3>성공적으로 업로드하였습니다.</h3>
         <Button
@@ -178,18 +220,31 @@ const VisitorForm: React.FC<Props> = ({
       <Container
         color="white"
         position={{ x: 0, y: open ? 25 : -10 }}
-        zIndex={1}
+        zIndex={5}
       >
         <MyInput
           id="nameInput"
-          inputRef={inputRefs.name}
+          // inputRef={inputRefs.name}
           // name="name"
           type="text"
           variant="outlined"
           value={name}
-          placeholder="이름을 입력해주세요"
-          onFocus={() => {
+          placeholder={inputFocuses.name ? '' : '이름을 입력해주세요'}
+          onClick={(e) => e.preventDefault()}
+          onFocus={(e) => {
+            if (!open && !withLayout) {
+              e.target.blur();
+            } else {
+              setInputFocuses({ name: true, content: false });
+            }
             setOpen(true);
+          }}
+          focused={inputFocuses.name}
+          onBlur={() => {
+            setInputFocuses({
+              ...inputFocuses,
+              name: false,
+            });
           }}
           onChange={(e) => {
             const newName = e.target.value;
@@ -203,7 +258,7 @@ const VisitorForm: React.FC<Props> = ({
         />
         <MyInput
           id="contentInput"
-          inputRef={inputRefs.content}
+          // inputRef={inputRefs.content}
           // name="content"
           type="text"
           variant="outlined"
@@ -211,8 +266,13 @@ const VisitorForm: React.FC<Props> = ({
           rows={4}
           rowsMax={4}
           value={content}
-          placeholder="전하고 싶은 말을 써주세요"
-          onFocus={() => {
+          placeholder={inputFocuses.content ? '' : '전하고 싶은 말을 써주세요'}
+          onFocus={(e) => {
+            if (!open && !withLayout) {
+              e.target.blur();
+            } else {
+              setInputFocuses({ name: false, content: true });
+            }
             setOpen(true);
             // if (name.length < 2) {
             //   const { current } = inputRefs.name;
@@ -220,6 +280,13 @@ const VisitorForm: React.FC<Props> = ({
             // } else {
             //   setContentFocused(true);
             // }
+          }}
+          focused={inputFocuses.content}
+          onBlur={() => {
+            setInputFocuses({
+              ...inputFocuses,
+              content: false,
+            });
           }}
           onChange={(e) => {
             setContent(e.target.value);
@@ -229,14 +296,14 @@ const VisitorForm: React.FC<Props> = ({
       <Container
         color={!open || enabled ? COLORS.primary : COLORS.disabled}
         position={{ x: 0, y: open ? -25 : 35 }}
-        zIndex={0}
+        zIndex={4}
       >
         <h4 className="title">방명록</h4>
         {enabled ? (
           <MyButton
             onClick={() => {
               sendData();
-              setOpen(false);
+              handleClose();
             }}
           >
             <span>보내기</span>

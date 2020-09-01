@@ -5,16 +5,12 @@ import useSWR from 'swr';
 import Countup from 'react-countup';
 import { CSSTransition } from 'react-transition-group';
 
-import Button from '@material-ui/core/Button';
-// import IconButton from '@material-ui/core/IconButton';
-// import Close from '@material-ui/icons/Close';
-
 import Loading from '../components/Loading';
 import Header from '../components/Header';
 import VisitorForm from '../components/Visitor/VisitorForm';
 import VisitorSignPad from '../components/Visitor/VisitorSignPad';
 
-import { API_URL, HEADER_HEIGHT } from '../defines';
+import { API_URL } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -30,21 +26,6 @@ const Root = styled.div<RootProps>`
   flex-direction: column;
   align-items: center;
   margin-top: ${(props) => (props.up ? '60px' : '0px')};
-
-  /* .visitor-enter {
-    top: 60px;
-  }
-  .visitor-enter-active {
-    top: -40px;
-    transition: 300ms;
-  }
-  .visitor-exit {
-    top: -40px;
-  }
-  .visitor-exit-active {
-    top: 60px;
-    transition: 300ms;
-  } */
 
   .signPad-enter {
     bottom: -300px;
@@ -77,28 +58,31 @@ const Root = styled.div<RootProps>`
   }
 `;
 
-const ExitHeader = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: ${HEADER_HEIGHT}px;
-  background-color: white;
-  /* box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px; */
-  z-index: 2;
-
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
-`;
+interface MyInputProps {
+  name: boolean;
+  content: boolean;
+}
 
 const VisitorPage: React.FC = () => {
   const { withLayout } = React.useContext(IndexContext);
   const { data, mutate, error } = useSWR(`${API_URL}/signature/count`);
   const [counter, setCounter] = React.useState<number>(0);
   const [open, setOpen] = React.useState<boolean>(false);
+
+  const [inputFocuses, setInputFocuses] = React.useState<MyInputProps>({
+    name: false,
+    content: false,
+  });
+
+  const handleClose = () => {
+    setOpen(false);
+    setInputFocuses({ name: false, content: false });
+  };
+
+  React.useLayoutEffect(() => {
+    if (withLayout && !inputFocuses.name && !inputFocuses.content && open)
+      handleClose();
+  }, [withLayout, inputFocuses]);
 
   if (!data && !error) return <Loading />;
   if (error)
@@ -116,15 +100,7 @@ const VisitorPage: React.FC = () => {
       <Head>
         <title>onDisplay - 방명록</title>
       </Head>
-      {withLayout || !open ? (
-        <Header />
-      ) : (
-        <ExitHeader>
-          <Button variant="text" onClick={() => setOpen(false)}>
-            취소
-          </Button>
-        </ExitHeader>
-      )}
+      {!withLayout && !open && <Header />}
       <Root up={!withLayout && open}>
         {(withLayout || !open) && (
           <>
@@ -147,7 +123,14 @@ const VisitorPage: React.FC = () => {
             </p>
           </>
         )}
-        <VisitorForm mutateData={mutate} open={open} setOpen={setOpen} />
+        <VisitorForm
+          mutateData={mutate}
+          open={open}
+          setOpen={setOpen}
+          inputFocuses={inputFocuses}
+          setInputFocuses={setInputFocuses}
+          handleClose={handleClose}
+        />
         {!withLayout && (
           <CSSTransition
             in={open}
