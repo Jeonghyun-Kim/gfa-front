@@ -224,8 +224,8 @@ const VisitorForm: React.FC<Props> = ({
       >
         <MyInput
           id="nameInput"
-          // inputRef={inputRefs.name}
-          // name="name"
+          name="name"
+          autoComplete="off"
           type="text"
           variant="outlined"
           value={name}
@@ -258,8 +258,6 @@ const VisitorForm: React.FC<Props> = ({
         />
         <MyInput
           id="contentInput"
-          // inputRef={inputRefs.content}
-          // name="content"
           type="text"
           variant="outlined"
           multiline
@@ -274,12 +272,6 @@ const VisitorForm: React.FC<Props> = ({
               setInputFocuses({ name: false, content: true });
             }
             setOpen(true);
-            // if (name.length < 2) {
-            //   const { current } = inputRefs.name;
-            //   if (current) current.focus();
-            // } else {
-            //   setContentFocused(true);
-            // }
           }}
           focused={inputFocuses.content}
           onBlur={() => {
