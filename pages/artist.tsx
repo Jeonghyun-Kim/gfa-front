@@ -96,7 +96,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     listModalFlag,
   } = React.useContext(IndexContext);
   // Use screen size and orientation (hooks)
-  const { isMobile, isTablet, isPortrait } = useMobileOrientation();
+  const { isPortrait } = useMobileOrientation();
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
 
