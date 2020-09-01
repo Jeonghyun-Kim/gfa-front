@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import ArtistGridItem from './ArtistList/ArtistGridItem';
+import ArtistGridItem from './ArtistGridItem';
 
-import IndexContext from '../IndexContext';
+import IndexContext from '../../IndexContext';
 
 interface RootProps {
   base: number;

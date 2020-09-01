@@ -6,9 +6,9 @@ import Close from '@material-ui/icons/Close';
 
 import ArtistLists from './ArtistLists';
 
-import useWindowSize from '../lib/hooks/useWindowSize';
+import useWindowSize from '../../lib/hooks/useWindowSize';
 
-import IndexContext from '../IndexContext';
+import IndexContext from '../../IndexContext';
 
 const GAP = 3;
 

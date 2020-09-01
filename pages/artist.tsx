@@ -9,7 +9,7 @@ import Header from '../components/Header';
 import RenderedImage from '../components/RenderedImage';
 import Loading from '../components/Loading';
 import MobileFooter from '../components/MobileFooter';
-import ArtistsModal from '../components/ArtistsModal';
+import ArtistsModal from '../components/ArtistList/ArtistsModal';
 
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
