@@ -198,8 +198,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               // lazyLoad="progressive"
               initialSlide={index - 1}
               focusOnSelect
-              useCSS={isMobile || (isTablet && isPortrait)}
-              swipe={isMobile || (isTablet && isPortrait)}
+              // useCSS={!withLayout}
+              swipe={!withLayout}
               afterChange={(currentSlide) => {
                 sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
                 setSlideChangedFlag(false);
