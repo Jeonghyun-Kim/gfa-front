@@ -40,17 +40,6 @@ const Root = styled.div<RootProps>`
     width: 100%;
     ${(props) => props.grid && 'grid-column: 2 / 3'};
     ${(props) => props.grid && 'grid-row: 1 / 2'};
-
-    @media screen and (max-width: ${TABLET_BREAKPOINT}px) {
-      /* Hide scrollbar for IE, Edge and Firefox */
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
-
-      /* Hide scrollbar for Chrome, Safari and Opera */
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
   }
 `;
 
@@ -60,7 +49,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const withLayout = !isMobile && (!isTablet || !isPortrait);
   const [index, setIndex] = React.useState<number>(0);
   const refSlider = React.createRef<Slider | null>();
-  const refMain = React.createRef<HTMLDivElement>();
   // For listModal toggle
   const [listModalFlag, setListModalFlag] = React.useState<boolean>(false);
 
@@ -103,13 +91,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             withLayout,
             listModalFlag,
             setListModalFlag,
-            refMain,
           }}
         >
           {withLayout && <NavBar />}
-          <div className="main" ref={refMain}>
-            {children}
-          </div>
+          <div className="main">{children}</div>
           {withLayout && <PlayBar />}
         </IndexContext.Provider>
       ) : (

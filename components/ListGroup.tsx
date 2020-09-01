@@ -44,13 +44,13 @@ interface Props {
 }
 const ListGroup: React.FC<Props> = ({ iconOnly = false, ...props }) => {
   const router = useRouter();
-  const { setListModalFlag } = React.useContext(IndexContext);
+  const { listModalFlag, setListModalFlag } = React.useContext(IndexContext);
   const disabled = router.pathname !== PAGE_ARRAY[1];
 
   return (
     <Root
       onClick={() => {
-        setListModalFlag(true);
+        setListModalFlag(!listModalFlag);
       }}
       disabled={disabled}
       {...props}

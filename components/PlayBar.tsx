@@ -23,6 +23,7 @@ const Root = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #222222f7;
+  z-index: 9;
 `;
 
 interface Props {

@@ -14,7 +14,8 @@ const Root = styled.div<RootProps>`
   display: grid;
   place-items: center;
   overflow-y: scroll;
-  background-color: white;
+  margin-bottom: 50px;
+  /* background-color: white; */
   grid-gap: ${(props) => props.gap};
   grid-template-columns: repeat(
     auto-fit,

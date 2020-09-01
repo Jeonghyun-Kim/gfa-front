@@ -16,14 +16,28 @@ const Root = styled.div`
   position: absolute;
   top: 0;
   width: 100%;
+  height: 100%;
   z-index: 99;
 
   .container {
     position: relative;
+    height: 100%;
+    background-color: white;
+    overflow: auto;
+    scroll-behavior: smooth;
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .modalHeader {
-    position: fixed;
+    position: absolute;
     top: 0px;
     width: 100%;
     height: 46px;
@@ -48,7 +62,7 @@ const Root = styled.div`
 const MyArtistLists = styled(ArtistLists)`
   position: absolute;
   top: 46px;
-  overflow-y: hidden;
+  overflow: hidden;
 `;
 
 interface Props {
@@ -56,34 +70,36 @@ interface Props {
 }
 const AristsModal: React.FC<Props> = ({ artists, ...props }) => {
   const { innerWidth } = useWindowSize();
-  const { index, setListModalFlag, refMain } = React.useContext(IndexContext);
+  const { index, setListModalFlag } = React.useContext(IndexContext);
   const [flag, setFlag] = React.useState<boolean>(true);
   const baseSize = Math.floor((innerWidth - 2 * GAP) / 3);
 
+  const refContainer = React.useRef<HTMLDivElement>(null);
+
   React.useEffect(() => {
-    if (flag && refMain.current) {
-      refMain.current.scroll(
+    if (flag && refContainer.current) {
+      refContainer.current.scroll(
         0,
         Math.floor((index - 1) / 3 - 1) * (baseSize + GAP),
       );
       // make autoscroll active only once (first mounted)
       setTimeout(() => setFlag(false), 0);
     }
-  }, [refMain.current]);
+  }, [refContainer.current]);
 
   return (
     <Root {...props}>
-      <div className="container unselectable">
-        <div className="modalHeader">
-          <IconButton
-            onClick={() => {
-              setListModalFlag(false);
-            }}
-          >
-            <Close />
-          </IconButton>
-          <h4>작품 목록</h4>
-        </div>
+      <div className="modalHeader">
+        <IconButton
+          onClick={() => {
+            setListModalFlag(false);
+          }}
+        >
+          <Close />
+        </IconButton>
+        <h4>작품 목록</h4>
+      </div>
+      <div ref={refContainer} className="container unselectable">
         <MyArtistLists artists={artists} size={baseSize} gap={`${GAP}px`} />
       </div>
     </Root>

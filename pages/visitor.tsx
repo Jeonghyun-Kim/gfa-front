@@ -79,10 +79,12 @@ const VisitorPage: React.FC = () => {
     setInputFocuses({ name: false, content: false });
   };
 
-  React.useLayoutEffect(() => {
-    if (withLayout && !inputFocuses.name && !inputFocuses.content && open)
-      handleClose();
-  }, [withLayout, inputFocuses]);
+  // React.useLayoutEffect(() => {
+  //   if (withLayout && !inputFocuses.name && !inputFocuses.content && open)
+  //     setTimeout(() => {
+  //       handleClose();
+  //     }, 100);
+  // }, [withLayout, inputFocuses]);
 
   if (!data && !error) return <Loading />;
   if (error)

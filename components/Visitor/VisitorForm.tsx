@@ -295,6 +295,7 @@ const VisitorForm: React.FC<Props> = ({
           <MyButton
             onClick={() => {
               sendData();
+              handleEnable(false);
               handleClose();
             }}
           >

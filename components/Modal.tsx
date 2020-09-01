@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 import ScrollLock from 'react-scrolllock';
 
+import { NAVBAR_WIDTH, PLAYBAR_HEIGHT } from '../defines';
+
+import IndexContext from '../IndexContext';
+
 const Root = styled.div`
   .modal-enter {
     opacity: 0;
@@ -20,12 +24,14 @@ const Root = styled.div`
   }
 `;
 
-const Dialog = styled.div`
+interface DialogProps {
+  withLayout: boolean;
+}
+const Dialog = styled.div<DialogProps>`
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: calc(50% - ${(props) => (props.withLayout ? PLAYBAR_HEIGHT / 2 : 0)}px);
+  left: calc(50% - ${(props) => (props.withLayout ? NAVBAR_WIDTH / 2 : 0)} px);
   transform: translate(-50%, -50%);
-  width: 100%;
   max-width: 80vw;
   padding: 1.5rem;
   background: #eee;
@@ -51,6 +57,8 @@ interface Props {
 }
 
 const Modal: React.FC<Props> = ({ children, visible = false, ...props }) => {
+  const { withLayout } = React.useContext(IndexContext);
+
   return (
     <Root>
       <ScrollLock isActive={visible} />
@@ -60,7 +68,9 @@ const Modal: React.FC<Props> = ({ children, visible = false, ...props }) => {
         unmountOnExit
         classNames="modal"
       >
-        <Dialog {...props}>{children}</Dialog>
+        <Dialog withLayout={withLayout} {...props}>
+          {children}
+        </Dialog>
       </CSSTransition>
     </Root>
   );

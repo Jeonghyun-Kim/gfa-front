@@ -10,6 +10,7 @@ import RenderedImage from '../components/RenderedImage';
 import Loading from '../components/Loading';
 import MobileFooter from '../components/MobileFooter';
 import ArtistsModal from '../components/ArtistList/ArtistsModal';
+import DesktopList from '../components/ArtistList/DesktopList';
 
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
@@ -58,6 +59,7 @@ const Root = styled.div`
       opacity: 1;
     }
   }
+
   /* .list-modal-exit {
     opacity: 1;
     .modalHeader {
@@ -71,6 +73,25 @@ const Root = styled.div`
       opacity: 0;
     }
   } */
+
+  .list-desktop-enter {
+    top: 100vh;
+  }
+
+  .list-desktop-active {
+    top: 100px;
+    transition: 300ms;
+  }
+
+  /* .list-desktop-exit {;
+    opacity: 1;
+    transition: 300ms
+  }
+;
+  .list-desktop-exit-active {;
+    opacity: 0
+    transition: 300ms
+  } */ ;
 `;
 
 interface Props {
@@ -223,7 +244,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 );
               })}
             </Slider>
-            {!withLayout && (
+            {!withLayout ? (
               <>
                 <MobileFooter
                   artworkData={artworks.find(
@@ -240,6 +261,15 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   <ArtistsModal artists={artists} />
                 </CSSTransition>
               </>
+            ) : (
+              <CSSTransition
+                in={listModalFlag}
+                timeout={300}
+                unmountOnExit
+                classNames="list-desktop"
+              >
+                <DesktopList artists={artists} />
+              </CSSTransition>
             )}
           </>
         ) : (

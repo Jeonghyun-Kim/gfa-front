@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import CurrentBackground from './CurrentArtistBackground';
+import GradientBackground from './GradientBackground';
 
 import { BUCKET_URL } from '../../defines';
 
@@ -47,6 +48,7 @@ const Root = styled.div<RootProps>`
     letter-spacing: 0.5rem;
     color: #ffffff;
     font-size: 1rem;
+    z-index: 1;
   }
 `;
 
@@ -99,6 +101,7 @@ const ArtistGridItem: React.FC<Props> = ({
         <p className="artistName">{artistData.artistName}</p>
       )}
       {current && <CurrentBackground />}
+      {withName && <GradientBackground hover />}
     </Root>
   );
 };

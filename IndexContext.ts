@@ -8,7 +8,6 @@ interface ContextProps {
   withLayout: boolean;
   listModalFlag: boolean;
   setListModalFlag: React.Dispatch<React.SetStateAction<boolean>>;
-  refMain: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const defaultContext: ContextProps = {
@@ -18,7 +17,6 @@ const defaultContext: ContextProps = {
   withLayout: false,
   listModalFlag: false,
   setListModalFlag: () => false,
-  refMain: React.createRef(),
 };
 
 export default React.createContext<ContextProps>(defaultContext);
