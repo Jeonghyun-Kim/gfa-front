@@ -208,6 +208,10 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 }, 50);
               }}
               onSwipe={() => setSlideChangedFlag(true)}
+              onEdge={(swipeDirection) => {
+                if (swipeDirection === 'left') router.push('/video');
+                else router.push('/');
+              }}
             >
               {artists.map((artist) => {
                 return (
