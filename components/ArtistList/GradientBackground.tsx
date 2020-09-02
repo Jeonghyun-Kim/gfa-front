@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface RootProps {
-  width?: number;
-  height?: number;
-  top: number;
-  left: number;
+  width?: string;
+  height?: string;
+  top?: string;
+  left?: string;
+  bottom?: string;
+  right?: string;
   opacity: {
     from: number;
     to: number;
@@ -16,8 +18,10 @@ const Root = styled.div<RootProps>`
   position: absolute;
   width: ${(props) => props.width ?? '100%'};
   height: ${(props) => props.height ?? '100%'};
-  top: ${(props) => props.top}px;
-  left: ${(props) => props.left}px;
+  top: ${(props) => props.top};
+  left: ${(props) => props.left};
+  bottom: ${(props) => props.bottom};
+  right: ${(props) => props.right};
   background: rgb(0, 0, 0);
   background: linear-gradient(
     0deg,
@@ -35,10 +39,12 @@ const Root = styled.div<RootProps>`
 `;
 
 interface Props {
-  width?: number;
-  height?: number;
-  top?: number;
-  left?: number;
+  width?: string;
+  height?: string;
+  top?: string;
+  left?: string;
+  bottom?: string;
+  right?: string;
   opacity?: {
     from: number;
     to: number;
@@ -46,10 +52,12 @@ interface Props {
   hover?: boolean;
 }
 const GradientBaground: React.FC<Props> = ({
-  width,
-  height,
-  top = 0,
-  left = 0,
+  width = '100%',
+  height = '100%',
+  top = '0',
+  left = '0',
+  bottom = '0',
+  right = '0',
   opacity = {
     from: 60,
     to: 0,
@@ -63,6 +71,8 @@ const GradientBaground: React.FC<Props> = ({
       height={height}
       top={top}
       left={left}
+      bottom={bottom}
+      right={right}
       opacity={opacity}
       hover={hover}
       {...props}

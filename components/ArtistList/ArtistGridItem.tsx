@@ -72,7 +72,7 @@ const ArtistGridItem: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const {
-    index,
+    // index,
     setIndex,
     withLayout,
     refSlider,
@@ -86,16 +86,22 @@ const ArtistGridItem: React.FC<Props> = ({
       gap={gap}
       hoverEffect={hoverEffect}
       onClick={() => {
-        setListModalFlag(false);
+        if (withLayout) {
+          setListModalFlag(false);
+        } else {
+          router.push(router.pathname.split('?')[0], undefined, {
+            shallow: true,
+          });
+        }
         setIndex(artistData.id);
         refSlider.current?.slickGoTo(artistData.id - 1);
         sessionStorage.setItem('@artistId', `${artistData.id}`);
-        if (!withLayout)
-          router.push(`/artist?id=${artistData.id}`, undefined, {
-            shallow: true,
-          });
+        // if (!withLayout)
+        //   router.push(`/artist?id=${artistData.id}`, undefined, {
+        //     shallow: true,
+        //   });
         setTimeout(() => {
-          if (artistData.id !== index) router.reload();
+          if (!withLayout) router.reload();
         }, 10);
       }}
       {...props}
@@ -109,7 +115,7 @@ const ArtistGridItem: React.FC<Props> = ({
         <p className="artistName">{artistData.artistName}</p>
       )}
       {current && <CurrentBackground />}
-      {withName && <GradientBackground hover />}
+      {withName && <GradientBackground height="25%" top="75%" hover />}
     </Root>
   );
 };

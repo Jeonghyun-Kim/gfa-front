@@ -30,7 +30,13 @@ interface Props {
   className?: string | undefined;
 }
 const PlayBar: React.FC<Props> = ({ className = undefined, ...props }) => {
-  const { index, setIndex, refSlider } = React.useContext(IndexContext);
+  const {
+    index,
+    setIndex,
+    refSlider,
+    listModalFlag,
+    setListModalFlag,
+  } = React.useContext(IndexContext);
   const { artist, title } = ArtworkData.find((artwork) => {
     return artwork.artistId === index;
   }) || { artist: '', title: '' };
@@ -41,6 +47,7 @@ const PlayBar: React.FC<Props> = ({ className = undefined, ...props }) => {
       else console.error('No refSlider');
       sessionStorage.setItem('@artistId', `${index - 1}`);
       setIndex(index - 1);
+      if (listModalFlag) setListModalFlag(false);
     }
   };
 
@@ -50,6 +57,7 @@ const PlayBar: React.FC<Props> = ({ className = undefined, ...props }) => {
       else console.error('No refSlider');
       sessionStorage.setItem('@artistId', `${index + 1}`);
       setIndex(index + 1);
+      if (listModalFlag) setListModalFlag(false);
     }
   };
 

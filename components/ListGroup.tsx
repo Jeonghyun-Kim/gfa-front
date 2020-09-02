@@ -10,6 +10,7 @@ import { PAGE_ARRAY, COLORS } from '../defines';
 import IndexContext from '../IndexContext';
 
 interface RootProps {
+  active: boolean;
   disabled: boolean;
 }
 const Root = styled.div<RootProps>`
@@ -18,7 +19,11 @@ const Root = styled.div<RootProps>`
   justify-content: center;
   align-items: center;
   right: 1rem;
-  color: ${(props) => (props.disabled ? COLORS.disabled : 'white')};
+  color: ${(props) => {
+    if (props.disabled) return COLORS.disabled;
+    if (props.active) return COLORS.primary;
+    return 'white';
+  }};
 
   p.listText {
     @media screen and (max-width: 1000px) {
@@ -30,7 +35,11 @@ const Root = styled.div<RootProps>`
     transition: none;
   }
   svg {
-    color: ${(props) => (props.disabled ? COLORS.disabled : 'white')};
+    color: ${(props) => {
+      if (props.disabled) return COLORS.disabled;
+      if (props.active) return COLORS.primary;
+      return 'white';
+    }};
     font-size: 1.8rem;
     transition: none;
   }
@@ -44,14 +53,25 @@ interface Props {
 }
 const ListGroup: React.FC<Props> = ({ iconOnly = false, ...props }) => {
   const router = useRouter();
-  const { listModalFlag, setListModalFlag } = React.useContext(IndexContext);
+  const { withLayout, listModalFlag, setListModalFlag } = React.useContext(
+    IndexContext,
+  );
   const disabled = router.pathname !== PAGE_ARRAY[1];
 
   return (
     <Root
       onClick={() => {
-        setListModalFlag(!listModalFlag);
+        if (withLayout) setListModalFlag(!listModalFlag);
+        else if (router.query.listOpen) {
+          // router.push(router.pathname.split('?')[0], undefined, {
+          //   shallow: true,
+          // });
+          router.back();
+        } else {
+          router.push('?listOpen=1', undefined, { shallow: true });
+        }
       }}
+      active={listModalFlag}
       disabled={disabled}
       {...props}
     >

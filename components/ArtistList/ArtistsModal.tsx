@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -8,9 +9,9 @@ import ArtistLists from './ArtistLists';
 
 import useWindowSize from '../../lib/hooks/useWindowSize';
 
-import IndexContext from '../../IndexContext';
+import { MOBILE_GAP } from '../../defines';
 
-const GAP = 3;
+import IndexContext from '../../IndexContext';
 
 const Root = styled.div`
   position: absolute;
@@ -20,6 +21,8 @@ const Root = styled.div`
   z-index: 99;
 
   .container {
+    /* position: absolute; */
+    /* width: 100%; */
     position: relative;
     height: 100%;
     background-color: white;
@@ -27,16 +30,18 @@ const Root = styled.div`
     scroll-behavior: smooth;
 
     /* Hide scrollbar for IE, Edge and Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 
     /* Hide scrollbar for Chrome, Safari and Opera */
     &::-webkit-scrollbar {
-      display: none;
+      /* display: none; */
+      scrollbar-width: auto;
     }
   }
 
   .modalHeader {
+    /* position: fixed; */
     position: absolute;
     top: 0px;
     width: 100%;
@@ -60,6 +65,7 @@ const Root = styled.div`
 `;
 
 const MyArtistLists = styled(ArtistLists)`
+  /* position: relative; */
   position: absolute;
   top: 46px;
   overflow: hidden;
@@ -69,10 +75,11 @@ interface Props {
   artists: Artist[];
 }
 const AristsModal: React.FC<Props> = ({ artists, ...props }) => {
+  const router = useRouter();
   const { innerWidth } = useWindowSize();
-  const { index, setListModalFlag } = React.useContext(IndexContext);
+  const { index } = React.useContext(IndexContext);
   const [flag, setFlag] = React.useState<boolean>(true);
-  const baseSize = Math.floor((innerWidth - 2 * GAP) / 3);
+  const baseSize = Math.floor((innerWidth - 2 * MOBILE_GAP) / 3);
 
   const refContainer = React.useRef<HTMLDivElement>(null);
 
@@ -80,7 +87,7 @@ const AristsModal: React.FC<Props> = ({ artists, ...props }) => {
     if (flag && refContainer.current) {
       refContainer.current.scroll(
         0,
-        Math.floor((index - 1) / 3 - 1) * (baseSize + GAP),
+        Math.floor((index - 1) / 3 - 1) * (baseSize + MOBILE_GAP),
       );
       // make autoscroll active only once (first mounted)
       setTimeout(() => setFlag(false), 0);
@@ -92,7 +99,11 @@ const AristsModal: React.FC<Props> = ({ artists, ...props }) => {
       <div className="modalHeader">
         <IconButton
           onClick={() => {
-            setListModalFlag(false);
+            // setListModalFlag(false);
+            // router.replace(router.pathname.split('?')[0], undefined, {
+            //   shallow: true,
+            // });
+            router.back();
           }}
         >
           <Close />
@@ -100,7 +111,11 @@ const AristsModal: React.FC<Props> = ({ artists, ...props }) => {
         <h4>작품 목록</h4>
       </div>
       <div ref={refContainer} className="container unselectable">
-        <MyArtistLists artists={artists} size={baseSize} gap={`${GAP}px`} />
+        <MyArtistLists
+          artists={artists}
+          size={baseSize}
+          gap={`${MOBILE_GAP}px`}
+        />
       </div>
     </Root>
   );

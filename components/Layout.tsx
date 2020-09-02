@@ -29,8 +29,9 @@ const Root = styled.div<RootProps>`
     `grid-template: 1fr ${PLAYBAR_HEIGHT}px / ${NAVBAR_WIDTH}px 1fr`};
 
   .main {
-    /* position: relative; */
+    position: relative;
     overflow-y: auto;
+    scroll-behavior: smooth;
     height: 100%;
     width: 100%;
     ${(props) => props.grid && 'grid-column: 2 / 3'};
@@ -56,11 +57,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         setIndex(Number(id));
         sessionStorage.setItem('@artistId', `${id}`);
 
-        if (withLayout) {
-          router.replace(router.pathname.split('?')[0], undefined, {
-            shallow: true,
-          });
-        }
+        // if (withLayout) {
+        router.replace(router.pathname.split('?')[0], undefined, {
+          shallow: true,
+        });
+        // }
       } else {
         const item = sessionStorage.getItem('@artistId');
         if (item && JSON.parse(item) >= 1 && JSON.parse(item) <= NUM_ARTISTS)

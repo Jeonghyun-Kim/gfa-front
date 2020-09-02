@@ -9,6 +9,10 @@ export const NUM_ARTISTS = 64;
 export const HEADER_HEIGHT = 56;
 export const TRANSITION = 300;
 
+export const MOBILE_GAP = 3;
+export const DESKTOP_GAP = 20;
+export const CONTAINER_WIDTH = 900;
+
 export const COLORS = {
   primary: '#17babc',
   disabled: '#7d7d7d',
@@ -25,6 +29,9 @@ const DEFINES = {
   NUM_ARTISTS,
   HEADER_HEIGHT,
   TRANSITION,
+  MOBILE_GAP,
+  DESKTOP_GAP,
+  CONTAINER_WIDTH,
   COLORS,
 };
 

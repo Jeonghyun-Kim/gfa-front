@@ -8,27 +8,24 @@ import ArtistLists from './ArtistLists';
 
 import useWindowSize from '../../lib/hooks/useWindowSize';
 
-import { NAVBAR_WIDTH, PLAYBAR_HEIGHT } from '../../defines';
+import { PLAYBAR_HEIGHT, DESKTOP_GAP, CONTAINER_WIDTH } from '../../defines';
 
 import IndexContext from '../../IndexContext';
-
-const GAP = 20;
-const MAX_WIDTH = 1200;
 
 interface RootProps {
   width: number;
 }
 const Root = styled.div<RootProps>`
   position: absolute;
-  top: 120px;
+  top: 100px;
   width: ${(props) => props.width}px;
-  height: calc(100% - 120px);
-  right: calc((100% - ${NAVBAR_WIDTH}px - ${(props) => props.width}px) / 2);
+  height: calc(100% - 100px);
+  right: calc((100% - ${(props) => props.width}px) / 2);
   z-index: 5;
 
   .modalHeader {
     position: absolute;
-    top: -80px;
+    top: -60px;
     display: flex;
     width: ${(props) => props.width}px;
     height: 60px;
@@ -58,6 +55,7 @@ const Root = styled.div<RootProps>`
     .closeButton {
       position: absolute;
       right: 0;
+      padding-right: 0;
       svg {
         font-size: 1.8rem;
         color: #b1b1b1;
@@ -95,6 +93,8 @@ const DarkBackground = styled.div`
 const MyArtistLists = styled(ArtistLists)`
   position: absolute;
   overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 50px;
 `;
 
 interface Props {
@@ -103,10 +103,10 @@ interface Props {
 const DesktopList: React.FC<Props> = ({ artists, ...props }) => {
   const { innerWidth } = useWindowSize();
   const containerWidth =
-    innerWidth > MAX_WIDTH ? MAX_WIDTH - 300 : innerWidth - 300;
+    innerWidth > CONTAINER_WIDTH + 300 ? CONTAINER_WIDTH : innerWidth - 300;
   const { index, setListModalFlag } = React.useContext(IndexContext);
   const [flag, setFlag] = React.useState<boolean>(true);
-  const baseSize = Math.floor((containerWidth - 2 * GAP) / 3);
+  const baseSize = Math.floor((containerWidth - 2 * DESKTOP_GAP) / 3);
 
   const refContainer = React.useRef<HTMLDivElement>(null);
 
@@ -114,7 +114,7 @@ const DesktopList: React.FC<Props> = ({ artists, ...props }) => {
     if (flag && refContainer.current) {
       refContainer.current.scroll(
         0,
-        Math.floor((index - 1) / 3 - 1) * (baseSize + GAP),
+        Math.floor((index - 1) / 3) * (baseSize + DESKTOP_GAP) - 100,
       );
       // make autoscroll active only once (first mounted)
       setTimeout(() => setFlag(false), 0);
@@ -142,8 +142,9 @@ const DesktopList: React.FC<Props> = ({ artists, ...props }) => {
           <MyArtistLists
             artists={artists}
             size={baseSize}
-            gap={`${GAP}px`}
+            gap={`${DESKTOP_GAP}px`}
             withName
+            hoverEffect
           />
         </div>
       </Root>

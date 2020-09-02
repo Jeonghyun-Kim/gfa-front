@@ -14,8 +14,8 @@ import DesktopList from '../components/ArtistList/DesktopList';
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
 
-import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
-// import { API_URL } from '../defines';
+// import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
+import { API_URL } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -48,6 +48,7 @@ const Root = styled.div`
   .list-modal-enter {
     top: 100%;
     .modalHeader {
+      /* top: 100%; */
       opacity: 0;
     }
   }
@@ -55,42 +56,20 @@ const Root = styled.div`
     top: 0;
     transition: 300ms;
     .modalHeader {
+      /* top: 0; */
       opacity: 1;
+      transition: 300ms;
     }
   }
-
-  /* .list-modal-exit {
-    opacity: 1;
-    .modalHeader {
-      opacity: 1;
-    }
-  }
-  .list-modal-exit-active {
-    transition: 100ms;
-    opacity: 0;
-    .modalHeader {
-      opacity: 0;
-    }
-  } */
 
   .list-desktop-enter {
-    top: 100vh;
+    opacity: 0;
   }
 
-  .list-desktop-active {
-    top: 100px;
+  .list-desktop-enter-active {
+    opacity: 1;
     transition: 300ms;
   }
-
-  /* .list-desktop-exit {;
-    opacity: 1;
-    transition: 300ms
-  }
-;
-  .list-desktop-exit-active {;
-    opacity: 0
-    transition: 300ms
-  } */ ;
 `;
 
 interface Props {
@@ -114,29 +93,36 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     refSlider,
     withLayout,
     listModalFlag,
+    setListModalFlag,
   } = React.useContext(IndexContext);
   // Use screen size and orientation (hooks)
-  const { isMobile, isTablet, isPortrait } = useMobileOrientation();
+  const { isPortrait } = useMobileOrientation();
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
 
-  React.useEffect(() => {
-    // Set initial slide (react-slick's initialSlide property is now working properly.)
-    if (refSlider.current) {
-      if (router.query.id)
-        refSlider.current.slickGoTo(Number(router.query.id) - 1);
-      else refSlider.current.slickGoTo(index - 1);
-    }
-  }, [router.query]);
+  // React.useEffect(() => {
+  //   // Set initial slide (react-slick's initialSlide property is now working properly.)
+  //   if (refSlider.current) {
+  //     if (router.query.id)
+  //       refSlider.current.slickGoTo(Number(router.query.id) - 1);
+  //     else refSlider.current.slickGoTo(index - 1);
+  //   }
+  // }, [index, router.query]);
 
   // Same as componentDidMount()
   React.useEffect(() => {
+    if (refSlider.current) refSlider.current.slickGoTo(index - 1);
     // Clear all setTimeout() function, excecuting on page unmount event.
     const clearFunc = () => {
       let timeoutId = (setTimeout(() => {}, 0) as unknown) as number;
       while (timeoutId) {
         timeoutId -= 1;
         clearTimeout(timeoutId);
+      }
+      if (withLayout) {
+        setListModalFlag(false);
+      } else if (router.query.listOpen) {
+        router.back();
       }
     };
 
@@ -166,30 +152,30 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   }, [headerFlag]);
 
   // Prefetching images for enhancement of speed.
-  React.useEffect(() => {
-    if (withLayout) {
-      const prevImg = new Image();
-      const nextImg = new Image();
-      // Artist's index starts from 1, javascript array index starts from 0.
-      const prevIndex = index !== 1 ? index - 1 - 1 : null;
-      const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
-      if ((isMobile || isTablet) && isPortrait) {
-        if (prevIndex && artists[prevIndex].portraitFileName) {
-          prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].portraitFileName}`;
-        }
-        if (nextIndex && artists[nextIndex].portraitFileName) {
-          nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].portraitFileName}`;
-        }
-      } else {
-        if (prevIndex && artists[prevIndex].landscapeFileName) {
-          prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].landscapeFileName}`;
-        }
-        if (nextIndex && artists[nextIndex].landscapeFileName) {
-          nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
-        }
-      }
-    }
-  }, [withLayout, index, artists, isMobile, isTablet, isPortrait]);
+  // React.useEffect(() => {
+  //   if (withLayout) {
+  //     const prevImg = new Image();
+  //     const nextImg = new Image();
+  //     // Artist's index starts from 1, javascript array index starts from 0.
+  //     const prevIndex = index !== 1 ? index - 1 - 1 : null;
+  //     const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
+  //     if ((isMobile || isTablet) && isPortrait) {
+  //       if (prevIndex && artists[prevIndex].portraitFileName) {
+  //         prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].portraitFileName}`;
+  //       }
+  //       if (nextIndex && artists[nextIndex].portraitFileName) {
+  //         nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].portraitFileName}`;
+  //       }
+  //     } else {
+  //       if (prevIndex && artists[prevIndex].landscapeFileName) {
+  //         prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].landscapeFileName}`;
+  //       }
+  //       if (nextIndex && artists[nextIndex].landscapeFileName) {
+  //         nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
+  //       }
+  //     }
+  //   }
+  // }, [withLayout, index, artists, isMobile, isTablet, isPortrait]);
 
   // Toggle Header on custom conditions.
   const toggleHeader = () => {
@@ -222,7 +208,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
             dots={false}
             arrows={false}
             infinite={false}
-            lazyLoad={withLayout ? 'ondemand' : 'progressive'}
+            // lazyLoad={withLayout ? 'ondemand' : undefined}
             initialSlide={index - 1}
             focusOnSelect
             useCSS={!withLayout}
@@ -237,11 +223,11 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
                   setSlideChangedFlag(false);
                   setIndex(currentSlide + 1);
-                  if (router.query.id) {
-                    router.push(`/artist?id=${currentSlide + 1}`);
-                  } else {
-                    router.replace(`/artist?id=${currentSlide + 1}`);
-                  }
+                  // if (router.query.id) {
+                  //   router.push(`/artist?id=${currentSlide + 1}`);
+                  // } else {
+                  //   router.replace(`/artist?id=${currentSlide + 1}`);
+                  // }
                 }, 300);
               }
             }}
@@ -270,12 +256,16 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 onClick={() => toggleHeader()}
               />
               <CSSTransition
-                in={listModalFlag}
+                in={Boolean(router.query.listOpen)}
                 timeout={300}
                 unmountOnExit
                 classNames="list-modal"
               >
-                <ArtistsModal artists={artists} />
+                {router.query.listOpen ? (
+                  <ArtistsModal artists={artists} />
+                ) : (
+                  <></>
+                )}
               </CSSTransition>
             </>
           ) : (
@@ -285,7 +275,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               unmountOnExit
               classNames="list-desktop"
             >
-              <DesktopList artists={artists} />
+              {listModalFlag ? <DesktopList artists={artists} /> : <></>}
             </CSSTransition>
           )}
         </>
