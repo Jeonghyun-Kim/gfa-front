@@ -13,6 +13,7 @@ import { PLAYBAR_HEIGHT } from '../../defines';
 import IndexContext from '../../IndexContext';
 
 const GAP = 20;
+const MAX_WIDTH = 1200;
 
 interface RootProps {
   width: number;
@@ -101,7 +102,8 @@ interface Props {
 }
 const DesktopList: React.FC<Props> = ({ artists, ...props }) => {
   const { innerWidth } = useWindowSize();
-  const containerWidth = innerWidth > 1000 ? 700 : innerWidth - 300;
+  const containerWidth =
+    innerWidth > MAX_WIDTH ? MAX_WIDTH - 300 : innerWidth - 300;
   const { index, setListModalFlag } = React.useContext(IndexContext);
   const [flag, setFlag] = React.useState<boolean>(true);
   const baseSize = Math.floor((containerWidth - 2 * GAP) / 3);

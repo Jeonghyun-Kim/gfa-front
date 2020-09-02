@@ -14,8 +14,8 @@ import DesktopList from '../components/ArtistList/DesktopList';
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
 
-// import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
-import { API_URL } from '../defines';
+import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
+// import { API_URL } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -116,7 +116,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     listModalFlag,
   } = React.useContext(IndexContext);
   // Use screen size and orientation (hooks)
-  const { isPortrait } = useMobileOrientation();
+  const { isMobile, isTablet, isPortrait } = useMobileOrientation();
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
 
@@ -127,7 +127,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         refSlider.current.slickGoTo(Number(router.query.id) - 1);
       else refSlider.current.slickGoTo(index - 1);
     }
-  }, [index, refSlider, router.query]);
+  }, [router.query]);
 
   // Same as componentDidMount()
   React.useEffect(() => {
@@ -166,28 +166,30 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   }, [headerFlag]);
 
   // Prefetching images for enhancement of speed.
-  // React.useEffect(() => {
-  //   const prevImg = new Image();
-  //   const nextImg = new Image();
-  //   // Artist's index starts from 1, javascript array index starts from 0.
-  //   const prevIndex = index !== 1 ? index - 1 - 1 : null;
-  //   const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
-  //   if ((isMobile || isTablet) && isPortrait) {
-  //     if (prevIndex && artists[prevIndex].portraitFileName) {
-  //       prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].portraitFileName}`;
-  //     }
-  //     if (nextIndex && artists[nextIndex].portraitFileName) {
-  //       nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].portraitFileName}`;
-  //     }
-  //   } else {
-  //     if (prevIndex && artists[prevIndex].landscapeFileName) {
-  //       prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].landscapeFileName}`;
-  //     }
-  //     if (nextIndex && artists[nextIndex].landscapeFileName) {
-  //       nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
-  //     }
-  //   }
-  // }, [index, artists, isMobile, isTablet, isPortrait]);
+  React.useEffect(() => {
+    if (withLayout) {
+      const prevImg = new Image();
+      const nextImg = new Image();
+      // Artist's index starts from 1, javascript array index starts from 0.
+      const prevIndex = index !== 1 ? index - 1 - 1 : null;
+      const nextIndex = index !== NUM_ARTISTS ? index + 1 - 1 : null;
+      if ((isMobile || isTablet) && isPortrait) {
+        if (prevIndex && artists[prevIndex].portraitFileName) {
+          prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].portraitFileName}`;
+        }
+        if (nextIndex && artists[nextIndex].portraitFileName) {
+          nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].portraitFileName}`;
+        }
+      } else {
+        if (prevIndex && artists[prevIndex].landscapeFileName) {
+          prevImg.src = `${BUCKET_URL}/rendered/${artists[prevIndex].landscapeFileName}`;
+        }
+        if (nextIndex && artists[nextIndex].landscapeFileName) {
+          nextImg.src = `${BUCKET_URL}/rendered/${artists[nextIndex].landscapeFileName}`;
+        }
+      }
+    }
+  }, [withLayout, index, artists, isMobile, isTablet, isPortrait]);
 
   // Toggle Header on custom conditions.
   const toggleHeader = () => {
@@ -220,22 +222,26 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
             dots={false}
             arrows={false}
             infinite={false}
-            // lazyLoad="progressive"
+            lazyLoad={withLayout ? 'ondemand' : 'progressive'}
             initialSlide={index - 1}
             focusOnSelect
             useCSS={!withLayout}
             swipe={!withLayout}
             beforeChange={(_, currentSlide) => {
-              if (!withLayout) {
+              if (withLayout) {
+                sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
+                setSlideChangedFlag(false);
+                setIndex(currentSlide + 1);
+              } else {
                 setTimeout(() => {
+                  sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
+                  setSlideChangedFlag(false);
+                  setIndex(currentSlide + 1);
                   if (router.query.id) {
                     router.push(`/artist?id=${currentSlide + 1}`);
                   } else {
                     router.replace(`/artist?id=${currentSlide + 1}`);
                   }
-                  sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
-                  setSlideChangedFlag(false);
-                  setIndex(currentSlide + 1);
                 }, 300);
               }
             }}

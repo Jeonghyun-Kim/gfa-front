@@ -38,20 +38,18 @@ const PlayBar: React.FC<Props> = ({ className = undefined, ...props }) => {
   const handleLeft = () => {
     if (index > 1) {
       if (refSlider.current) refSlider.current.slickPrev();
-      setTimeout(() => {
-        sessionStorage.setItem('@artistId', `${index - 1}`);
-        setIndex(index - 1);
-      }, 300);
+      else console.error('No refSlider');
+      sessionStorage.setItem('@artistId', `${index - 1}`);
+      setIndex(index - 1);
     }
   };
 
   const handleRight = () => {
     if (index < NUM_ARTISTS) {
       if (refSlider.current) refSlider.current.slickNext();
-      setTimeout(() => {
-        sessionStorage.setItem('@artistId', `${index + 1}`);
-        setIndex(index + 1);
-      }, 300);
+      else console.error('No refSlider');
+      sessionStorage.setItem('@artistId', `${index + 1}`);
+      setIndex(index + 1);
     }
   };
 
