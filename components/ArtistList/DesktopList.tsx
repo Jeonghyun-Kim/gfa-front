@@ -8,7 +8,7 @@ import ArtistLists from './ArtistLists';
 
 import useWindowSize from '../../lib/hooks/useWindowSize';
 
-import { PLAYBAR_HEIGHT } from '../../defines';
+import { NAVBAR_WIDTH, PLAYBAR_HEIGHT } from '../../defines';
 
 import IndexContext from '../../IndexContext';
 
@@ -23,7 +23,7 @@ const Root = styled.div<RootProps>`
   top: 120px;
   width: ${(props) => props.width}px;
   height: calc(100% - 120px);
-  left: calc((100% - ${(props) => props.width}px) / 2);
+  right: calc((100% - ${NAVBAR_WIDTH}px - ${(props) => props.width}px) / 2);
   z-index: 5;
 
   .modalHeader {

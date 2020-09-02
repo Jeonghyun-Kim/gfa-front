@@ -29,7 +29,7 @@ const Root = styled.div<RootProps>`
     `grid-template: 1fr ${PLAYBAR_HEIGHT}px / ${NAVBAR_WIDTH}px 1fr`};
 
   .main {
-    position: relative;
+    /* position: relative; */
     overflow-y: auto;
     height: 100%;
     width: 100%;
