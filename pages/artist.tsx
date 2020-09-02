@@ -7,7 +7,6 @@ import { CSSTransition } from 'react-transition-group';
 
 import Header from '../components/Header';
 import RenderedImage from '../components/RenderedImage';
-import Loading from '../components/Loading';
 import MobileFooter from '../components/MobileFooter';
 import ArtistsModal from '../components/ArtistList/ArtistsModal';
 import DesktopList from '../components/ArtistList/DesktopList';
@@ -121,11 +120,17 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
 
-  // Same as componentDidMount()
   React.useEffect(() => {
     // Set initial slide (react-slick's initialSlide property is now working properly.)
-    if (refSlider.current) refSlider.current.slickGoTo(index - 1);
+    if (refSlider.current) {
+      if (router.query.id)
+        refSlider.current.slickGoTo(Number(router.query.id) - 1);
+      else refSlider.current.slickGoTo(index - 1);
+    }
+  }, [index, refSlider, router.query]);
 
+  // Same as componentDidMount()
+  React.useEffect(() => {
     // Clear all setTimeout() function, excecuting on page unmount event.
     const clearFunc = () => {
       let timeoutId = (setTimeout(() => {}, 0) as unknown) as number;
@@ -207,74 +212,77 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       </Head>
       <Header fixed={false} visible={headerFlag} />
       <Root>
-        {index ? (
-          <>
-            <Slider
-              ref={(slider) => {
-                refSlider.current = slider;
-              }}
-              dots={false}
-              arrows={false}
-              infinite={false}
-              // lazyLoad="progressive"
-              initialSlide={index - 1}
-              focusOnSelect
-              // useCSS={!withLayout}
-              swipe={!withLayout}
-              afterChange={(currentSlide) => {
-                sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
-                setSlideChangedFlag(false);
+        <>
+          <Slider
+            ref={(slider) => {
+              refSlider.current = slider;
+            }}
+            dots={false}
+            arrows={false}
+            infinite={false}
+            // lazyLoad="progressive"
+            initialSlide={index - 1}
+            focusOnSelect
+            useCSS={!withLayout}
+            swipe={!withLayout}
+            beforeChange={(_, currentSlide) => {
+              if (!withLayout) {
                 setTimeout(() => {
+                  if (router.query.id) {
+                    router.push(`/artist?id=${currentSlide + 1}`);
+                  } else {
+                    router.replace(`/artist?id=${currentSlide + 1}`);
+                  }
+                  sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
+                  setSlideChangedFlag(false);
                   setIndex(currentSlide + 1);
-                }, 50);
-              }}
-              onSwipe={() => setSlideChangedFlag(true)}
-              onEdge={(swipeDirection) => {
-                if (swipeDirection === 'left') router.push('/video');
-                else router.push('/');
-              }}
-            >
-              {artists.map((artist) => {
-                return (
-                  <RenderedImage
-                    key={artist.id}
-                    artistData={artist}
-                    onClick={() => toggleHeader()}
-                  />
-                );
-              })}
-            </Slider>
-            {!withLayout ? (
-              <>
-                <MobileFooter
-                  artworkData={artworks.find(
-                    (artwork: ArtworkJson) => artwork.artistId === index,
-                  )}
+                }, 300);
+              }
+            }}
+            onSwipe={() => setSlideChangedFlag(true)}
+            onEdge={(swipeDirection) => {
+              if (swipeDirection === 'left') router.push('/video');
+              else router.push('/');
+            }}
+          >
+            {artists.map((artist) => {
+              return (
+                <RenderedImage
+                  key={artist.id}
+                  artistData={artist}
                   onClick={() => toggleHeader()}
                 />
-                <CSSTransition
-                  in={listModalFlag}
-                  timeout={300}
-                  unmountOnExit
-                  classNames="list-modal"
-                >
-                  <ArtistsModal artists={artists} />
-                </CSSTransition>
-              </>
-            ) : (
+              );
+            })}
+          </Slider>
+          {!withLayout ? (
+            <>
+              <MobileFooter
+                artworkData={artworks.find(
+                  (artwork: ArtworkJson) => artwork.artistId === index,
+                )}
+                onClick={() => toggleHeader()}
+              />
               <CSSTransition
                 in={listModalFlag}
                 timeout={300}
                 unmountOnExit
-                classNames="list-desktop"
+                classNames="list-modal"
               >
-                <DesktopList artists={artists} />
+                <ArtistsModal artists={artists} />
               </CSSTransition>
-            )}
-          </>
-        ) : (
-          <Loading />
-        )}
+            </>
+          ) : (
+            <CSSTransition
+              in={listModalFlag}
+              timeout={300}
+              unmountOnExit
+              classNames="list-desktop"
+            >
+              <DesktopList artists={artists} />
+            </CSSTransition>
+          )}
+        </>
       </Root>
     </>
   );

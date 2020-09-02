@@ -117,7 +117,7 @@ const DesktopList: React.FC<Props> = ({ artists, ...props }) => {
       // make autoscroll active only once (first mounted)
       setTimeout(() => setFlag(false), 0);
     }
-  }, [refContainer.current]);
+  }, [baseSize, flag, index]);
 
   return (
     <>

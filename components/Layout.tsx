@@ -11,12 +11,7 @@ import Loading from './Loading';
 // import { sendCounter } from '../lib/utils';
 import useWindowSize from '../lib/hooks/useWindowSize';
 
-import {
-  PLAYBAR_HEIGHT,
-  NAVBAR_WIDTH,
-  NUM_ARTISTS,
-  TABLET_BREAKPOINT,
-} from '../defines';
+import { PLAYBAR_HEIGHT, NAVBAR_WIDTH, NUM_ARTISTS } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -54,16 +49,18 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   // Set initial index with router.query.id if exists.
   React.useEffect(() => {
+    // if (process.env.NODE_ENV === 'production') sendCounter();
     if (router.query) {
       const { id } = router.query;
       if (id) {
         setIndex(Number(id));
         sessionStorage.setItem('@artistId', `${id}`);
-        if (refSlider.current) refSlider.current.slickGoTo(Number(id) - 1);
-        // if (process.env.NODE_ENV === 'production') sendCounter();
-        router.replace(router.pathname.split('?')[0], undefined, {
-          shallow: true,
-        });
+
+        if (withLayout) {
+          router.replace(router.pathname.split('?')[0], undefined, {
+            shallow: true,
+          });
+        }
       } else {
         const item = sessionStorage.getItem('@artistId');
         if (item && JSON.parse(item) >= 1 && JSON.parse(item) <= NUM_ARTISTS)
@@ -73,7 +70,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         // or at the index page..?
       }
     }
-  }, [router, refSlider]);
+  }, [router, withLayout]);
 
   React.useEffect(() => {
     // logPageView();
