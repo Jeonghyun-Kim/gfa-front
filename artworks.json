@@ -5,7 +5,7 @@
     "artist": "전뢰진",
     "title": "새봄맞이",
     "size": "unknown",
-    "material": ""
+    "material": "unknown"
   },
   {
     "artworkId": 2,
@@ -13,7 +13,7 @@
     "artist": "전뢰진",
     "title": "모자상",
     "size": "unknown",
-    "material": ""
+    "material": "unknown"
   },
   {
     "artworkId": 3,
@@ -21,7 +21,7 @@
     "artist": "전뢰진",
     "title": "Family",
     "size": "unknown",
-    "material": ""
+    "material": "unknown"
   },
   {
     "artworkId": 4,
@@ -676,7 +676,7 @@
     "artistId": 29,
     "artist": "민병문",
     "title": "산청의 외가",
-    "size": "100 x 80.3 (cm)",
+    "size": "80.3 x 100 (cm) (cm)",
     "material": "수묵담채"
   },
   {
@@ -836,7 +836,7 @@
     "artistId": 36,
     "artist": "선문순",
     "title": "여름날의 여정1",
-    "size": "53 x 45.5 (cm)",
+    "size": "45.5 x 53 (cm)",
     "material": "mixed on canvas"
   },
   {
