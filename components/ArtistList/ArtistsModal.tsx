@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { isIOS } from 'react-device-detect';
 
 import IconButton from '@material-ui/core/IconButton';
 import Close from '@material-ui/icons/Close';
@@ -77,7 +78,7 @@ interface Props {
 const AristsModal: React.FC<Props> = ({ artists, ...props }) => {
   const router = useRouter();
   const { innerWidth } = useWindowSize();
-  const { index } = React.useContext(IndexContext);
+  const { index, setListModalFlag } = React.useContext(IndexContext);
   const [flag, setFlag] = React.useState<boolean>(true);
   const baseSize = Math.floor((innerWidth - 2 * MOBILE_GAP) / 3);
 
@@ -99,11 +100,14 @@ const AristsModal: React.FC<Props> = ({ artists, ...props }) => {
       <div className="modalHeader">
         <IconButton
           onClick={() => {
-            // setListModalFlag(false);
-            // router.replace(router.pathname.split('?')[0], undefined, {
-            //   shallow: true,
-            // });
-            router.back();
+            if (isIOS) {
+              setListModalFlag(false);
+              router.replace(router.pathname.split('?')[0], undefined, {
+                shallow: true,
+              });
+            } else if (router.query.listOpen) {
+              router.back();
+            }
           }}
         >
           <Close />

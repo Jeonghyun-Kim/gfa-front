@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { isIOS } from 'react-device-detect';
 
 import IconButton from '@material-ui/core/IconButton';
 import Apps from '@material-ui/icons/Apps';
@@ -61,7 +62,7 @@ const ListGroup: React.FC<Props> = ({ iconOnly = false, ...props }) => {
   return (
     <Root
       onClick={() => {
-        if (withLayout) setListModalFlag(!listModalFlag);
+        if (withLayout || isIOS) setListModalFlag(!listModalFlag);
         else if (router.query.listOpen) {
           // router.push(router.pathname.split('?')[0], undefined, {
           //   shallow: true,

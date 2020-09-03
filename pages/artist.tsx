@@ -4,6 +4,7 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { CSSTransition } from 'react-transition-group';
+import { isIOS } from 'react-device-detect';
 
 import Header from '../components/Header';
 import RenderedImage from '../components/RenderedImage';
@@ -256,12 +257,12 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 onClick={() => toggleHeader()}
               />
               <CSSTransition
-                in={Boolean(router.query.listOpen)}
+                in={!isIOS ? Boolean(router.query.listOpen) : listModalFlag}
                 timeout={300}
                 unmountOnExit
                 classNames="list-modal"
               >
-                {router.query.listOpen ? (
+                {(!isIOS ? Boolean(router.query.listOpen) : listModalFlag) ? (
                   <ArtistsModal artists={artists} />
                 ) : (
                   <></>
