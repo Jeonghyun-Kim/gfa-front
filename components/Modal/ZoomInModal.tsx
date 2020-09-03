@@ -44,7 +44,17 @@ const Root = styled(Modal)<RootProps>`
     position: fixed;
     top: 0;
     left: 0;
+    background: rgb(0, 0, 0);
+    background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.7161239495798319) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
     z-index: 10;
+
+    @media screen and (max-height: 500px) and (orientation: landscape) {
+      top: 60px;
+    }
     svg {
       color: white;
     }
@@ -65,6 +75,9 @@ const ZoomInModal: React.FC<Props> = ({
   const router = useRouter();
   const { withLayout } = React.useContext(IndexContext);
 
+  const visible =
+    withLayout || isIOS ? Boolean(modalOpen) : Boolean(router.query.zoomIn);
+
   const handleModalClose = () => {
     if (withLayout || isIOS) {
       setModalOpen(0);
@@ -74,14 +87,7 @@ const ZoomInModal: React.FC<Props> = ({
   };
 
   return (
-    <Root
-      withLayout={withLayout}
-      visible={
-        withLayout || isIOS ? Boolean(modalOpen) : Boolean(router.query.zoomIn)
-      }
-      full
-      {...props}
-    >
+    <Root withLayout={withLayout} visible={visible} full {...props}>
       <IconButton
         onClick={() => {
           handleModalClose();
@@ -89,35 +95,37 @@ const ZoomInModal: React.FC<Props> = ({
       >
         <Close />
       </IconButton>
-      <PinchToZoom
-        className="pinchArea"
-        maxZoomScale={3}
-        minZoomScale={0.8}
-        boundSize={{ width: 50, height: 50 }}
-        onTransform={() => {}}
-        contentSize={{ width: 0, height: 0 }}
-        debug={false}
-      >
-        <img
-          className="zoomInArtworkImg"
-          alt={
-            artworksJson.find((artworkJson: ArtworkJson) => {
-              if (withLayout || isIOS) {
-                return artworkJson.artworkId === modalOpen;
-              }
-              return artworkJson.artworkId === Number(router.query.zoomIn);
-            })?.title
-          }
-          src={`${BUCKET_URL}/artworks/${
-            artworks.find((artwork) => {
-              if (withLayout || isIOS) {
-                return artwork.id === modalOpen;
-              }
-              return artwork.id === Number(router.query.zoomIn);
-            })?.fileName
-          }`}
-        />
-      </PinchToZoom>
+      {visible && (
+        <PinchToZoom
+          className="pinchArea"
+          maxZoomScale={3}
+          minZoomScale={0.8}
+          boundSize={{ width: 50, height: 50 }}
+          onTransform={() => {}}
+          contentSize={{ width: 0, height: 0 }}
+          debug={false}
+        >
+          <img
+            className="zoomInArtworkImg"
+            alt={
+              artworksJson.find((artworkJson: ArtworkJson) => {
+                if (withLayout || isIOS) {
+                  return artworkJson.artworkId === modalOpen;
+                }
+                return artworkJson.artworkId === Number(router.query.zoomIn);
+              })?.title
+            }
+            src={`${BUCKET_URL}/artworks/${
+              artworks.find((artwork) => {
+                if (withLayout || isIOS) {
+                  return artwork.id === modalOpen;
+                }
+                return artwork.id === Number(router.query.zoomIn);
+              })?.fileName
+            }`}
+          />
+        </PinchToZoom>
+      )}
     </Root>
   );
 };

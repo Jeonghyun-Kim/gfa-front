@@ -102,7 +102,7 @@ const DesktopProfile = styled(Profile)`
 interface Props {
   artist: Artist;
 }
-const DesktopDetailModal: React.FC<Props> = ({ artist, ...props }) => {
+const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
   const { innerWidth } = useWindowSize();
 
   const narrow = innerWidth < 1000;
@@ -168,4 +168,4 @@ const DesktopDetailModal: React.FC<Props> = ({ artist, ...props }) => {
   );
 };
 
-export default DesktopDetailModal;
+export default DesktopDetail;
