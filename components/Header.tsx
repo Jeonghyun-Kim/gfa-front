@@ -37,8 +37,8 @@ const FixedHeader = styled.div<HeaderProps>`
   height: ${HEADER_HEIGHT}px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 15px;
+  padding-right: 15px;
   z-index: 2;
 `;
 

@@ -12,7 +12,7 @@ const Root = styled.a<RootProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
+  width: 2.5rem;
   height: 100%;
   margin: 0 0.2rem;
   font-size: 0.8rem;

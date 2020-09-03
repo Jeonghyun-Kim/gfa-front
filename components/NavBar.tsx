@@ -12,7 +12,7 @@ const Root = styled.div`
   grid-row: 1 / 2;
   display: flex;
   flex-direction: column;
-  padding: 2rem 2rem;
+  padding: 30px 30px;
 
   background-color: #121212;
 
