@@ -7,13 +7,13 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Close from '@material-ui/icons/Close';
 
-import Profile from './Profile';
-import Artwork from './Artwork';
+import Profile from '../Profile';
+import Artwork from '../Artwork';
 
-import useWindowSize from '../lib/hooks/useWindowSize';
+import useWindowSize from '../../lib/hooks/useWindowSize';
 
-import artworksJson from '../artworks.json';
-import { API_URL } from '../defines';
+import artworksJson from '../../artworks.json';
+import { API_URL } from '../../defines';
 
 interface RootProps {
   seeMore: boolean;

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import Header from '../components/Header';
-import Modal from '../components/Modal';
+import Modal from '../components/Modal/Modal';
 
 import { sendCounter } from '../lib/utils';
 

@@ -9,11 +9,11 @@ import Close from '@material-ui/icons/Close';
 
 import Modal from './Modal';
 
-import { BUCKET_URL } from '../defines';
+import { BUCKET_URL } from '../../defines';
 
-import IndexContext from '../IndexContext';
+import IndexContext from '../../IndexContext';
 
-import artworksJson from '../artworks.json';
+import artworksJson from '../../artworks.json';
 
 interface RootProps {
   withLayout: boolean;

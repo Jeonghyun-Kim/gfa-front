@@ -14,8 +14,8 @@ import RenderedImage from '../components/RenderedImage';
 import MobileFooter from '../components/MobileFooter';
 import ArtistsModal from '../components/ArtistList/ArtistsModal';
 import DesktopList from '../components/ArtistList/DesktopList';
-import MobileDetailModal from '../components/MobileDetailModal';
-import ZoomInModal from '../components/ZoomInModal';
+import MobileDetailModal from '../components/Modal/MobileDetailModal';
+import ZoomInModal from '../components/Modal/ZoomInModal';
 
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';

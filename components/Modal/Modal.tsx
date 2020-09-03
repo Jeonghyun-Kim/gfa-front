@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 import ScrollLock from 'react-scrolllock';
 
-import { NAVBAR_WIDTH, PLAYBAR_HEIGHT } from '../defines';
+import { NAVBAR_WIDTH, PLAYBAR_HEIGHT } from '../../defines';
 
-import IndexContext from '../IndexContext';
+import IndexContext from '../../IndexContext';
 
 const Root = styled.div`
   .modal-enter {
