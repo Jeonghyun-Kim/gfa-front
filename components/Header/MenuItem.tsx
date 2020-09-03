@@ -9,8 +9,12 @@ interface RootProps {
   current?: boolean;
 }
 const Root = styled.a<RootProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
   height: 100%;
-  margin: 0 0.5rem;
+  margin: 0 0.2rem;
   font-size: 0.8rem;
   font-weight: ${(props) => (props.current ? 'bolder' : 'normal')};
   color: ${(props) => (props.current ? COLORS.primary : '#676F7F')};

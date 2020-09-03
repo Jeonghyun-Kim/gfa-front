@@ -33,7 +33,7 @@ const Container = styled.div<ContainerProps>`
   top: 50%;
   left: 0;
   width: 100%;
-  height: 190px;
+  height: 180px;
   border: 1px solid #b5b5b5;
   border-radius: 8px;
   transition: 300ms ease;
