@@ -25,18 +25,33 @@ const Root = styled.div`
 `;
 
 interface DialogProps {
+  full: boolean;
   withLayout: boolean;
 }
 const Dialog = styled.div<DialogProps>`
   position: fixed;
-  top: calc(50% - ${(props) => (props.withLayout ? PLAYBAR_HEIGHT / 2 : 0)}px);
-  left: calc(50% - ${(props) => (props.withLayout ? NAVBAR_WIDTH / 2 : 0)} px);
+  ${(props) =>
+    !props.full
+      ? `
+  top: calc(50% - ${props.withLayout ? PLAYBAR_HEIGHT / 2 : 0}px);
+  left: calc(50% - ${props.withLayout ? NAVBAR_WIDTH / 2 : 0} px);
   transform: translate(-50%, -50%);
   max-width: 80vw;
   padding: 1.5rem;
-  background: #eee;
   border-radius: 10px;
   border: 1px solid #aaa;
+  `
+      : `
+    top: 0;
+    left: ${props.withLayout ? NAVBAR_WIDTH : 0}px;
+    width: 100%;
+    height: calc(100% - ${props.withLayout ? PLAYBAR_HEIGHT : 0}px);
+
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  `}
   h3 {
     margin: 0;
     font-size: 1.5rem;
@@ -53,14 +68,20 @@ const Dialog = styled.div<DialogProps>`
 
 interface Props {
   children: React.ReactNode;
+  full?: boolean;
   visible?: boolean;
 }
 
-const Modal: React.FC<Props> = ({ children, visible = false, ...props }) => {
+const Modal: React.FC<Props> = ({
+  children,
+  full = false,
+  visible = false,
+  ...props
+}) => {
   const { withLayout } = React.useContext(IndexContext);
 
   return (
-    <Root>
+    <Root {...props}>
       <ScrollLock isActive={visible} />
       <CSSTransition
         in={visible}
@@ -68,7 +89,7 @@ const Modal: React.FC<Props> = ({ children, visible = false, ...props }) => {
         unmountOnExit
         classNames="modal"
       >
-        <Dialog withLayout={withLayout} {...props}>
+        <Dialog className="modalRoot" full={full} withLayout={withLayout}>
           {children}
         </Dialog>
       </CSSTransition>
