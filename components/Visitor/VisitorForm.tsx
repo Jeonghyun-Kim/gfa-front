@@ -88,6 +88,14 @@ const MyInput = styled(TextField)<InputProps>`
   background-color: #f6f5f6;
   border-radius: 6px;
 
+  #nameInput {
+    height: 20px;
+  }
+
+  #contentInput {
+    height: 75px !important;
+  }
+
   input,
   textarea {
     text-align: center;
