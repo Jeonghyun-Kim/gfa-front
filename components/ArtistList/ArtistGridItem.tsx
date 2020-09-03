@@ -72,7 +72,6 @@ const ArtistGridItem: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const {
-    // index,
     setIndex,
     withLayout,
     refSlider,
@@ -86,20 +85,15 @@ const ArtistGridItem: React.FC<Props> = ({
       gap={gap}
       hoverEffect={hoverEffect}
       onClick={() => {
-        if (withLayout) {
-          setListModalFlag(false);
-        } else {
+        if (!withLayout) {
           router.push(router.pathname.split('?')[0], undefined, {
             shallow: true,
           });
         }
+        setListModalFlag(false);
         setIndex(artistData.id);
         refSlider.current?.slickGoTo(artistData.id - 1);
         sessionStorage.setItem('@artistId', `${artistData.id}`);
-        // if (!withLayout)
-        //   router.push(`/artist?id=${artistData.id}`, undefined, {
-        //     shallow: true,
-        //   });
         setTimeout(() => {
           if (!withLayout) router.reload();
         }, 10);
