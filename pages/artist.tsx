@@ -6,11 +6,16 @@ import Slider from 'react-slick';
 import { CSSTransition } from 'react-transition-group';
 import { isIOS } from 'react-device-detect';
 
+import IconButton from '@material-ui/core/IconButton';
+import ZoomIn from '@material-ui/icons/ZoomIn';
+
 import Header from '../components/Header';
 import RenderedImage from '../components/RenderedImage';
 import MobileFooter from '../components/MobileFooter';
 import ArtistsModal from '../components/ArtistList/ArtistsModal';
 import DesktopList from '../components/ArtistList/DesktopList';
+import MobileDetailModal from '../components/MobileDetailModal';
+import ZoomInModal from '../components/ZoomInModal';
 
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
@@ -46,14 +51,14 @@ const Root = styled.div`
     }
   }
 
-  .list-modal-enter {
+  .mobile-modal-enter {
     top: 100%;
     .modalHeader {
       /* top: 100%; */
       opacity: 0;
     }
   }
-  .list-modal-enter-active {
+  .mobile-modal-enter-active {
     top: 0;
     transition: 300ms;
     .modalHeader {
@@ -70,6 +75,33 @@ const Root = styled.div`
   .list-desktop-enter-active {
     opacity: 1;
     transition: 300ms;
+  }
+`;
+
+const MyIconButton = styled(IconButton)`
+  position: absolute !important;
+  right: 20px;
+  bottom: 80px;
+  background-color: black !important;
+  padding: 5px !important;
+  z-index: 2;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  svg {
+    font-size: 20px;
+    color: white;
+  }
+
+  &.withLayout {
+    right: 30px;
+    bottom: 30px;
+
+    svg {
+      font-size: 30px;
+    }
   }
 `;
 
@@ -95,6 +127,10 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     withLayout,
     listModalFlag,
     setListModalFlag,
+    detailModalFlag,
+    setDetailModalFlag,
+    zoomInModal,
+    setZoomInModal,
   } = React.useContext(IndexContext);
   // Use screen size and orientation (hooks)
   const { isPortrait } = useMobileOrientation();
@@ -120,9 +156,20 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         timeoutId -= 1;
         clearTimeout(timeoutId);
       }
-      if (withLayout) {
+      if (listModalFlag) {
         setListModalFlag(false);
-      } else if (router.query.listOpen) {
+      }
+      if (detailModalFlag) {
+        setDetailModalFlag(false);
+      }
+      if (zoomInModal) {
+        setZoomInModal(0);
+      }
+      if (
+        router.query.listOpen ||
+        router.query.detailOpen ||
+        router.query.zoomIn
+      ) {
         router.back();
       }
     };
@@ -183,6 +230,21 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     if (!withLayout && !slideChangedFlag) setHeaderFlag(!headerFlag);
   };
 
+  const handleModalOpen = () => {
+    const artwork = artworks.find((item: ArtworkJson) => {
+      return item.artistId === index;
+    });
+    if (artwork) {
+      if (withLayout || isIOS) {
+        setZoomInModal(artwork.artworkId);
+      } else {
+        router.push(`?zoomIn=${artwork.artworkId}`, undefined, {
+          shallow: true,
+        });
+      }
+    }
+  };
+
   return (
     <>
       <Head>
@@ -200,6 +262,11 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         />
       </Head>
       <Header fixed={false} visible={headerFlag} />
+      <ZoomInModal
+        modalOpen={zoomInModal}
+        setModalOpen={setZoomInModal}
+        artworks={artists[index - 1].artworks}
+      />
       <Root>
         <>
           <Slider
@@ -248,6 +315,14 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               );
             })}
           </Slider>
+          <MyIconButton
+            className={withLayout ? 'withLayout' : ''}
+            onClick={() => {
+              handleModalOpen();
+            }}
+          >
+            <ZoomIn />
+          </MyIconButton>
           {!withLayout ? (
             <>
               <MobileFooter
@@ -260,10 +335,24 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 in={!isIOS ? Boolean(router.query.listOpen) : listModalFlag}
                 timeout={300}
                 unmountOnExit
-                classNames="list-modal"
+                classNames="mobile-modal"
               >
                 {(!isIOS ? Boolean(router.query.listOpen) : listModalFlag) ? (
                   <ArtistsModal artists={artists} />
+                ) : (
+                  <></>
+                )}
+              </CSSTransition>
+              <CSSTransition
+                in={!isIOS ? Boolean(router.query.detailOpen) : detailModalFlag}
+                timeout={300}
+                unmountOnExit
+                classNames="mobile-modal"
+              >
+                {(
+                  !isIOS ? Boolean(router.query.detailOpen) : detailModalFlag
+                ) ? (
+                  <MobileDetailModal artist={artists[index - 1]} />
                 ) : (
                   <></>
                 )}

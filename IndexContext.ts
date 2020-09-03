@@ -10,6 +10,8 @@ interface ContextProps {
   setListModalFlag: React.Dispatch<React.SetStateAction<boolean>>;
   detailModalFlag: boolean;
   setDetailModalFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  zoomInModal: number;
+  setZoomInModal: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const defaultContext: ContextProps = {
@@ -21,6 +23,8 @@ const defaultContext: ContextProps = {
   setListModalFlag: () => false,
   detailModalFlag: false,
   setDetailModalFlag: () => false,
+  zoomInModal: 0,
+  setZoomInModal: () => 0,
 };
 
 export default React.createContext<ContextProps>(defaultContext);

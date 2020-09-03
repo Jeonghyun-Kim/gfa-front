@@ -17,11 +17,13 @@ declare interface Artist {
   id: number;
   artistName: string;
   detail?: string;
+  profileFileName: string;
   thumbFileName: string;
   landscapeFileName?: string;
   portraitFileName?: string;
   hitCount: number;
   seeMoreCount: number;
+  artworks: Artwork[];
 }
 
 declare interface ArtworkData {

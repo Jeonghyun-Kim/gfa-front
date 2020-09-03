@@ -49,6 +49,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [listModalFlag, setListModalFlag] = React.useState<boolean>(false);
   // For detailModal toggle
   const [detailModalFlag, setDetailModalFlag] = React.useState<boolean>(false);
+  // For zoomIn Modal Open
+  const [zoomInModal, setZoomInModal] = React.useState<number>(0);
 
   // Set initial index with router.query.id if exists.
   React.useEffect(() => {
@@ -93,6 +95,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             setListModalFlag,
             detailModalFlag,
             setDetailModalFlag,
+            zoomInModal,
+            setZoomInModal,
           }}
         >
           {withLayout && <NavBar />}

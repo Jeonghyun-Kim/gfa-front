@@ -15,14 +15,15 @@ const CONTAINER_WIDTH = 1200;
 const GAP = 15;
 
 interface RootProps {
-  tmp: boolean;
+  narrow: boolean;
+  baseSize: number;
 }
 const Root = styled.div<RootProps>`
   position: relative;
   max-width: ${CONTAINER_WIDTH}px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 20px;
+  padding: 0 40px;
 
   .container {
     /* position: absolute; */
@@ -33,27 +34,46 @@ const Root = styled.div<RootProps>`
     margin-top: 46px;
 
     section {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
 
       .sectionTitle {
         color: #1e1e1e;
-        font-weight: normal;
-        margin-bottom: 5px;
+        font-size: 1.5rem;
+        font-weight: bolder;
+        margin-top: 0;
+        margin-bottom: 10px;
       }
     }
 
     .profile-and-history {
       display: flex;
-      flex-direction: ${(props) => (props.tmp ? 'column' : 'row')};
+      flex-direction: ${(props) => (props.narrow ? 'column' : 'row')};
     }
 
     .history {
-      width: ${(100 / 3) * 2}%;
+      flex-grow: 1;
+      height: ${PROFILE_HEIGHT}px;
+      margin-top: ${(props) => (props.narrow ? 30 : 0)}px;
+
       article {
+        width: 100%;
+        height: ${PROFILE_HEIGHT - 45}px;
+        overflow-y: scroll;
         color: #7d7d7d;
         font-size: 0.9rem;
+        padding-top: 10px;
+        border-top: 1px solid #707070;
+        border-bottom: 1px solid #707070;
 
-        .detailDiv {
+        ::-webkit-scrollbar {
+          -webkit-appearance: none;
+          width: 7px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          border-radius: 4px;
+          background-color: rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
         }
 
         b {
@@ -65,16 +85,18 @@ const Root = styled.div<RootProps>`
 
     .artworks {
       .artworks-row {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(${(props) => props.baseSize}px, 1fr)
+        );
       }
     }
   }
 `;
 
 const DesktopProfile = styled(Profile)`
-  min-width: 350px;
-  margin-right: 50px;
+  min-width: 391px;
 `;
 
 interface Props {
@@ -83,10 +105,13 @@ interface Props {
 const DesktopDetailModal: React.FC<Props> = ({ artist, ...props }) => {
   const { innerWidth } = useWindowSize();
 
+  const narrow = innerWidth < 1000;
+  const artworksPerLine = narrow ? 2 : 3;
   const artworkSize =
-    innerWidth > 1200 + NAVBAR_WIDTH + 40
-      ? (1200 - 40 - GAP * 2) / 3
-      : (innerWidth - NAVBAR_WIDTH - 40 - GAP * 2) / 3;
+    innerWidth > 1200 + NAVBAR_WIDTH + 80
+      ? (1200 - 80 - GAP * (artworksPerLine - 1)) / artworksPerLine
+      : (innerWidth - NAVBAR_WIDTH - 80 - GAP * (artworksPerLine - 1)) /
+        artworksPerLine;
 
   const artworks = artworksJson.filter((artworkJson) => {
     return artworkJson.artistId === artist.id;
@@ -95,14 +120,23 @@ const DesktopDetailModal: React.FC<Props> = ({ artist, ...props }) => {
   const detail = artist.detail ? artist.detail.split('\n').join('<br />') : '';
 
   return (
-    <Root tmp={innerWidth < 1000} {...props}>
+    <Root narrow={narrow} baseSize={artworkSize} {...props}>
       <div className="container unselectable">
         <section className="profile-and-history">
           <DesktopProfile artist={artist} height={PROFILE_HEIGHT} />
-          {/* <div className="history">
-          </div> */}
+          <div className="history">
+            <h4 className="sectionTitle">작가 경력</h4>
+            <article>
+              <div
+                className="detailDiv"
+                dangerouslySetInnerHTML={{
+                  __html: detail,
+                }}
+              />
+            </article>
+          </div>
         </section>
-        <section className="history">
+        {/* <section className="history">
           <h4 className="sectionTitle">작가 경력</h4>
           <article>
             <div
@@ -112,7 +146,7 @@ const DesktopDetailModal: React.FC<Props> = ({ artist, ...props }) => {
               }}
             />
           </article>
-        </section>
+        </section> */}
         <section className="artworks">
           <h4 className="sectionTitle">대표 작품</h4>
           <div className="artworks-row">

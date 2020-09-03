@@ -1,16 +1,11 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import PinchToZoom from 'react-pinch-and-zoom';
 import { isIOS } from 'react-device-detect';
 
 import IconButton from '@material-ui/core/IconButton';
 import ZoomIn from '@material-ui/icons/ZoomIn';
-import Close from '@material-ui/icons/Close';
 
-import Modal from './Modal';
-
-// import useWindowSize from '../lib/hooks/useWindowSize';
 import IndexContext from '../IndexContext';
 
 const BLUR_PX = 10;
@@ -32,6 +27,10 @@ const Root = styled.div<RootProps>`
     overflow: hidden;
     width: ${(props) => props.width}px;
     height: ${(props) => props.width}px;
+
+    &:hover {
+      cursor: pointer;
+    }
 
     img.artworkImg {
       max-width: ${(props) => props.width - 32}px;
@@ -65,46 +64,11 @@ const MyIconButton = styled(IconButton)`
   bottom: 10px;
   background-color: black !important;
   padding: 5px !important;
+  z-index: 2;
 
   svg {
     font-size: 20px;
     color: white;
-  }
-`;
-
-interface ModalProps {
-  withLayout: boolean;
-}
-const MyModal = styled(Modal)<ModalProps>`
-  .modalRoot {
-    display: grid;
-    place-items: center;
-    background-color: black;
-    width: ${(props) => (props.withLayout ? '100vw' : '100%')};
-    height: ${(props) => (props.withLayout ? '100vh' : '100%')};
-  }
-
-  .pinchArea {
-    .pinch-to-zoom-area {
-      width: 100vh;
-      height: 100vh;
-    }
-  }
-
-  .zoomInArtworkImg {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  button {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    svg {
-      color: white;
-    }
   }
 `;
 
@@ -147,53 +111,33 @@ const Artwork: React.FC<Props> = ({
   ...props
 }) => {
   const router = useRouter();
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
 
-  const { withLayout } = React.useContext(IndexContext);
-  // const { innerWidth, innerHeight } = useWindowSize();
+  const { withLayout, setZoomInModal } = React.useContext(IndexContext);
+
+  const handleModalOpen = () => {
+    if (withLayout || isIOS) {
+      setZoomInModal(id);
+    } else {
+      router.push(`?zoomIn=${id}`, undefined, { shallow: true });
+    }
+  };
 
   return (
     <Root width={width} {...props}>
-      <MyModal
-        withLayout={withLayout}
-        visible={
-          withLayout || isIOS ? modalOpen : Number(router.query.zoomIn) === id
-        }
-        full
+      <div
+        className="artworkContainer"
+        role="button"
+        tabIndex={0}
+        onKeyDown={() => {}}
+        onClick={() => {
+          handleModalOpen();
+        }}
       >
-        <IconButton
-          onClick={() => {
-            if (withLayout || isIOS) {
-              setModalOpen(false);
-            } else if (router.query.zoomIn) {
-              router.back();
-            }
-          }}
-        >
-          <Close />
-        </IconButton>
-        <PinchToZoom
-          className="pinchArea"
-          maxZoomScale={3}
-          minZoomScale={0.8}
-          boundSize={{ width: 50, height: 50 }}
-          onTransform={() => {}}
-          contentSize={{ width: 0, height: 0 }}
-          debug={false}
-        >
-          <img className="zoomInArtworkImg" alt={title} src={imageUrl} />
-        </PinchToZoom>
-      </MyModal>
-      <div className="artworkContainer">
         <img className="artworkImg" alt={title} src={imageUrl} />
         <ArtworkBox background={imageUrl} width={width} />
         <MyIconButton
           onClick={() => {
-            if (withLayout || isIOS) {
-              setModalOpen(true);
-            } else {
-              router.push(`?zoomIn=${id}`, undefined, { shallow: true });
-            }
+            handleModalOpen();
           }}
         >
           <ZoomIn />
