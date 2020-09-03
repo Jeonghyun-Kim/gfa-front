@@ -8,6 +8,8 @@ interface ContextProps {
   withLayout: boolean;
   listModalFlag: boolean;
   setListModalFlag: React.Dispatch<React.SetStateAction<boolean>>;
+  detailModalFlag: boolean;
+  setDetailModalFlag: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultContext: ContextProps = {
@@ -17,6 +19,8 @@ const defaultContext: ContextProps = {
   withLayout: false,
   listModalFlag: false,
   setListModalFlag: () => false,
+  detailModalFlag: false,
+  setDetailModalFlag: () => false,
 };
 
 export default React.createContext<ContextProps>(defaultContext);

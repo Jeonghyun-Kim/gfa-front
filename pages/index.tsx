@@ -27,9 +27,16 @@ const HomePage: React.FC = () => {
       <Root>
         <div>
           <div>Home</div>
-          <Link href="/artist">
-            <a>artist</a>
-          </Link>
+          <div>
+            <Link href="/artist">
+              <a>artist</a>
+            </Link>
+          </div>
+          <div>
+            <Link href="/test">
+              <a>test</a>
+            </Link>
+          </div>
           <button type="button" onClick={() => setFlag(!flag)}>
             click me
           </button>

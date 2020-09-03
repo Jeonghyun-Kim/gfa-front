@@ -47,6 +47,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const refSlider = React.createRef<Slider | null>();
   // For listModal toggle
   const [listModalFlag, setListModalFlag] = React.useState<boolean>(false);
+  // For detailModal toggle
+  const [detailModalFlag, setDetailModalFlag] = React.useState<boolean>(false);
 
   // Set initial index with router.query.id if exists.
   React.useEffect(() => {
@@ -89,6 +91,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             withLayout,
             listModalFlag,
             setListModalFlag,
+            detailModalFlag,
+            setDetailModalFlag,
           }}
         >
           {withLayout && <NavBar />}
