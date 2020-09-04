@@ -11,6 +11,10 @@ declare interface Artwork {
   id: number;
   fileName: string;
   artistId: number;
+  artistName: string;
+  title: string;
+  size: string;
+  material: string;
 }
 
 declare interface Artist {

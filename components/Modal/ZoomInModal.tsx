@@ -13,8 +13,6 @@ import { BUCKET_URL } from '../../defines';
 
 import IndexContext from '../../IndexContext';
 
-import artworksJson from '../../artworks.json';
-
 interface RootProps {
   withLayout: boolean;
 }
@@ -108,11 +106,11 @@ const ZoomInModal: React.FC<Props> = ({
           <img
             className="zoomInArtworkImg"
             alt={
-              artworksJson.find((artworkJson: ArtworkJson) => {
+              artworks.find((artwork) => {
                 if (withLayout || isIOS) {
-                  return artworkJson.artworkId === modalOpen;
+                  return artwork.id === modalOpen;
                 }
-                return artworkJson.artworkId === Number(router.query.zoomIn);
+                return artwork.id === Number(router.query.zoomIn);
               })?.title
             }
             src={`${BUCKET_URL}/artworks/${

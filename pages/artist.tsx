@@ -25,8 +25,6 @@ import { API_URL } from '../defines';
 
 import IndexContext from '../IndexContext';
 
-import artworks from '../artworks.json';
-
 const Root = styled.div`
   width: 100%;
   height: 100%;
@@ -137,6 +135,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
 
+  const artwork = artists[index - 1].artworks[0];
+
   // React.useEffect(() => {
   //   // Set initial slide (react-slick's initialSlide property is now working properly.)
   //   if (refSlider.current) {
@@ -231,18 +231,18 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   };
 
   const handleModalOpen = () => {
-    const artwork = artworks.find((item: ArtworkJson) => {
-      return item.artistId === index;
-    });
-    if (artwork) {
-      if (withLayout || isIOS) {
-        setZoomInModal(artwork.artworkId);
-      } else {
-        router.push(`?zoomIn=${artwork.artworkId}`, undefined, {
-          shallow: true,
-        });
-      }
+    // const artwork = artworks.find((item: ArtworkJson) => {
+    //   return item.artistId === index;
+    // });
+    // if (artwork) {
+    if (withLayout || isIOS) {
+      setZoomInModal(artwork.id);
+    } else {
+      router.push(`?zoomIn=${artwork.id}`, undefined, {
+        shallow: true,
+      });
     }
+    // }
   };
 
   return (
@@ -326,9 +326,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
           {!withLayout ? (
             <>
               <MobileFooter
-                artworkData={artworks.find(
-                  (artwork: ArtworkJson) => artwork.artistId === index,
-                )}
+                artworkData={artwork}
                 onClick={() => toggleHeader()}
               />
               <CSSTransition

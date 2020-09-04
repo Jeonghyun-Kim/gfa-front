@@ -49,7 +49,7 @@ const MyListGroup = styled(ListGroup)`
 `;
 
 interface Props {
-  artworkData?: ArtworkJson;
+  artworkData?: Artwork;
   onClick?: () => void;
 }
 const MobileFooter: React.FC<Props> = ({
