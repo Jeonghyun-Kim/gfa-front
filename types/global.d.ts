@@ -31,7 +31,7 @@ declare interface Artist {
 }
 
 declare interface ArtworkData {
-  artist: string;
+  artistName: string;
   title: string;
 }
 

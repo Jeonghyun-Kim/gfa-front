@@ -37,9 +37,9 @@ const PlayBar: React.FC<Props> = ({ className = undefined, ...props }) => {
     listModalFlag,
     setListModalFlag,
   } = React.useContext(IndexContext);
-  const { artist, title } = ArtworkData.find((artwork) => {
+  const { artist: artistName, title } = ArtworkData.find((artwork) => {
     return artwork.artistId === index;
-  }) || { artist: '', title: '' };
+  }) || { artistName: '', title: '' };
 
   const handleLeft = () => {
     if (index > 1) {
@@ -71,7 +71,7 @@ const PlayBar: React.FC<Props> = ({ className = undefined, ...props }) => {
         id={index}
       />
       <SimpleInfo
-        artworkData={{ artist, title }}
+        artworkData={{ artistName: artistName ?? '', title }}
         animation={!checkLength(title, 35)}
       />
       <ListGroup />

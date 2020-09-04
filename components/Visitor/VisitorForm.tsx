@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-// import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import TextField from '@material-ui/core/TextField';
@@ -66,7 +66,6 @@ const ExitHeader = styled.div`
   width: 100%;
   height: ${HEADER_HEIGHT}px;
   background-color: white;
-  /* box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px; */
   z-index: 2;
 
   display: flex;
@@ -160,7 +159,6 @@ const VisitorForm: React.FC<Props> = ({
   handleClose,
   ...props
 }) => {
-  // const router = useRouter();
   const [name, setName] = React.useState<string>('');
   const [content, setContent] = React.useState<string>('');
   const [timer, setTimer] = React.useState<NodeJS.Timeout | null>(null);
@@ -185,6 +183,7 @@ const VisitorForm: React.FC<Props> = ({
 
       setRes(error);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
     }
   };

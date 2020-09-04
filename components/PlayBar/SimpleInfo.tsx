@@ -59,12 +59,12 @@ const SimpleInfo: React.FC<Props> = ({
   ...props
 }) => {
   const router = useRouter();
-  const { artist, title } = artworkData;
+  const { artistName, title } = artworkData;
   return (
     <Root animation={animation} {...props}>
       {router.pathname === '/artist' && (
         <>
-          <p className="name">{artist}</p>
+          <p className="name">{artistName}</p>
           <p className="title">{title}</p>
         </>
       )}

@@ -49,11 +49,11 @@ const MyListGroup = styled(ListGroup)`
 `;
 
 interface Props {
-  artworkData?: Artwork;
+  artworkData: Artwork;
   onClick?: () => void;
 }
 const MobileFooter: React.FC<Props> = ({
-  artworkData = { artist: '', title: '' },
+  artworkData,
   onClick = () => {},
   ...props
 }) => {
@@ -63,7 +63,7 @@ const MobileFooter: React.FC<Props> = ({
     <>
       <Root onClick={() => onClick()} {...props}>
         <ArtworkInfo
-          artworkData={artworkData as ArtworkData}
+          artworkData={artworkData}
           animation={!checkLength(artworkData.title, 30)}
         />
       </Root>
