@@ -13,7 +13,7 @@ import Artwork from '../Artwork';
 import useWindowSize from '../../lib/hooks/useWindowSize';
 
 import artworksJson from '../../artworks.json';
-import { API_URL } from '../../defines';
+import { BUCKET_URL } from '../../defines';
 
 interface RootProps {
   seeMore: boolean;
@@ -193,7 +193,7 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
           {artworks.map((artwork, idx) => (
             <Artwork
               key={artwork.artworkId}
-              imageUrl={`${API_URL}/artworks/${artist.artworks[idx].fileName}`}
+              imageUrl={`${BUCKET_URL}/artworks/${artist.artworks[idx].fileName}`}
               id={artwork.artworkId}
               title={artwork.title}
               size={artwork.size}
