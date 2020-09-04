@@ -19,7 +19,7 @@ const OneLineLogo: React.FC = ({ ...props }) => {
   return (
     <Root {...props}>
       <Link href="/">
-        <img alt="onDP" src="/logo/logo-squared.svg" />
+        <img alt="onDP" src="/logo/logo-squared-with-dot.svg" />
       </Link>
     </Root>
   );
