@@ -108,8 +108,8 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
   const narrow = innerWidth < 1000;
   const artworksPerLine = narrow ? 2 : 3;
   const artworkSize =
-    innerWidth > 1200 + NAVBAR_WIDTH + 80
-      ? (1200 - 80 - GAP * (artworksPerLine - 1)) / artworksPerLine
+    innerWidth > CONTAINER_WIDTH + NAVBAR_WIDTH
+      ? (CONTAINER_WIDTH - 80 - GAP * (artworksPerLine - 1)) / artworksPerLine
       : (innerWidth - NAVBAR_WIDTH - 80 - GAP * (artworksPerLine - 1)) /
         artworksPerLine;
 
