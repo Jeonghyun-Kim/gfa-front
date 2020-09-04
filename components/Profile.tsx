@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { API_URL } from '../defines';
+import { BUCKET_URL } from '../defines';
 
 interface RootProps {
   height: number;
@@ -52,7 +52,7 @@ const Profile: React.FC<Props> = ({ artist, height = 150, ...props }) => {
       <img
         className="profileImage"
         alt={artist.artistName}
-        src={`${API_URL}/profile/${artist.profileFileName}`}
+        src={`${BUCKET_URL}/profile/${artist.profileFileName}`}
       />
       <span className="nameBox">
         <div className="grow" />
