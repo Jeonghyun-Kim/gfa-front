@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { isIOS } from 'react-device-detect';
 
 import CurrentBackground from './CurrentArtistBackground';
 import GradientBackground from './GradientBackground';
@@ -85,18 +86,18 @@ const ArtistGridItem: React.FC<Props> = ({
       gap={gap}
       hoverEffect={hoverEffect}
       onClick={() => {
-        if (!withLayout) {
-          router.push(router.pathname.split('?')[0], undefined, {
-            shallow: true,
-          });
-        }
-        setListModalFlag(false);
         setIndex(artistData.id);
-        refSlider.current?.slickGoTo(artistData.id - 1);
         sessionStorage.setItem('@artistId', `${artistData.id}`);
-        setTimeout(() => {
-          if (!withLayout) router.reload();
-        }, 10);
+        if (!withLayout) {
+          if (isIOS) {
+            setListModalFlag(false);
+          } else {
+            router.back();
+          }
+          setTimeout(() => router.reload(), 10);
+        } else {
+          refSlider.current?.slickGoTo(artistData.id - 1);
+        }
       }}
       {...props}
     >
