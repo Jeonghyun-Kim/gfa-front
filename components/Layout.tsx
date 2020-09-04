@@ -44,7 +44,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isMobile, isTablet, isPortrait } = useWindowSize();
   const withLayout = !isMobile && (!isTablet || !isPortrait);
   const [index, setIndex] = React.useState<number>(0);
-  const refSlider = React.createRef<Slider | null>();
+  const refSlider = React.useRef<Slider | null>(null);
   // For listModal toggle
   const [listModalFlag, setListModalFlag] = React.useState<boolean>(false);
   // For detailModal toggle
