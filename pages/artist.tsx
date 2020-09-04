@@ -29,6 +29,40 @@ import { API_URL, HEADER_HEIGHT } from '../defines';
 
 import IndexContext from '../IndexContext';
 
+interface ZoomInProps {
+  headerFlag?: boolean;
+}
+const ZoomInButton = styled(IconButton)<ZoomInProps>`
+  position: absolute !important;
+  padding: 5px !important;
+  z-index: 2;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  svg {
+    font-size: 40px;
+    color: white;
+  }
+
+  &.desktop {
+    top: initial;
+    right: 30px;
+    bottom: 30px;
+    background-color: black !important;
+
+    svg {
+      font-size: 30px;
+    }
+  }
+
+  &.mobile {
+    top: ${(props) => (props.headerFlag ? HEADER_HEIGHT + 5 : 5)}px;
+    right: 5px;
+  }
+`;
+
 const Root = styled.div`
   width: 100%;
   height: 100%;
@@ -80,52 +114,21 @@ const Root = styled.div`
   }
 
   .header-toggle-enter {
-    opacity: 0;
+    top: 5px;
   }
 
   .header-toggle-enter-active {
-    opacity: 1;
+    top: calc(${HEADER_HEIGHT}px + 5px);
     transition: 300ms;
   }
 
   .header-toggle-exit {
-    opacity: 1;
+    top: calc(${HEADER_HEIGHT}px + 5px);
   }
 
   .header-toggle-exit-active {
-    opacity: 0;
+    top: 5px;
     transition: 300ms;
-  }
-`;
-
-const ZoomInButton = styled(IconButton)`
-  position: absolute !important;
-  padding: 5px !important;
-  z-index: 2;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  svg {
-    font-size: 40px;
-    color: white;
-  }
-
-  &.desktop {
-    top: initial;
-    right: 30px;
-    bottom: 30px;
-    background-color: black !important;
-
-    svg {
-      font-size: 30px;
-    }
-  }
-
-  &.mobile {
-    top: calc(${HEADER_HEIGHT}px + 5px);
-    right: 5px;
   }
 `;
 
@@ -319,6 +322,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
             focusOnSelect
             useCSS={!withLayout}
             swipe={!withLayout}
+            speed={300}
             waitForAnimate
             beforeChange={(_, currentSlide) => {
               if (withLayout) {
@@ -363,11 +367,12 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               <CSSTransition
                 in={headerFlag}
                 timeout={300}
-                unmountOnExit
+                // unmountOnExit
                 classNames="header-toggle"
               >
                 <ZoomInButton
                   className="mobile"
+                  headerFlag={headerFlag}
                   onClick={() => {
                     handleModalOpen();
                   }}
