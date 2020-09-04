@@ -2,8 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
 
-import DesktopDetailModal from '../components/DesktopDetailModal';
-import MobileDetailmodal from '../components/MobileDetailModal';
+import DesktopDetail from '../components/DesktopDetail';
+import MobileDetailModal from '../components/Modal/MobileDetailModal';
 
 import fetcher from '../lib/fetcher';
 
@@ -20,7 +20,7 @@ interface Props {
 }
 const TemplatePage: React.FC<Props> = ({ artists }) => {
   const { withLayout } = React.useContext(IndexContext);
-  const id = 49;
+  const id = 2;
 
   return (
     <>
@@ -29,9 +29,9 @@ const TemplatePage: React.FC<Props> = ({ artists }) => {
       </Head>
       <Root>
         {withLayout ? (
-          <DesktopDetailModal artist={artists[id - 1]} />
+          <DesktopDetail artist={artists[id - 1]} />
         ) : (
-          <MobileDetailmodal artist={artists[id - 1]} />
+          <MobileDetailModal artist={artists[id - 1]} />
         )}
       </Root>
     </>

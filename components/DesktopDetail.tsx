@@ -12,6 +12,7 @@ import { NAVBAR_WIDTH, API_URL } from '../defines';
 
 const PROFILE_HEIGHT = 280;
 const CONTAINER_WIDTH = 1200;
+const CONTAINER_PADDING = 40;
 const GAP = 15;
 
 interface RootProps {
@@ -23,7 +24,7 @@ const Root = styled.div<RootProps>`
   max-width: ${CONTAINER_WIDTH}px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 40px;
+  padding: 0 ${CONTAINER_PADDING}px;
 
   .container {
     /* position: absolute; */
@@ -109,8 +110,14 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
   const artworksPerLine = narrow ? 2 : 3;
   const artworkSize =
     innerWidth > CONTAINER_WIDTH + NAVBAR_WIDTH
-      ? (CONTAINER_WIDTH - 80 - GAP * (artworksPerLine - 1)) / artworksPerLine
-      : (innerWidth - NAVBAR_WIDTH - 80 - GAP * (artworksPerLine - 1)) /
+      ? (CONTAINER_WIDTH -
+          CONTAINER_PADDING * 2 -
+          GAP * (artworksPerLine - 1)) /
+        artworksPerLine
+      : (innerWidth -
+          NAVBAR_WIDTH -
+          CONTAINER_PADDING * 2 -
+          GAP * (artworksPerLine - 1)) /
         artworksPerLine;
 
   const artworks = artworksJson.filter((artworkJson) => {
@@ -136,17 +143,6 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
             </article>
           </div>
         </section>
-        {/* <section className="history">
-          <h4 className="sectionTitle">작가 경력</h4>
-          <article>
-            <div
-              className="detailDiv"
-              dangerouslySetInnerHTML={{
-                __html: detail,
-              }}
-            />
-          </article>
-        </section> */}
         <section className="artworks">
           <h4 className="sectionTitle">대표 작품</h4>
           <div className="artworks-row">

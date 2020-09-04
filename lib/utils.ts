@@ -28,8 +28,34 @@ export const checkLength = (input: string, maxLength: number) => {
   return true;
 };
 
+export const splitLongText = (input: string, splitHeight: number) => {
+  let totalLine = 0;
+  let totalLength = 0;
+  let splitIndex = input.length - 1;
+  for (let i = 0; i < input.length; i += 1) {
+    const oneChar = input.charAt(i);
+    if (oneChar === '\n') {
+      totalLine += 1;
+      totalLength = 0;
+    } else {
+      totalLength += 1;
+      if (totalLength === 20) {
+        totalLine += 1;
+        totalLength = 0;
+      }
+    }
+    if (totalLine === splitHeight) splitIndex = i;
+  }
+
+  return {
+    shortStr: input.substring(0, splitIndex + 1),
+    extraStr: input.substring(splitIndex + 1, input.length),
+  };
+};
+
 export default {
   checkSameObject,
   sendCounter,
   checkLength,
+  splitLongText,
 };
