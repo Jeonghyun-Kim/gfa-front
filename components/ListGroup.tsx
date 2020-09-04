@@ -17,6 +17,7 @@ interface RootProps {
 const Root = styled.div<RootProps>`
   position: absolute;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   right: 1rem;
@@ -26,10 +27,8 @@ const Root = styled.div<RootProps>`
     return 'white';
   }};
 
-  p.listText {
-    @media screen and (max-width: 1000px) {
-      display: none;
-    }
+  &.withLayout {
+    flex-direction: row;
   }
 
   button {
@@ -52,7 +51,7 @@ const Root = styled.div<RootProps>`
 interface Props {
   iconOnly?: boolean;
 }
-const ListGroup: React.FC<Props> = ({ iconOnly = false, ...props }) => {
+const ListGroup: React.FC<Props> = ({ ...props }) => {
   const router = useRouter();
   const { withLayout, listModalFlag, setListModalFlag } = React.useContext(
     IndexContext,
@@ -74,12 +73,14 @@ const ListGroup: React.FC<Props> = ({ iconOnly = false, ...props }) => {
       }}
       active={listModalFlag}
       disabled={disabled}
+      className={withLayout ? 'withLayout' : ''}
       {...props}
     >
-      {!iconOnly && <p className="listText">작품목록</p>}
+      {withLayout && <p className="listText">작품목록</p>}
       <IconButton>
         <Apps />
       </IconButton>
+      {!withLayout && <p className="listText">작품목록</p>}
     </Root>
   );
 };

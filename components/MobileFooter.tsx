@@ -1,9 +1,14 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
+
+import IconButton from '@material-ui/core/IconButton';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 
 import SimpleInfo from './PlayBar/SimpleInfo';
 import ProgressBar from './ProgressBar';
 import ListGroup from './ListGroup';
+import DetailGroup from './DetailGroup';
 
 import { checkLength } from '../lib/utils';
 
@@ -14,24 +19,24 @@ const Root = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 7rem;
+  height: 105px;
   background: rgb(0, 0, 0);
   background: linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.3) 0%,
     rgba(0, 0, 0, 0) 100%
   );
 `;
 
 const ArtworkInfo = styled(SimpleInfo)`
   position: absolute;
-  bottom: 3rem;
-  left: 0rem;
-  transform: translate(0, 50%);
-  width: 300px;
+  bottom: 15px;
+  left: 45px;
+  width: fit-content;
 
   p.title {
-    font-size: 1.2rem;
+    color: white;
+    font-size: 1rem;
   }
 `;
 
@@ -41,10 +46,42 @@ const MyProgressBar = styled(ProgressBar)`
 `;
 
 const MyListGroup = styled(ListGroup)`
-  right: 0rem;
-  bottom: 0.5rem;
+  left: 0;
+  bottom: 13px;
+  width: fit-content;
+
+  .listText {
+    margin: 0;
+    margin-top: -13px;
+    font-size: 0.7rem;
+  }
+
   svg {
-    font-size: 2.1rem;
+    font-size: 34px;
+  }
+`;
+
+const MyDetailGroup = styled(DetailGroup)``;
+
+const NextGroup = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  bottom: 13px;
+  color: white;
+
+  svg {
+    color: white;
+    font-size: 34px;
+  }
+
+  .nextText {
+    margin: 0;
+    margin-top: -13px;
+    font-size: 0.7rem;
   }
 `;
 
@@ -57,6 +94,7 @@ const MobileFooter: React.FC<Props> = ({
   onClick = () => {},
   ...props
 }) => {
+  const router = useRouter();
   const { index } = React.useContext(IndexContext);
 
   return (
@@ -69,6 +107,13 @@ const MobileFooter: React.FC<Props> = ({
       </Root>
       <MyProgressBar index={index} />
       <MyListGroup iconOnly />
+      <MyDetailGroup />
+      <NextGroup onClick={() => router.push('/video')}>
+        <IconButton>
+          <ExitToApp />
+        </IconButton>
+        <p className="nextText">소개영상</p>
+      </NextGroup>
     </>
   );
 };

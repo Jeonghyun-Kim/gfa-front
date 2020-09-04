@@ -2,6 +2,8 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
+import IndexContext from '../../IndexContext';
+
 interface RootProps {
   animation: boolean;
 }
@@ -15,10 +17,9 @@ const Root = styled.div<RootProps>`
     line-height: 1.5;
     margin: 0;
     white-space: nowrap;
-  }
-  .name {
     color: white;
   }
+
   .title {
     color: #b1b1b1;
   }
@@ -60,8 +61,15 @@ const SimpleInfo: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const { artistName, title } = artworkData;
+
+  const { withLayout } = React.useContext(IndexContext);
+
   return (
-    <Root animation={animation} {...props}>
+    <Root
+      animation={animation}
+      className={withLayout ? 'withLayout' : ''}
+      {...props}
+    >
       {router.pathname === '/artist' && (
         <>
           <p className="name">{artistName}</p>

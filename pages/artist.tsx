@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ZoomIn from '@material-ui/icons/ZoomIn';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import ZoomInShadow from '../public/icons/zoom_in.svg';
-import LeftArrow from '../public/icons/left_arrow.svg';
+// import LeftArrow from '../public/icons/left_arrow.svg';
 // import RightArrow from '../public/icons/right_arrow.svg';
 
 import Header from '../components/Header';
@@ -129,25 +129,22 @@ const ZoomInButton = styled(IconButton)`
   }
 `;
 
-const ArrowButton = styled(IconButton)`
-  position: absolute !important;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 0 !important;
-
-  &.left {
-    left: 16px;
-  }
-
-  &.right {
-    right: 16px;
-  }
-
-  svg {
-    color: white;
-    font-size: 40px;
-  }
-`;
+// const ArrowButton = styled(IconButton)`
+//   position: absolute !important;
+//   top: 50%;
+//   transform: translateY(-50%);
+//   padding: 0 !important;
+//   &.left {
+//     left: 16px;
+//   }
+//   &.right {
+//     right: 16px;
+//   }
+//   svg {
+//     color: white;
+//     font-size: 40px;
+//   }
+// `;
 
 interface Props {
   artists: Artist[];
@@ -378,7 +375,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   <SvgIcon component={ZoomInShadow} viewBox="0 0 24 24" />
                 </ZoomInButton>
               </CSSTransition>
-              <CSSTransition
+              {/* <CSSTransition
                 in={headerFlag}
                 timeout={300}
                 unmountOnExit
@@ -395,7 +392,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 >
                   <SvgIcon component={LeftArrow} viewBox="0 0 24 24" />
                 </ArrowButton>
-              </CSSTransition>
+              </CSSTransition> */}
               {/* <CSSTransition
                 in={headerFlag}
                 timeout={300}

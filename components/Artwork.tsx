@@ -117,6 +117,8 @@ const Artwork: React.FC<Props> = ({
   const handleModalOpen = () => {
     if (withLayout || isIOS) {
       setZoomInModal(id);
+    } else if (router.query.detailOpen) {
+      router.push(`?detailOpen=1&zoomIn=${id}`, undefined, { shallow: true });
     } else {
       router.push(`?zoomIn=${id}`, undefined, { shallow: true });
     }

@@ -96,6 +96,7 @@ const ArtistGridItem: React.FC<Props> = ({
           }
           setTimeout(() => router.reload(), 10);
         } else {
+          setListModalFlag(false);
           refSlider.current?.slickGoTo(artistData.id - 1);
         }
       }}

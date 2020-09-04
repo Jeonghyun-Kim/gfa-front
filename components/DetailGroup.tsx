@@ -4,62 +4,73 @@ import styled from 'styled-components';
 import { isIOS } from 'react-device-detect';
 
 import IconButton from '@material-ui/core/IconButton';
-import ExpandLess from '@material-ui/icons/ExpandLess';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import DesktopDetailIcon from '../public/icons/desktop_detail.svg';
+import MobileDetailIcon from '../public/icons/mobile_detail.svg';
 
 import IndexContext from '../IndexContext';
 
 const Root = styled.div`
   position: absolute;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  right: 1rem;
   color: 'white';
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
 
-  p.listText {
-    @media screen and (max-width: 1000px) {
-      display: none;
-    }
+  .detailText {
+    color: white;
+    font-size: 0.9rem;
+    margin: 0;
+    margin-top: -5px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   }
 
   button {
-    transition: none;
+    padding: 3px;
   }
+
   svg {
-    color: 'white';
-    font-size: 1.8rem;
-    transition: none;
+    color: white;
+    font-size: 2rem;
   }
   &:hover {
     cursor: 'pointer';
   }
 `;
 
-interface Props {
-  iconOnly?: boolean;
-}
-const ListGroup: React.FC<Props> = ({ iconOnly = false, ...props }) => {
+const ListGroup: React.FC = ({ ...props }) => {
   const router = useRouter();
-  const { withLayout, listModalFlag, setListModalFlag } = React.useContext(
+  const { withLayout, detailModalFlag, setDetailModalFlag } = React.useContext(
     IndexContext,
   );
 
   return (
     <Root
       onClick={() => {
-        if (withLayout || isIOS) setListModalFlag(!listModalFlag);
+        if (withLayout || isIOS) setDetailModalFlag(!detailModalFlag);
         else if (router.query.listOpen) {
           router.back();
         } else {
-          router.push('?listOpen=1', undefined, { shallow: true });
+          router.push('?detailOpen=1', undefined, { shallow: true });
         }
       }}
       {...props}
     >
-      {!iconOnly && <p className="listText">작품목록</p>}
-      <IconButton>
-        <ExpandLess />
-      </IconButton>
+      {!withLayout && (
+        <IconButton>
+          <SvgIcon component={MobileDetailIcon} viewBox="0 0 32.2 13.3" />
+        </IconButton>
+      )}
+      <p className={`detailText ${withLayout && 'withLayout'}`}>자세히 보기</p>
+      {withLayout && (
+        <IconButton>
+          <SvgIcon component={DesktopDetailIcon} viewBox="0 0 56.9 22.1" />
+        </IconButton>
+      )}
     </Root>
   );
 };
