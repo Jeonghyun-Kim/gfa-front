@@ -39,3 +39,8 @@ declare interface User {
   userId: string;
   createdAt: Date;
 }
+
+declare module '*.svg' {
+  const content: any;
+  export default content;
+}
