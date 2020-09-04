@@ -2,6 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { isIOS } from 'react-device-detect';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,6 +15,8 @@ import useWindowSize from '../../lib/hooks/useWindowSize';
 
 import artworksJson from '../../artworks.json';
 import { BUCKET_URL } from '../../defines';
+
+import IndexContext from '../../IndexContext';
 
 interface RootProps {
   seeMore: boolean;
@@ -128,6 +131,8 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
   const [seeMore, setSeeMore] = React.useState<boolean>(false);
   const { innerWidth } = useWindowSize();
 
+  const { setDetailModalFlag } = React.useContext(IndexContext);
+
   const artworks = artworksJson.filter((artworkJson) => {
     return artworkJson.artistId === artist.id;
   });
@@ -144,7 +149,11 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
       <div className="modalHeader">
         <IconButton
           onClick={() => {
-            router.back();
+            if (isIOS) {
+              setDetailModalFlag(false);
+            } else if (router.query.detailOpen) {
+              router.back();
+            }
           }}
         >
           <Close />
