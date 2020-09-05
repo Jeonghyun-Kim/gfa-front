@@ -4,10 +4,12 @@ import styled from 'styled-components';
 
 import Header from '../components/Header';
 
+import { HEADER_HEIGHT } from '../defines';
+
 const Root = styled.div`
   display: grid;
   width: 100%;
-  height: 100%;
+  height: calc(100% - ${HEADER_HEIGHT}px);
   place-items: center;
 
   .dateBlock {
