@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Slider from 'react-slick';
+import { isIE } from 'react-device-detect';
 
 import NavBar from './NavBar';
 import PlayBar from './PlayBar';
@@ -40,6 +41,12 @@ const Root = styled.div<RootProps>`
     /* &.withLayout {
       overflow-y: auto;
     } */
+  }
+`;
+
+const ForIE = styled.div`
+  * {
+    text-align: center;
   }
 `;
 
@@ -87,6 +94,22 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     // logPageView();
     // if (process.env.NODE_ENV === 'production') sendCounter();
   }, []);
+
+  if (isIE) {
+    return (
+      <ForIE>
+        <h2>인터넷 익스플로러에서는 전시를 감상할 수 없어요ㅜ.ㅜ</h2>
+        <h2>보다 원활한 전시 감상을 위해 크롬 브라우저 사용을 권장합니다.</h2>
+        <a
+          href="https://www.google.com/chrome/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <h4>크롬 다운받기</h4>
+        </a>
+      </ForIE>
+    );
+  }
 
   return (
     <Root grid={withLayout}>
