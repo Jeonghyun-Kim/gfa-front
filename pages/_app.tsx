@@ -37,7 +37,7 @@ export default class MyApp extends App {
           />
           <meta
             property="og:description"
-            content="코로나 19로 인해 문화생활이 힘든 지금, 수준 높은 작가들의 온라인 전시를 감상해보세요."
+            content="수준 높은 작가들의 온라인 전시를 감상해보세요."
           />
           <meta
             property="og:image"
