@@ -12,6 +12,7 @@ interface ContextProps {
   setDetailModalFlag: React.Dispatch<React.SetStateAction<boolean>>;
   zoomInModal: number;
   setZoomInModal: React.Dispatch<React.SetStateAction<number>>;
+  refMain: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const defaultContext: ContextProps = {
@@ -25,6 +26,7 @@ const defaultContext: ContextProps = {
   setDetailModalFlag: () => false,
   zoomInModal: 0,
   setZoomInModal: () => 0,
+  refMain: React.createRef(),
 };
 
 export default React.createContext<ContextProps>(defaultContext);

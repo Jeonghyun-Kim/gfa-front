@@ -22,6 +22,8 @@ import ArtistsModal from '../components/ArtistList/ArtistsModal';
 import DesktopList from '../components/ArtistList/DesktopList';
 import MobileDetailModal from '../components/Modal/MobileDetailModal';
 import ZoomInModal from '../components/Modal/ZoomInModal';
+import DesktopDetail from '../components/DesktopDetail';
+import DetailGroup from '../components/DetailGroup';
 
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
@@ -63,6 +65,34 @@ const ZoomInButton = styled(IconButton)`
     &.headerFlag {
       top: calc(${HEADER_HEIGHT}px + 5px);
     }
+  }
+`;
+
+const MyDetailGroup = styled(DetailGroup)`
+  bottom: 30px;
+  transition: 300ms ease;
+
+  button {
+    width: 60px;
+    height: 25px;
+    &:hover {
+      background: none;
+    }
+
+    svg {
+      font-size: 60px;
+    }
+  }
+
+  .detailText {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    text-shadow: none;
+  }
+
+  &:hover {
+    cursor: pointer;
+    transform: translate(-50%, -10px);
   }
 `;
 
@@ -214,13 +244,13 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     }
   };
 
-  const handleDetailClose = () => {
-    if (withLayout || isIOS) {
-      setDetailModalFlag(false);
-    } else if (router.query.detailOpen && !router.query.zoomIn) {
-      router.back();
-    }
-  };
+  // const handleDetailClose = () => {
+  //   if (withLayout || isIOS) {
+  //     if (isIOS) setDetailModalFlag(false);
+  //   } else if (router.query.detailOpen && !router.query.zoomIn) {
+  //     router.back();
+  //   }
+  // };
 
   const handleSwipe = useSwipeable({
     onSwiped: (e) => {
@@ -245,7 +275,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         case 27:
           if (withLayout || isIOS) {
             if (zoomInModal) setZoomInModal(0);
-            if (detailModalFlag) setDetailModalFlag(false);
+            else if (detailModalFlag) {
+              if (isIOS) setDetailModalFlag(false);
+            }
           } else if (router.query.zoomIn || router.query.detailOpen)
             router.back();
           break;
@@ -262,7 +294,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
           handleDetailOpen();
           break;
         case 40:
-          handleDetailClose();
+          handleDetailOpen();
           break;
         default:
           break;
@@ -425,6 +457,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 if (swipeDirection === 'left') router.push('/video');
                 else router.push('/');
               }}
+              accessibility={!detailModalFlag && !zoomInModal}
             >
               {artists.map((artist) => {
                 return (
@@ -438,14 +471,17 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
             </Slider>
           </div>
           {withLayout ? (
-            <ZoomInButton
-              className="desktop"
-              onClick={() => {
-                handleModalOpen();
-              }}
-            >
-              <ZoomIn />
-            </ZoomInButton>
+            <>
+              <ZoomInButton
+                className="desktop"
+                onClick={() => {
+                  handleModalOpen();
+                }}
+              >
+                <ZoomIn />
+              </ZoomInButton>
+              <MyDetailGroup />
+            </>
           ) : (
             <>
               <CSSTransition
@@ -535,14 +571,17 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               </CSSTransition>
             </>
           ) : (
-            <CSSTransition
-              in={listModalFlag}
-              timeout={300}
-              unmountOnExit
-              classNames="list-desktop"
-            >
-              {listModalFlag ? <DesktopList artists={artists} /> : <></>}
-            </CSSTransition>
+            <>
+              {detailModalFlag && <DesktopDetail artist={artists[index - 1]} />}
+              <CSSTransition
+                in={listModalFlag}
+                timeout={300}
+                unmountOnExit
+                classNames="list-desktop"
+              >
+                {listModalFlag ? <DesktopList artists={artists} /> : <></>}
+              </CSSTransition>
+            </>
           )}
         </>
       </Root>

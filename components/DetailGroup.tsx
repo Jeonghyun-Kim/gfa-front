@@ -5,7 +5,7 @@ import { isIOS } from 'react-device-detect';
 
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import DesktopDetailIcon from '../public/icons/desktop_detail.svg';
+import DesktopDetailIcon from '../public/icons/go_down.svg';
 import MobileDetailIcon from '../public/icons/mobile_detail.svg';
 
 import IndexContext from '../IndexContext';
@@ -42,7 +42,7 @@ const Root = styled.div`
   }
 `;
 
-const ListGroup: React.FC = ({ ...props }) => {
+const DetailGroup: React.FC = ({ ...props }) => {
   const router = useRouter();
   const { withLayout, detailModalFlag, setDetailModalFlag } = React.useContext(
     IndexContext,
@@ -75,4 +75,4 @@ const ListGroup: React.FC = ({ ...props }) => {
   );
 };
 
-export default ListGroup;
+export default DetailGroup;

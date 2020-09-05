@@ -2,13 +2,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import GoUp from '../public/icons/go_up.svg';
+
 import Profile from './Profile';
 import Artwork from './Artwork';
 
 import useWindowSize from '../lib/hooks/useWindowSize';
 
 import artworksJson from '../artworks.json';
-import { NAVBAR_WIDTH, BUCKET_URL } from '../defines';
+import { NAVBAR_WIDTH, BUCKET_URL, PLAYBAR_HEIGHT } from '../defines';
+
+import IndexContext from '../IndexContext';
 
 const PROFILE_HEIGHT = 280;
 const CONTAINER_WIDTH = 1200;
@@ -100,11 +106,53 @@ const DesktopProfile = styled(Profile)`
   min-width: 391px;
 `;
 
+const GoUpButtonGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+  transition: 300ms ease;
+
+  button {
+    padding: 3px;
+    width: 54px;
+    height: 20px;
+    transition: none;
+
+    &:hover {
+      background: none;
+    }
+
+    svg {
+      font-size: 50px;
+      transition: none;
+    }
+
+    .goUpTitle {
+      margin: 5px;
+      font-size: 1.5rem;
+      font-weight: bolder;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.9;
+    transform: scale(1.2);
+  }
+`;
+
 interface Props {
   artist: Artist;
 }
 const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
-  const { innerWidth } = useWindowSize();
+  const { innerWidth, innerHeight } = useWindowSize();
+  const { refMain, setDetailModalFlag, refSlider } = React.useContext(
+    IndexContext,
+  );
+  const [shownFlag, setShownFlag] = React.useState<boolean>(false);
+  const [scrollY, setScrollY] = React.useState<number | null>(null);
 
   const narrow = innerWidth < 1000;
   const artworksPerLine = narrow ? 2 : 3;
@@ -125,6 +173,31 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
   });
 
   const detail = artist.detail ? artist.detail.split('\n').join('<br />') : '';
+
+  React.useEffect(() => {
+    const handleSetScroll = () => {
+      setScrollY(refMain.current?.scrollTop ?? null);
+    };
+    refMain.current?.addEventListener('scroll', handleSetScroll, {
+      capture: false,
+      passive: true,
+    });
+    handleSetScroll();
+    setTimeout(() => {
+      refMain.current?.scroll(0, innerHeight - PLAYBAR_HEIGHT);
+      setShownFlag(true);
+    }, 10);
+
+    return () =>
+      refMain.current?.removeEventListener('scroll', handleSetScroll);
+  }, [refMain.current]);
+
+  React.useEffect(() => {
+    if (shownFlag && scrollY === 0) {
+      setDetailModalFlag(false);
+      setShownFlag(false);
+    }
+  }, [scrollY]);
 
   return (
     <Root narrow={narrow} baseSize={artworkSize} {...props}>
@@ -159,6 +232,16 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
             ))}
           </div>
         </section>
+        <GoUpButtonGroup
+          onClick={() => {
+            refMain.current?.scroll(0, 0);
+          }}
+        >
+          <IconButton>
+            <SvgIcon component={GoUp} viewBox="0 0 56.9 22.1" />
+          </IconButton>
+          <p className="goUpTitle">전시장으로 돌아가기</p>
+        </GoUpButtonGroup>
       </div>
     </Root>
   );

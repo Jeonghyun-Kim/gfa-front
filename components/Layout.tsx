@@ -31,6 +31,7 @@ const Root = styled.div<RootProps>`
   .main {
     position: relative;
     overflow-y: auto;
+    scroll-behavior: smooth;
     height: 100%;
     width: 100%;
     ${(props) => props.grid && 'grid-column: 2 / 3'};
@@ -54,6 +55,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [detailModalFlag, setDetailModalFlag] = React.useState<boolean>(false);
   // For zoomIn Modal Open
   const [zoomInModal, setZoomInModal] = React.useState<number>(0);
+  // MainRef
+  const refMain = React.createRef<HTMLDivElement>();
 
   // Set initial index with router.query.id if exists.
   React.useEffect(() => {
@@ -100,10 +103,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             setDetailModalFlag,
             zoomInModal,
             setZoomInModal,
+            refMain,
           }}
         >
           {withLayout && <NavBar />}
-          <div className={withLayout ? 'main withLayout' : 'main'}>
+          <div
+            ref={refMain}
+            className={withLayout ? 'main withLayout' : 'main'}
+          >
             {children}
           </div>
           {withLayout && <PlayBar />}
