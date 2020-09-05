@@ -96,11 +96,11 @@ const Root = styled.div`
   }
   .mobile-modal-enter-active {
     top: 0;
-    transition: 300ms;
+    transition: 300ms ease;
     .modalHeader {
       /* top: 0; */
       opacity: 1;
-      transition: 300ms;
+      transition: 300ms ease;
     }
   }
 
