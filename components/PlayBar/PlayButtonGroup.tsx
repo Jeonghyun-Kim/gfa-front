@@ -10,6 +10,8 @@ import LastPage from '@material-ui/icons/LastPage';
 
 import { ISTEST, NUM_ARTISTS, PAGE_ARRAY, COLORS } from '../../defines';
 
+import IndexContext from '../../IndexContext';
+
 interface RootProps {
   isFirst: boolean;
   isLast: boolean;
@@ -72,11 +74,14 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
   const pageIndex =
     PAGE_ARRAY.findIndex((elem) => router.pathname === elem) || 0;
 
+  const { setDetailModalFlag } = React.useContext(IndexContext);
+
   return (
     <Root isFirst={id === 1} isLast={id === NUM_ARTISTS} pageIndex={pageIndex}>
       <IconButton
         className="prevPage"
         onClick={() => {
+          setDetailModalFlag(false);
           if (!ISTEST) router.push(PAGE_ARRAY[pageIndex - 1]);
         }}
         disabled={ISTEST || pageIndex === 0}
@@ -87,6 +92,7 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
         className="left"
         onClick={() => {
           if (!blocker) {
+            setDetailModalFlag(false);
             setBlocker(true);
             handleLeft();
             setTimeout(() => setBlocker(false), 100);
@@ -100,6 +106,7 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
         className="right"
         onClick={() => {
           if (!blocker) {
+            setDetailModalFlag(false);
             setBlocker(true);
             handleRight();
             setTimeout(() => setBlocker(false), 100);
@@ -112,6 +119,7 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
       <IconButton
         className="nextPage"
         onClick={() => {
+          setDetailModalFlag(false);
           if (!ISTEST) router.push(PAGE_ARRAY[pageIndex + 1]);
         }}
         disabled={ISTEST || pageIndex === PAGE_ARRAY.length - 1}

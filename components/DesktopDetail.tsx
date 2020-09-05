@@ -37,7 +37,7 @@ const Root = styled.div<RootProps>`
     width: 100%;
     position: relative;
     background-color: white;
-    overflow: auto;
+    overflow: hidden;
     margin-top: 46px;
 
     section {

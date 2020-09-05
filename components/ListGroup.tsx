@@ -53,16 +53,22 @@ interface Props {
 }
 const ListGroup: React.FC<Props> = ({ ...props }) => {
   const router = useRouter();
-  const { withLayout, listModalFlag, setListModalFlag } = React.useContext(
-    IndexContext,
-  );
+  const {
+    withLayout,
+    detailModalFlag,
+    setDetailModalFlag,
+    listModalFlag,
+    setListModalFlag,
+  } = React.useContext(IndexContext);
   const disabled = router.pathname !== PAGE_ARRAY[1];
 
   return (
     <Root
       onClick={() => {
-        if (withLayout || isIOS) setListModalFlag(!listModalFlag);
-        else if (router.query.listOpen) {
+        if (withLayout || isIOS) {
+          if (detailModalFlag) setDetailModalFlag(false);
+          setListModalFlag(!listModalFlag);
+        } else if (router.query.listOpen) {
           // router.push(router.pathname.split('?')[0], undefined, {
           //   shallow: true,
           // });
