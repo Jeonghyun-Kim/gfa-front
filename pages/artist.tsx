@@ -87,7 +87,6 @@ const MyDetailGroup = styled(DetailGroup)`
   .detailText {
     margin-bottom: 10px;
     font-size: 1.2rem;
-    text-shadow: none;
   }
 
   &:hover {
