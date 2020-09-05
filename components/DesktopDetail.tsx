@@ -93,6 +93,7 @@ const Root = styled.div<RootProps>`
     .artworks {
       .artworks-row {
         display: grid;
+        place-items: center;
         grid-template-columns: repeat(
           auto-fit,
           minmax(${(props) => props.baseSize}px, 1fr)
