@@ -31,11 +31,14 @@ const Root = styled.div<RootProps>`
   .main {
     position: relative;
     overflow-y: auto;
-    scroll-behavior: smooth;
     height: 100%;
     width: 100%;
     ${(props) => props.grid && 'grid-column: 2 / 3'};
     ${(props) => props.grid && 'grid-row: 1 / 2'};
+
+    /* &.withLayout {
+      overflow-y: auto;
+    } */
   }
 `;
 
@@ -62,7 +65,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         sessionStorage.setItem('@artistId', `${id}`);
 
         // if (withLayout) {
-        router.replace(router.pathname.split('?')[0], undefined, {
+        router.replace(router.pathname, undefined, {
           shallow: true,
         });
         // }
@@ -100,7 +103,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           }}
         >
           {withLayout && <NavBar />}
-          <div className="main">{children}</div>
+          <div className={withLayout ? 'main withLayout' : 'main'}>
+            {children}
+          </div>
           {withLayout && <PlayBar />}
         </IndexContext.Provider>
       ) : (

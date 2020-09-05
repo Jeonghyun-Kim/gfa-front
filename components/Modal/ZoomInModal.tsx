@@ -84,9 +84,15 @@ const ZoomInModal: React.FC<Props> = ({
     if (withLayout || isIOS) {
       setModalOpen(0);
     } else if (router.query.zoomIn) {
-      router.replace(router.pathname.split('?')[0], undefined, {
-        shallow: true,
-      });
+      if (router.query.detailOpen) {
+        router.replace(`/artist?detailOpen=1`, undefined, {
+          shallow: true,
+        });
+      } else {
+        router.replace(router.pathname, undefined, {
+          shallow: true,
+        });
+      }
     }
   };
 
