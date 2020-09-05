@@ -148,9 +148,7 @@ interface Props {
 }
 const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
   const { innerWidth, innerHeight } = useWindowSize();
-  const { refMain, setDetailModalFlag, refSlider } = React.useContext(
-    IndexContext,
-  );
+  const { refMain, setDetailModalFlag } = React.useContext(IndexContext);
   const [shownFlag, setShownFlag] = React.useState<boolean>(false);
   const [scrollY, setScrollY] = React.useState<number | null>(null);
 
