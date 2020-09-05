@@ -84,7 +84,9 @@ const ZoomInModal: React.FC<Props> = ({
     if (withLayout || isIOS) {
       setModalOpen(0);
     } else if (router.query.zoomIn) {
-      router.back();
+      router.replace(router.pathname.split('?')[0], undefined, {
+        shallow: true,
+      });
     }
   };
 
