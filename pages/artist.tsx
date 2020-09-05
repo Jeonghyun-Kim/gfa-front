@@ -96,11 +96,11 @@ const Root = styled.div`
   }
   .mobile-modal-enter-active {
     top: 0;
-    transition: 300ms ease;
+    transition: 100ms ease;
     .modalHeader {
       /* top: 0; */
       opacity: 1;
-      transition: 300ms ease;
+      transition: 100ms ease;
     }
   }
 
@@ -426,7 +426,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               />
               <CSSTransition
                 in={!isIOS ? Boolean(router.query.listOpen) : listModalFlag}
-                timeout={300}
+                timeout={100}
                 unmountOnExit
                 classNames="mobile-modal"
               >
