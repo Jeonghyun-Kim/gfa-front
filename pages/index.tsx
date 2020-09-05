@@ -11,10 +11,7 @@ const Root = styled.div`
   width: 100%;
   height: calc(100% - ${HEADER_HEIGHT}px);
   place-items: center;
-
-  .dateBlock {
-    text-align: center;
-  }
+  text-align: center;
 `;
 
 const HomePage: React.FC = () => {
