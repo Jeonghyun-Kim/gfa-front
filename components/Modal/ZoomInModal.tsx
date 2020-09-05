@@ -103,9 +103,9 @@ const ZoomInModal: React.FC<Props> = ({
           maxZoomScale={3}
           minZoomScale={0.6}
           boundSize={{ width: 50, height: 50 }}
-          onTransform={({ zoomFactor, translate }) => {
-            const { x, y } = translate;
-            if (zoomFactor <= 0.6 || Math.sqrt(x * x + y * y) > 300) {
+          onTransform={({ zoomFactor }) => {
+            // const { x, y } = translate;
+            if (zoomFactor <= 0.6) {
               handleModalClose();
             }
           }}
