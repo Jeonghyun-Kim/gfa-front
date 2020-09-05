@@ -13,7 +13,6 @@ import Artwork from '../Artwork';
 
 import useWindowSize from '../../lib/hooks/useWindowSize';
 
-import artworksJson from '../../artworks.json';
 import { BUCKET_URL } from '../../defines';
 
 import IndexContext from '../../IndexContext';
@@ -145,10 +144,6 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
     }
   }, [detailModalFlag, router.query]);
 
-  const artworks = artworksJson.filter((artworkJson) => {
-    return artworkJson.artistId === artist.id;
-  });
-
   const detail = artist.detail ? artist.detail.split('\n') : [''];
   const isLong = detail.length > 4;
   const shortDetail = isLong
@@ -215,11 +210,11 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
         </section>
         <section className="artworks">
           <h4 className="sectionTitle">대표 작품</h4>
-          {artworks.map((artwork, idx) => (
+          {artist.artworks.map((artwork, idx) => (
             <Artwork
-              key={artwork.artworkId}
+              key={artwork.id}
               imageUrl={`${BUCKET_URL}/artworks/${artist.artworks[idx].fileName}`}
-              id={artwork.artworkId}
+              id={artwork.id}
               title={artwork.title}
               size={artwork.size}
               material={artwork.material}

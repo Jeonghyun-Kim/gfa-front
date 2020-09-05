@@ -11,7 +11,6 @@ import Artwork from './Artwork';
 
 import useWindowSize from '../lib/hooks/useWindowSize';
 
-import artworksJson from '../artworks.json';
 import { NAVBAR_WIDTH, BUCKET_URL, PLAYBAR_HEIGHT } from '../defines';
 
 import IndexContext from '../IndexContext';
@@ -167,10 +166,6 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
           GAP * (artworksPerLine - 1)) /
         artworksPerLine;
 
-  const artworks = artworksJson.filter((artworkJson) => {
-    return artworkJson.artistId === artist.id;
-  });
-
   const detail = artist.detail ? artist.detail.split('\n').join('<br />') : '';
 
   React.useEffect(() => {
@@ -218,11 +213,11 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
         <section className="artworks">
           <h4 className="sectionTitle">대표 작품</h4>
           <div className="artworks-row">
-            {artworks.map((artwork, idx) => (
+            {artist.artworks.map((artwork, idx) => (
               <Artwork
-                key={artwork.artworkId}
+                key={artwork.id}
                 imageUrl={`${BUCKET_URL}/artworks/${artist.artworks[idx].fileName}`}
-                id={artwork.artworkId}
+                id={artwork.id}
                 title={artwork.title}
                 size={artwork.size}
                 material={artwork.material}
