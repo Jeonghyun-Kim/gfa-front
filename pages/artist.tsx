@@ -521,7 +521,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               </CSSTransition>
               <CSSTransition
                 in={!isIOS ? Boolean(router.query.detailOpen) : detailModalFlag}
-                timeout={300}
+                timeout={100}
                 unmountOnExit
                 classNames="mobile-modal"
               >

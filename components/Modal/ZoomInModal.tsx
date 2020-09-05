@@ -101,11 +101,12 @@ const ZoomInModal: React.FC<Props> = ({
         <PinchToZoom
           className="pinchArea"
           maxZoomScale={3}
-          minZoomScale={0.6}
+          minZoomScale={0.9}
           boundSize={{ width: 50, height: 50 }}
-          onTransform={({ zoomFactor }) => {
-            // const { x, y } = translate;
-            if (zoomFactor <= 0.6) {
+          onTransform={({ zoomFactor, translate }) => {
+            const { x, y } = translate;
+            const diff = Math.sqrt(x * x + y * y) / Math.min(zoomFactor, 1);
+            if (zoomFactor < 2 && diff > 300) {
               handleModalClose();
             }
           }}
