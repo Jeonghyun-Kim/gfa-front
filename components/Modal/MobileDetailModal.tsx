@@ -30,11 +30,11 @@ const Root = styled.div<RootProps>`
 
   .container {
     /* position: absolute; */
-    /* width: 100%; */
+    width: 100%;
     position: relative;
     height: calc(100% - 46px);
     background-color: white;
-    overflow: auto;
+    overflow: scroll;
     scroll-behavior: smooth;
     margin-top: 46px;
     /* padding: 0 16px; */
@@ -131,7 +131,19 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
   const [seeMore, setSeeMore] = React.useState<boolean>(false);
   const { innerWidth } = useWindowSize();
 
-  const { setDetailModalFlag } = React.useContext(IndexContext);
+  const { detailModalFlag, setDetailModalFlag } = React.useContext(
+    IndexContext,
+  );
+
+  const refContainer = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (detailModalFlag || router.query.detailOpen) {
+      setTimeout(() => {
+        refContainer.current?.focus();
+      }, 100);
+    }
+  }, [detailModalFlag, router.query]);
 
   const artworks = artworksJson.filter((artworkJson) => {
     return artworkJson.artistId === artist.id;
@@ -160,7 +172,11 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
         </IconButton>
         <h4>작가 상세페이지</h4>
       </div>
-      <div className="container unselectable">
+      <div
+        ref={refContainer}
+        className="container unselectable"
+        onTouchStart={(e) => e.currentTarget.focus()}
+      >
         <section className="profile">
           <Profile artist={artist} />
         </section>
