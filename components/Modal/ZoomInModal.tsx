@@ -73,6 +73,10 @@ const ZoomInModal: React.FC<Props> = ({
   const router = useRouter();
   const { withLayout } = React.useContext(IndexContext);
 
+  React.useEffect(() => {
+    window.focus();
+  }, []);
+
   const visible =
     withLayout || isIOS ? Boolean(modalOpen) : Boolean(router.query.zoomIn);
 
@@ -97,9 +101,14 @@ const ZoomInModal: React.FC<Props> = ({
         <PinchToZoom
           className="pinchArea"
           maxZoomScale={3}
-          minZoomScale={0.8}
+          minZoomScale={0.6}
           boundSize={{ width: 50, height: 50 }}
-          onTransform={() => {}}
+          onTransform={({ zoomFactor, translate }) => {
+            const { x, y } = translate;
+            if (zoomFactor <= 0.6 || Math.sqrt(x * x + y * y) > 300) {
+              handleModalClose();
+            }
+          }}
           contentSize={{ width: 0, height: 0 }}
           debug={false}
         >

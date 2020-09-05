@@ -4,6 +4,8 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { CSSTransition } from 'react-transition-group';
+import { useSwipeable } from 'react-swipeable';
+import { usePinch } from 'react-use-gesture';
 import { isIOS } from 'react-device-detect';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -29,10 +31,7 @@ import { API_URL, HEADER_HEIGHT } from '../defines';
 
 import IndexContext from '../IndexContext';
 
-interface ZoomInProps {
-  headerFlag?: boolean;
-}
-const ZoomInButton = styled(IconButton)<ZoomInProps>`
+const ZoomInButton = styled(IconButton)`
   position: absolute !important;
   padding: 5px !important;
   z-index: 2;
@@ -58,8 +57,12 @@ const ZoomInButton = styled(IconButton)<ZoomInProps>`
   }
 
   &.mobile {
-    top: ${(props) => (props.headerFlag ? HEADER_HEIGHT + 5 : 5)}px;
+    top: 5px;
     right: 5px;
+
+    &.headerFlag {
+      top: calc(${HEADER_HEIGHT}px + 5px);
+    }
   }
 `;
 
@@ -67,6 +70,12 @@ const Root = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+
+  .sliderContainer {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
 
   .slick-slider,
   .slick-list,
@@ -115,6 +124,7 @@ const Root = styled.div`
 
   .header-toggle-enter {
     top: 5px;
+    transition: 300ms;
   }
 
   .header-toggle-enter-active {
@@ -124,6 +134,7 @@ const Root = styled.div`
 
   .header-toggle-exit {
     top: calc(${HEADER_HEIGHT}px + 5px);
+    transition: 300ms;
   }
 
   .header-toggle-exit-active {
@@ -183,17 +194,91 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
 
   const artwork = artists[index - 1].artworks[0];
 
-  // React.useEffect(() => {
-  //   // Set initial slide (react-slick's initialSlide property is now working properly.)
-  //   if (refSlider.current) {
-  //     refSlider.current.slickGoTo(index - 1);
-  //   }
-  // }, [index]);
+  const handlePinch = usePinch(({ offset: [d] }) => {
+    if (d > 100) {
+      if ((withLayout || isIOS) && !zoomInModal) {
+        setZoomInModal(artwork.id);
+      } else if (!router.query.zoomIn) {
+        router.push(`?zoomIn=${artwork.id}`, undefined, { shallow: true });
+      }
+    }
+  });
+
+  const handleDetailOpen = () => {
+    if (withLayout || isIOS) {
+      setDetailModalFlag(true);
+    } else if (!router.query.detailOpen) {
+      router.push(`?detailOpen=1`, undefined, {
+        shallow: true,
+      });
+    }
+  };
+
+  const handleDetailClose = () => {
+    if (withLayout || isIOS) {
+      setDetailModalFlag(false);
+    } else if (router.query.detailOpen && !router.query.zoomIn) {
+      router.back();
+    }
+  };
+
+  const handleSwipe = useSwipeable({
+    onSwiped: (e) => {
+      if (e.dir === 'Up') {
+        handleDetailOpen();
+      }
+    },
+  });
+
+  React.useEffect(() => {
+    // Set initial slide (react-slick's initialSlide property is now working properly.)
+    if (refSlider.current) {
+      refSlider.current.slickGoTo(index - 1);
+    }
+  }, [index]);
+
+  React.useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      const { keyCode } = e;
+
+      switch (keyCode) {
+        case 27:
+          if (withLayout || isIOS) {
+            if (zoomInModal) setZoomInModal(0);
+            if (detailModalFlag) setDetailModalFlag(false);
+          } else if (router.query.zoomIn || router.query.detailOpen)
+            router.back();
+          break;
+        case 32:
+          if (withLayout || isIOS) {
+            setZoomInModal(zoomInModal ? 0 : artwork.id);
+          } else if (router.query.zoomIn) router.back();
+          else
+            router.push(`?zoomIn=${artwork.id}`, undefined, {
+              shallow: true,
+            });
+          break;
+        case 38:
+          handleDetailOpen();
+          break;
+        case 40:
+          handleDetailClose();
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeydown);
+
+    return () => window.removeEventListener('keydown', handleKeydown);
+  }, [index, zoomInModal, router.query]);
 
   // Same as componentDidMount()
   React.useEffect(() => {
-    if (refSlider.current) refSlider.current.slickGoTo(index - 1);
+    // if (refSlider.current) refSlider.current.slickGoTo(index - 1);
     // Clear all setTimeout() function, excecuting on page unmount event.
+
     const clearFunc = () => {
       let timeoutId = (setTimeout(() => {}, 0) as unknown) as number;
       while (timeoutId) {
@@ -309,50 +394,49 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       />
       <Root>
         <>
-          <Slider
-            // ref={(slider) => {
-            //   refSlider.current = slider;
-            // }}
-            ref={refSlider}
-            dots={false}
-            arrows={false}
-            infinite={false}
-            // lazyLoad={withLayout ? 'ondemand' : undefined}
-            initialSlide={index - 1}
-            focusOnSelect
-            useCSS={!withLayout}
-            swipe={!withLayout}
-            speed={300}
-            waitForAnimate
-            beforeChange={(_, currentSlide) => {
-              if (withLayout) {
-                sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
-                setSlideChangedFlag(false);
-                setIndex(currentSlide + 1);
-              } else {
-                setTimeout(() => {
+          <div className="sliderContainer" {...handleSwipe} {...handlePinch()}>
+            <Slider
+              ref={refSlider}
+              dots={false}
+              arrows={false}
+              infinite={false}
+              // lazyLoad={withLayout ? 'ondemand' : undefined}
+              initialSlide={index - 1}
+              focusOnSelect
+              useCSS={!withLayout}
+              swipe={!withLayout}
+              speed={300}
+              waitForAnimate
+              beforeChange={(_, currentSlide) => {
+                if (withLayout) {
                   sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
                   setSlideChangedFlag(false);
                   setIndex(currentSlide + 1);
-                }, 300);
-              }
-            }}
-            onSwipe={() => setSlideChangedFlag(true)}
-            onEdge={(swipeDirection) => {
-              if (swipeDirection === 'left') router.push('/video');
-              else router.push('/');
-            }}
-          >
-            {artists.map((artist) => {
-              return (
-                <RenderedImage
-                  key={artist.id}
-                  artistData={artist}
-                  onClick={() => toggleHeader()}
-                />
-              );
-            })}
-          </Slider>
+                } else {
+                  setTimeout(() => {
+                    sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
+                    setSlideChangedFlag(false);
+                    setIndex(currentSlide + 1);
+                  }, 300);
+                }
+              }}
+              onSwipe={() => setSlideChangedFlag(true)}
+              onEdge={(swipeDirection) => {
+                if (swipeDirection === 'left') router.push('/video');
+                else router.push('/');
+              }}
+            >
+              {artists.map((artist) => {
+                return (
+                  <RenderedImage
+                    key={artist.id}
+                    artistData={artist}
+                    onClick={() => toggleHeader()}
+                  />
+                );
+              })}
+            </Slider>
+          </div>
           {withLayout ? (
             <ZoomInButton
               className="desktop"
@@ -371,8 +455,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 classNames="header-toggle"
               >
                 <ZoomInButton
-                  className="mobile"
-                  headerFlag={headerFlag}
+                  className={headerFlag ? 'headerFlag mobile' : 'mobile'}
                   onClick={() => {
                     handleModalOpen();
                   }}

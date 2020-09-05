@@ -20,7 +20,9 @@
     "react-scrolllock": "^5.0.1",
     "react-signature-canvas": "^1.0.3",
     "react-slick": "^0.27.10",
+    "react-swipeable": "^5.5.1",
     "react-transition-group": "^4.4.1",
+    "react-use-gesture": "^7.0.16",
     "styled-components": "^5.0.0",
     "swr": "^0.2.3",
     "uuid": "^8.3.0"
