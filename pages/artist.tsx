@@ -400,7 +400,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               dots={false}
               arrows={false}
               infinite={false}
-              // lazyLoad={withLayout ? 'ondemand' : undefined}
+              lazyLoad={withLayout ? undefined : 'progressive'}
               initialSlide={index - 1}
               focusOnSelect
               useCSS={!withLayout}
