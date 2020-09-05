@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import Logo from './Logo/OneLineLogo';
 
-import { COLORS, PAGE_ARRAY } from '../defines';
+import { ISTEST, COLORS, PAGE_ARRAY } from '../defines';
 
 const Root = styled.div`
   grid-column: 1 / 2;
@@ -55,17 +55,25 @@ const NavBar: React.FC = ({ ...props }) => {
           나의 이야기
         </MenuItem>
       </Link>
-      <Link href={PAGE_ARRAY[1]}>
-        <MenuItem current={router.pathname === PAGE_ARRAY[1]}>전시장</MenuItem>
-      </Link>
-      <Link href={PAGE_ARRAY[2]}>
-        <MenuItem current={router.pathname === PAGE_ARRAY[2]}>
-          관악미술협회 이야기
-        </MenuItem>
-      </Link>
-      <Link href={PAGE_ARRAY[3]}>
-        <MenuItem current={router.pathname === PAGE_ARRAY[3]}>방명록</MenuItem>
-      </Link>
+      {!ISTEST && (
+        <>
+          <Link href={PAGE_ARRAY[1]}>
+            <MenuItem current={router.pathname === PAGE_ARRAY[1]}>
+              전시장
+            </MenuItem>
+          </Link>
+          <Link href={PAGE_ARRAY[2]}>
+            <MenuItem current={router.pathname === PAGE_ARRAY[2]}>
+              관악미술협회 이야기
+            </MenuItem>
+          </Link>
+          <Link href={PAGE_ARRAY[3]}>
+            <MenuItem current={router.pathname === PAGE_ARRAY[3]}>
+              방명록
+            </MenuItem>
+          </Link>
+        </>
+      )}
       <div className="grow" />
       <div className="divider" />
       <Link href={PAGE_ARRAY[4]}>

@@ -8,7 +8,7 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
 
-import { NUM_ARTISTS, PAGE_ARRAY, COLORS } from '../../defines';
+import { ISTEST, NUM_ARTISTS, PAGE_ARRAY, COLORS } from '../../defines';
 
 interface RootProps {
   isFirst: boolean;
@@ -77,9 +77,9 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
       <IconButton
         className="prevPage"
         onClick={() => {
-          router.push(PAGE_ARRAY[pageIndex - 1]);
+          if (!ISTEST) router.push(PAGE_ARRAY[pageIndex - 1]);
         }}
-        disabled={pageIndex === 0}
+        disabled={ISTEST || pageIndex === 0}
       >
         <FirstPage />
       </IconButton>
@@ -112,9 +112,9 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
       <IconButton
         className="nextPage"
         onClick={() => {
-          router.push(PAGE_ARRAY[pageIndex + 1]);
+          if (!ISTEST) router.push(PAGE_ARRAY[pageIndex + 1]);
         }}
-        disabled={pageIndex === PAGE_ARRAY.length - 1}
+        disabled={ISTEST || pageIndex === PAGE_ARRAY.length - 1}
       >
         <LastPage />
       </IconButton>

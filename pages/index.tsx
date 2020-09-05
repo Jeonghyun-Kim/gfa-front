@@ -1,23 +1,21 @@
 import React from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
 import styled from 'styled-components';
 
 import Header from '../components/Header';
-import Modal from '../components/Modal/Modal';
-
-import { sendCounter } from '../lib/utils';
 
 const Root = styled.div`
   display: grid;
   width: 100%;
   height: 100%;
   place-items: center;
+
+  .dateBlock {
+    text-align: center;
+  }
 `;
 
 const HomePage: React.FC = () => {
-  const [flag, setFlag] = React.useState<boolean>(false);
-
   return (
     <>
       <Head>
@@ -25,33 +23,12 @@ const HomePage: React.FC = () => {
       </Head>
       <Header />
       <Root>
-        <div>
-          <div>Home</div>
-          <div>
-            <Link href="/artist">
-              <a>artist</a>
-            </Link>
-          </div>
-          <div>
-            <Link href="/test">
-              <a>test</a>
-            </Link>
-          </div>
-          <button type="button" onClick={() => setFlag(!flag)}>
-            click me
-          </button>
-          <Modal visible={flag}>
-            <div>hello World!</div>
-            <button
-              type="button"
-              onClick={() => {
-                setFlag(false);
-                if (process.env.NODE_ENV === 'production') sendCounter();
-              }}
-            >
-              OK
-            </button>
-          </Modal>
+        <h1>관악미술협회 15주년 기념전</h1>
+        <h2>전시회 준비중입니다.</h2>
+        <div className="dateBlock">
+          <h3>2020년 09월 11일 (금)</h3>
+          <h3>~</h3>
+          <h3>2020년 09월 24일 (금)</h3>
         </div>
       </Root>
     </>

@@ -1,3 +1,5 @@
+export const ISTEST = true;
+
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 export const MOBILE_BREAKPOINT = 500;
@@ -20,6 +22,7 @@ export const COLORS = {
 export const PAGE_ARRAY = ['/', '/artist', '/video', '/visitor', '/about'];
 
 const DEFINES = {
+  ISTEST,
   API_URL,
   BUCKET_URL,
   MOBILE_BREAKPOINT,

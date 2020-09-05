@@ -5,7 +5,7 @@ import { CSSTransition } from 'react-transition-group';
 import Logo from './Logo/SquaredLogo';
 import MenuItem from './Header/MenuItem';
 
-import { PAGE_ARRAY, HEADER_HEIGHT, TRANSITION } from '../defines';
+import { ISTEST, PAGE_ARRAY, HEADER_HEIGHT, TRANSITION } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -67,9 +67,13 @@ const Header: React.FC<Props> = ({
         <FixedHeader fixed={fixed} {...props}>
           <Logo />
           <div className="grow" />
-          <MenuItem href={PAGE_ARRAY[1]}>전시장</MenuItem>
-          <MenuItem href={PAGE_ARRAY[2]}>협회</MenuItem>
-          <MenuItem href={PAGE_ARRAY[3]}>방명록</MenuItem>
+          {!ISTEST && (
+            <>
+              <MenuItem href={PAGE_ARRAY[1]}>전시장</MenuItem>
+              <MenuItem href={PAGE_ARRAY[2]}>협회</MenuItem>
+              <MenuItem href={PAGE_ARRAY[3]}>방명록</MenuItem>
+            </>
+          )}
         </FixedHeader>
       </CSSTransition>
     </Root>
