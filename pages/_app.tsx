@@ -31,6 +31,18 @@ export default class MyApp extends App {
             content="width=device-width, initial-scale=1.0"
           />
           <meta name="theme-color" content="#000000" />
+          <meta
+            property="og:title"
+            content="onDisplay - 관악미술협회 15주년 정기전"
+          />
+          <meta
+            property="og:description"
+            content="코로나 19로 인해 문화생활이 힘든 지금, 수준 높은 작가들의 온라인 전시를 감상해보세요."
+          />
+          <meta
+            property="og:image"
+            content="https://gfaa.ondisplay.co.kr/images/og-image.jpg"
+          />
           <title>onDisplay</title>
         </Head>
         <SWRConfig
