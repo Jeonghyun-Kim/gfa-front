@@ -96,7 +96,7 @@ const Root = styled.div<RootProps>`
     .artworks {
       .artworks-row {
         display: grid;
-        place-items: center;
+        place-items: start center;
         width: 100%;
         grid-template-columns: repeat(
           auto-fit,
