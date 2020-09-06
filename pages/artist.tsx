@@ -271,13 +271,26 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       const { keyCode } = e;
 
       switch (keyCode) {
+        case 9:
+          if (withLayout || isIOS) {
+            setListModalFlag(!listModalFlag);
+          } else if (router.query.listOpen) router.back();
+          else
+            router.push('?listOpen=1', undefined, {
+              shallow: true,
+            });
+          break;
         case 27:
           if (withLayout || isIOS) {
             if (zoomInModal) setZoomInModal(0);
             else if (detailModalFlag) {
               if (isIOS) setDetailModalFlag(false);
-            }
-          } else if (router.query.zoomIn || router.query.detailOpen)
+            } else if (listModalFlag) setListModalFlag(false);
+          } else if (
+            router.query.zoomIn ||
+            router.query.detailOpen ||
+            router.query.listOpen
+          )
             router.back();
           break;
         case 32:
@@ -303,7 +316,14 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     window.addEventListener('keydown', handleKeydown);
 
     return () => window.removeEventListener('keydown', handleKeydown);
-  }, [index, zoomInModal, router.query]);
+  }, [
+    index,
+    withLayout,
+    zoomInModal,
+    detailModalFlag,
+    listModalFlag,
+    router.query,
+  ]);
 
   // Same as componentDidMount()
   React.useEffect(() => {

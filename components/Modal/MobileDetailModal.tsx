@@ -2,6 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { useSwipeable } from 'react-swipeable';
 import { isIOS } from 'react-device-detect';
 
 import Button from '@material-ui/core/Button';
@@ -136,6 +137,18 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
 
   const refContainer = React.useRef<HTMLDivElement>(null);
 
+  const handleClose = () => {
+    if (isIOS) {
+      setDetailModalFlag(false);
+    } else if (router.query.detailOpen) {
+      router.back();
+    }
+  };
+
+  const handleSwipe = useSwipeable({
+    onSwipedDown: () => handleClose(),
+  });
+
   React.useEffect(() => {
     if (detailModalFlag || router.query.detailOpen) {
       setTimeout(() => {
@@ -153,16 +166,8 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
 
   return (
     <Root seeMore={seeMore} {...props}>
-      <div className="modalHeader">
-        <IconButton
-          onClick={() => {
-            if (isIOS) {
-              setDetailModalFlag(false);
-            } else if (router.query.detailOpen) {
-              router.back();
-            }
-          }}
-        >
+      <div className="modalHeader" {...handleSwipe}>
+        <IconButton onClick={() => handleClose()}>
           <Close />
         </IconButton>
         <h4>작가 상세페이지</h4>

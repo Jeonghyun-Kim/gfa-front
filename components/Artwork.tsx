@@ -112,10 +112,12 @@ const Artwork: React.FC<Props> = ({
 }) => {
   const router = useRouter();
 
-  const { withLayout, setZoomInModal } = React.useContext(IndexContext);
+  const { withLayout, zoomInModal, setZoomInModal } = React.useContext(
+    IndexContext,
+  );
 
   const handleModalOpen = () => {
-    if (withLayout || isIOS) {
+    if ((withLayout || isIOS) && !zoomInModal) {
       setZoomInModal(id);
     } else if (router.query.detailOpen) {
       router.push(`?detailOpen=1&zoomIn=${id}`, undefined, { shallow: true });
