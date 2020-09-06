@@ -4,7 +4,7 @@ import { SWRConfig } from 'swr';
 import App from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from 'styled-components';
-import { browserName, isAndroid, isIOS } from 'react-device-detect';
+import { browserName, isAndroid } from 'react-device-detect';
 
 import Layout from '../components/Layout';
 
