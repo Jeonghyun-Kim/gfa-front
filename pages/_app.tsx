@@ -1,8 +1,10 @@
 import React from 'react';
+import Router from 'next/router';
 import { SWRConfig } from 'swr';
 import App from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from 'styled-components';
+import { browserName, isAndroid, isIOS } from 'react-device-detect';
 
 import Layout from '../components/Layout';
 
@@ -21,6 +23,13 @@ export default class MyApp extends App {
   componentDidMount(): void {
     if (process.env.NODE_ENV === 'production') {
       initGA();
+    }
+
+    if (/Web/.test(browserName)) {
+      if (isAndroid)
+        window.location.href = `intent://gfaa.ondisplay.co.kr/${Router.pathname}#Intent;scheme=https;package=com.android.chrome;end`;
+      else
+        window.location.href = `https://urlopen.link/gfaa.ondisplay.co.kr/${Router.pathname}`;
     }
   }
 
