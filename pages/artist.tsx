@@ -228,7 +228,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     if (first) setFirstDist(d);
     else if (!active) setFirstDist(null);
     if (active && firstDist && (d > firstDist + 200 || vd > 1)) {
-      if ((withLayout || isIOS) && !zoomInModal) {
+      if (withLayout || isIOS) {
         setZoomInModal(artwork.id);
       } else if (!router.query.zoomIn) {
         router.push(`?zoomIn=${artwork.id}`, undefined, { shallow: true });
