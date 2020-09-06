@@ -16,7 +16,7 @@ const Root = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: 'white';
+  color: white;
   bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
@@ -25,17 +25,18 @@ const Root = styled.div`
     color: white;
     font-size: 0.9rem;
     margin: 0;
-    margin-top: -5px;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   }
 
   button {
     padding: 3px;
-  }
+    z-index: 5;
 
-  svg {
-    color: white;
-    font-size: 2rem;
+    svg {
+      color: white;
+      font-size: 2rem;
+      height: 20px;
+    }
   }
   &:hover {
     cursor: 'pointer';

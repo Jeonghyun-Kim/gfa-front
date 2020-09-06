@@ -23,6 +23,7 @@
     "react-swipeable": "^5.5.1",
     "react-transition-group": "^4.4.1",
     "react-use-gesture": "^7.0.16",
+    "smoothscroll-polyfill": "^0.4.4",
     "styled-components": "^5.0.0",
     "swr": "^0.2.3",
     "uuid": "^8.3.0"
@@ -35,6 +36,7 @@
     "@types/react-signature-canvas": "^1.0.1",
     "@types/react-slick": "^0.23.4",
     "@types/react-transition-group": "^4.4.0",
+    "@types/smoothscroll-polyfill": "^0.3.1",
     "@types/styled-components": "^5.1.1",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^3.10.1",

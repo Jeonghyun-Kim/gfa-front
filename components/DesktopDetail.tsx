@@ -38,8 +38,12 @@ const Root = styled.div<RootProps>`
     background-color: white;
     overflow: hidden;
     margin-top: 46px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     section {
+      width: 100%;
       margin-bottom: 30px;
 
       .sectionTitle {
@@ -93,6 +97,7 @@ const Root = styled.div<RootProps>`
       .artworks-row {
         display: grid;
         place-items: center;
+        width: 100%;
         grid-template-columns: repeat(
           auto-fit,
           minmax(${(props) => props.baseSize}px, 1fr)
@@ -117,7 +122,6 @@ const GoUpButtonGroup = styled.div`
   button {
     padding: 3px;
     width: 54px;
-    height: 20px;
     transition: none;
 
     &:hover {
@@ -126,6 +130,7 @@ const GoUpButtonGroup = styled.div`
 
     svg {
       font-size: 50px;
+      height: 20px;
       transition: none;
     }
 
@@ -139,7 +144,7 @@ const GoUpButtonGroup = styled.div`
   &:hover {
     cursor: pointer;
     opacity: 0.9;
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 `;
 
@@ -178,7 +183,11 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
     });
     handleSetScroll();
     setTimeout(() => {
-      refMain.current?.scroll(0, innerHeight - PLAYBAR_HEIGHT);
+      refMain.current?.scroll({
+        behavior: 'smooth',
+        top: innerHeight - PLAYBAR_HEIGHT,
+        left: 0,
+      });
       setShownFlag(true);
     }, 10);
 
@@ -228,7 +237,7 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
         </section>
         <GoUpButtonGroup
           onClick={() => {
-            refMain.current?.scroll(0, 0);
+            refMain.current?.scroll({ behavior: 'smooth', top: 0, left: 0 });
           }}
         >
           <IconButton>

@@ -112,10 +112,11 @@ const DesktopList: React.FC<Props> = ({ artists, ...props }) => {
 
   React.useEffect(() => {
     if (flag && refContainer.current) {
-      refContainer.current.scroll(
-        0,
-        Math.floor((index - 1) / 3) * (baseSize + DESKTOP_GAP) - 100,
-      );
+      refContainer.current.scroll({
+        behavior: 'smooth',
+        left: 0,
+        top: Math.floor((index - 1) / 3) * (baseSize + DESKTOP_GAP) - 100,
+      });
       // make autoscroll active only once (first mounted)
       setTimeout(() => setFlag(false), 0);
     }

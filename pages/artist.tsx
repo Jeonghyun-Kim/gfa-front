@@ -220,14 +220,11 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   const { isPortrait } = useMobileOrientation();
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
-  // const [onPinch, setOnPinch] = React.useState<boolean>(false);
   const [firstDist, setFirstDist] = React.useState<number | null>(null);
 
   const artwork = artists[index - 1].artworks[0];
 
   const handlePinch = usePinch(({ first, active, da: [d], vdva: [vd] }) => {
-    // if (active) setOnPinch(true);
-    // else setOnPinch(false);
     if (first) setFirstDist(d);
     else if (!active) setFirstDist(null);
     if (active && firstDist && (d > firstDist + 200 || vd > 1)) {

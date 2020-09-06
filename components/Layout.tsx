@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { isIE } from 'react-device-detect';
+import smoothscroll from 'smoothscroll-polyfill';
 
 import NavBar from './NavBar';
 import PlayBar from './PlayBar';
@@ -24,23 +25,25 @@ const Root = styled.div<RootProps>`
   width: 100%;
   height: 100%;
 
-  ${(props) => props.grid && 'display: grid'};
-  ${(props) =>
-    props.grid &&
-    `grid-template: 1fr ${PLAYBAR_HEIGHT}px / ${NAVBAR_WIDTH}px 1fr`};
+  display: ${(props) => (props.grid ? 'grid' : 'block')};
+  grid-template: 1fr ${PLAYBAR_HEIGHT}px / ${NAVBAR_WIDTH}px 1fr;
 
   .main {
     position: relative;
-    overflow-y: auto;
+    overflow-y: hidden;
     scroll-behavior: smooth;
     height: 100%;
     width: 100%;
     ${(props) => props.grid && 'grid-column: 2 / 3'};
     ${(props) => props.grid && 'grid-row: 1 / 2'};
 
-    /* &.withLayout {
-      overflow-y: auto;
-    } */
+    &.withLayout {
+      height: calc(100vh - ${PLAYBAR_HEIGHT}px);
+
+      &.detailOpen {
+        overflow-y: auto;
+      }
+    }
   }
 `;
 
@@ -91,6 +94,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [router, withLayout]);
 
   React.useEffect(() => {
+    smoothscroll.polyfill();
     if (process.env.NODE_ENV === 'production') {
       logPageView();
       // sendCounter();
@@ -134,7 +138,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           {withLayout && <NavBar />}
           <div
             ref={refMain}
-            className={withLayout ? 'main withLayout' : 'main'}
+            className={`main ${withLayout && 'withLayout'} ${
+              detailModalFlag && 'detailOpen'
+            }`}
           >
             {children}
           </div>
