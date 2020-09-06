@@ -7,6 +7,7 @@ import { ThemeProvider } from 'styled-components';
 import Layout from '../components/Layout';
 
 import fetcher from '../lib/fetcher';
+import { initGA } from '../lib/analytics';
 
 import '../public/css/global.css';
 
@@ -18,7 +19,9 @@ const theme = {
 
 export default class MyApp extends App {
   componentDidMount(): void {
-    // initGA();
+    if (process.env.NODE_ENV === 'production') {
+      initGA();
+    }
   }
 
   render(): JSX.Element {

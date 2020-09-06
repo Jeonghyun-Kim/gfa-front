@@ -8,7 +8,7 @@ import NavBar from './NavBar';
 import PlayBar from './PlayBar';
 import Loading from './Loading';
 
-// import { logPageView } from '../lib/analytics';
+import { logPageView } from '../lib/analytics';
 // import { sendCounter } from '../lib/utils';
 import useWindowSize from '../lib/hooks/useWindowSize';
 
@@ -91,8 +91,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [router, withLayout]);
 
   React.useEffect(() => {
-    // logPageView();
-    // if (process.env.NODE_ENV === 'production') sendCounter();
+    if (process.env.NODE_ENV === 'production') {
+      logPageView();
+      // sendCounter();
+    }
   }, []);
 
   if (isIE) {
