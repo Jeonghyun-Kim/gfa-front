@@ -220,11 +220,14 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   const { isPortrait } = useMobileOrientation();
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
+  const [onPinch, setOnPinch] = React.useState<boolean>(false);
 
   const artwork = artists[index - 1].artworks[0];
 
-  const handlePinch = usePinch(({ offset: [d] }) => {
-    if (d > 100) {
+  const handlePinch = usePinch(({ active, da: [d], vdva: [vd] }) => {
+    if (active) setOnPinch(true);
+    else setOnPinch(false);
+    if (active && (d > 200 || vd > 1)) {
       if ((withLayout || isIOS) && !zoomInModal) {
         setZoomInModal(artwork.id);
       } else if (!router.query.zoomIn) {
@@ -456,18 +459,19 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               focusOnSelect
               useCSS={!withLayout}
               swipe={!withLayout}
+              touchMove={!onPinch}
               speed={300}
               waitForAnimate
-              beforeChange={(_, currentSlide) => {
+              beforeChange={(_, afterSlide) => {
                 if (withLayout) {
-                  sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
+                  sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
                   setSlideChangedFlag(false);
-                  setIndex(currentSlide + 1);
+                  setIndex(afterSlide + 1);
                 } else {
                   setTimeout(() => {
-                    sessionStorage.setItem('@artistId', `${currentSlide + 1}`);
+                    sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
                     setSlideChangedFlag(false);
-                    setIndex(currentSlide + 1);
+                    setIndex(afterSlide + 1);
                   }, 300);
                 }
               }}
