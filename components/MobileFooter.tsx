@@ -108,11 +108,11 @@ const MobileFooter: React.FC<Props> = ({
       <MyProgressBar index={index} />
       <MyListGroup iconOnly />
       <MyDetailGroup />
-      <NextGroup onClick={() => router.push('/video')}>
+      <NextGroup onClick={() => router.push('/visitor')}>
         <IconButton>
           <ExitToApp />
         </IconButton>
-        <p className="nextText">소개영상</p>
+        <p className="nextText">방명록</p>
       </NextGroup>
     </>
   );

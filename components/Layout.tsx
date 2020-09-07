@@ -32,15 +32,16 @@ const Root = styled.div<RootProps>`
     position: relative;
     overflow-y: hidden;
     scroll-behavior: smooth;
-    height: 100%;
     width: 100%;
+    height: 100%;
     ${(props) => props.grid && 'grid-column: 2 / 3'};
     ${(props) => props.grid && 'grid-row: 1 / 2'};
 
     &.withLayout {
       height: calc(100vh - ${PLAYBAR_HEIGHT}px);
+    }
 
-      &.detailOpen {
+    &.overflowAuto {
         overflow-y: auto;
       }
     }
@@ -139,7 +140,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <div
             ref={refMain}
             className={`main ${withLayout && 'withLayout'} ${
-              detailModalFlag && 'detailOpen'
+              withLayout && detailModalFlag && 'overflowAuto'
             }`}
           >
             {children}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { useSwipeable } from 'react-swipeable';
 import { isIOS } from 'react-device-detect';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -49,6 +50,24 @@ const DetailGroup: React.FC = ({ ...props }) => {
     IndexContext,
   );
 
+  const handleDetailOpen = () => {
+    if (withLayout || isIOS) {
+      setDetailModalFlag(true);
+    } else if (!router.query.detailOpen) {
+      router.push(`?detailOpen=1`, undefined, {
+        shallow: true,
+      });
+    }
+  };
+
+  const handleSwipe = useSwipeable({
+    onSwiped: (e) => {
+      if (e.dir === 'Up') {
+        handleDetailOpen();
+      }
+    },
+  });
+
   return (
     <Root
       onClick={() => {
@@ -59,6 +78,7 @@ const DetailGroup: React.FC = ({ ...props }) => {
           router.push('?detailOpen=1', undefined, { shallow: true });
         }
       }}
+      {...handleSwipe}
       {...props}
     >
       {!withLayout && (

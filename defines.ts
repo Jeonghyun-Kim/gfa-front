@@ -19,7 +19,7 @@ export const COLORS = {
   primary: '#17babc',
   disabled: '#7d7d7d',
 };
-export const PAGE_ARRAY = ['/', '/artist', '/video', '/visitor', '/about'];
+export const PAGE_ARRAY = ['/', '/video', '/artist', '/visitor', '/about'];
 
 const DEFINES = {
   ISTEST,

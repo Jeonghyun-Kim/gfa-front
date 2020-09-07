@@ -64,13 +64,13 @@ const Header: React.FC<Props> = ({
         unmountOnExit
         classNames="header"
       >
-        <FixedHeader fixed={fixed} {...props}>
+        <FixedHeader className="header" fixed={fixed} {...props}>
           <Logo />
           <div className="grow" />
           {!ISTEST && (
             <>
-              <MenuItem href={PAGE_ARRAY[1]}>전시장</MenuItem>
-              <MenuItem href={PAGE_ARRAY[2]}>협회</MenuItem>
+              <MenuItem href={PAGE_ARRAY[1]}>협회</MenuItem>
+              <MenuItem href={PAGE_ARRAY[2]}>전시장</MenuItem>
               <MenuItem href={PAGE_ARRAY[3]}>방명록</MenuItem>
             </>
           )}

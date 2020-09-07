@@ -6,7 +6,7 @@ import { isIOS } from 'react-device-detect';
 import IconButton from '@material-ui/core/IconButton';
 import Apps from '@material-ui/icons/Apps';
 
-import { PAGE_ARRAY, COLORS } from '../defines';
+import { COLORS } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -26,6 +26,12 @@ const Root = styled.div<RootProps>`
     if (props.active) return COLORS.primary;
     return 'white';
   }};
+
+  .listTextDesktop {
+    @media screen and (max-width: 1000px) {
+      display: none;
+    }
+  }
 
   &.withLayout {
     flex-direction: row;
@@ -60,7 +66,7 @@ const ListGroup: React.FC<Props> = ({ ...props }) => {
     listModalFlag,
     setListModalFlag,
   } = React.useContext(IndexContext);
-  const disabled = router.pathname !== PAGE_ARRAY[1];
+  const disabled = router.pathname !== '/artist';
 
   return (
     <Root
@@ -82,7 +88,7 @@ const ListGroup: React.FC<Props> = ({ ...props }) => {
       className={withLayout ? 'withLayout' : ''}
       {...props}
     >
-      {withLayout && <p className="listText">작품목록</p>}
+      {withLayout && <p className="listTextDesktop">작품목록</p>}
       <IconButton>
         <Apps />
       </IconButton>

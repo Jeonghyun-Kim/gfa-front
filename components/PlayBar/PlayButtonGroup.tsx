@@ -30,7 +30,7 @@ const Root = styled.div<RootProps>`
   .left {
     svg {
       color: ${(props) =>
-        props.isFirst || props.pageIndex !== 1 ? COLORS.disabled : 'white'};
+        props.isFirst || props.pageIndex !== 2 ? COLORS.disabled : 'white'};
     }
     &:hover {
       cursor: ${(props) => (props.isFirst ? 'default' : 'pointer')};
@@ -39,7 +39,7 @@ const Root = styled.div<RootProps>`
   .right {
     svg {
       color: ${(props) =>
-        props.isLast || props.pageIndex !== 1 ? COLORS.disabled : 'white'};
+        props.isLast || props.pageIndex !== 2 ? COLORS.disabled : 'white'};
     }
     &:hover {
       cursor: ${(props) => (props.isLast ? 'default' : 'pointer')};
@@ -98,7 +98,7 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
             setTimeout(() => setBlocker(false), 100);
           }
         }}
-        disabled={pageIndex !== 1 || id === 1}
+        disabled={pageIndex !== 2 || id === 1}
       >
         <ChevronLeft />
       </IconButton>
@@ -112,7 +112,7 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
             setTimeout(() => setBlocker(false), 100);
           }
         }}
-        disabled={pageIndex !== 1 || id === NUM_ARTISTS}
+        disabled={pageIndex !== 2 || id === NUM_ARTISTS}
       >
         <ChevronRight />
       </IconButton>
