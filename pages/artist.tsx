@@ -460,7 +460,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               useCSS={!withLayout}
               swipe={!withLayout}
               touchMove={!firstDist}
-              speed={300}
+              speed={180}
               waitForAnimate
               beforeChange={(_, afterSlide) => {
                 if (withLayout) {
@@ -472,7 +472,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                     sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
                     setSlideChangedFlag(false);
                     setIndex(afterSlide + 1);
-                  }, 300);
+                  }, 180);
                 }
               }}
               onSwipe={() => setSlideChangedFlag(true)}
