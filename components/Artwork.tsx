@@ -8,7 +8,8 @@ import ZoomIn from '@material-ui/icons/ZoomIn';
 
 import IndexContext from '../IndexContext';
 
-const BLUR_PX = 10;
+const BLUR_PX = 30;
+const borderList = [31, 32, 33, 40, 41, 42];
 
 interface RootProps {
   width: number;
@@ -36,7 +37,11 @@ const Root = styled.div<RootProps>`
       max-width: ${(props) => props.width - 32}px;
       max-height: ${(props) => props.width - 32}px;
       object-fit: contain;
-      z-index: 1;
+      z-index: 3;
+
+      &.withBorder {
+        border: 1px solid #ddd;
+      }
     }
   }
 
@@ -64,7 +69,7 @@ const MyIconButton = styled(IconButton)`
   bottom: 10px;
   background-color: black !important;
   padding: 5px !important;
-  z-index: 2;
+  z-index: 4;
 
   svg {
     font-size: 20px;
@@ -78,19 +83,32 @@ interface BoxProps {
 }
 const ArtworkBox = styled.div<BoxProps>`
   position: absolute;
-  top: -10px;
-  left: -10px;
+  top: 0;
+  left: 0;
   width: ${(props) => props.width}px;
   height: ${(props) => props.width}px;
   background-image: url('${(props) => props.background}');
   background-size: cover;
   background-repeat: repeat;
-  -webkit-filter: blur(${BLUR_PX}px);
+  /* -webkit-filter: blur(${BLUR_PX}px);
   -moz-filter: blur(${BLUR_PX}px);
   -o-filter: blur(${BLUR_PX}px);
   -ms-filter: blur(${BLUR_PX}px);
   filter: blur(${BLUR_PX}px);
-  transform: scale(1.2);
+  transform: scale(1.1); */
+  z-index: 1;
+
+  .blurBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: ${(props) => props.width}px;
+    height: ${(props) => props.width}px;
+    background: rgba(255, 255, 255, 0.2) no-repeat padding-box;
+    -webkit-backdrop--filter: blur(30px);
+    backdrop-filter: blur(30px);
+    z-index: 2;
+  }
 `;
 
 interface Props {
@@ -137,8 +155,16 @@ const Artwork: React.FC<Props> = ({
           handleModalOpen();
         }}
       >
-        <img className="artworkImg" alt={title} src={imageUrl} />
-        <ArtworkBox background={imageUrl} width={width} />
+        <img
+          className={`artworkImg ${
+            borderList.find((idx) => idx === id) && 'withBorder'
+          }`}
+          alt={title}
+          src={imageUrl}
+        />
+        <ArtworkBox background={imageUrl} width={width}>
+          <div className="blurBackground" />
+        </ArtworkBox>
         <MyIconButton
           onClick={() => {
             handleModalOpen();
