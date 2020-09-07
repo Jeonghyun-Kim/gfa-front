@@ -477,8 +477,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               }}
               onSwipe={() => setSlideChangedFlag(true)}
               onEdge={(swipeDirection) => {
-                if (swipeDirection === 'left') router.push('/video');
-                else router.push('/');
+                if (swipeDirection === 'left') router.push('/visitor');
+                else router.push('/video');
               }}
               accessibility={!detailModalFlag && !zoomInModal}
             >

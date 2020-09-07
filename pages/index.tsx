@@ -1,35 +1,449 @@
 import React from 'react';
+import Link from 'next/link';
 import Head from 'next/head';
 import styled from 'styled-components';
+import { CSSTransition } from 'react-transition-group';
+import { isIOS } from 'react-device-detect';
+
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import GoDown from '../public/icons/mobile_go_down.svg';
 
 import Header from '../components/Header';
+import Logo from '../components/Logo/OneLineLogo';
 
-import { HEADER_HEIGHT } from '../defines';
+import useWindowSize from '../lib/hooks/useWindowSize';
+import useWindowScroll from '../lib/hooks/useWindowScroll';
 
-const Root = styled.div`
+import { HEADER_HEIGHT, COLORS, ISTEST } from '../defines';
+
+import IndexContext from '../IndexContext';
+
+const TestRoot = styled.div`
   display: grid;
   width: 100%;
-  height: calc(100% - ${HEADER_HEIGHT}px);
+  height: calc(100vh - ${HEADER_HEIGHT}px);
   place-items: center;
   text-align: center;
 `;
 
+const Root = styled.div`
+  position: relative;
+  width: 100%;
+
+  .mobilePoster {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  section {
+    padding: 40px 20px;
+  }
+
+  section.summary {
+    .title {
+      font-size: 1.25rem;
+      color: ${COLORS.primary};
+      font-weight: normal;
+      margin-bottom: 40px;
+    }
+    .quoteBlock {
+      margin-bottom: 40px;
+      .quote {
+        margin-bottom: 10px;
+      }
+      .name {
+        margin-top: 10px;
+        color: #686868;
+      }
+    }
+    .instructionBlock {
+      margin-bottom: 40px;
+      h4 {
+        font-size: 1rem;
+        font-weight: normal;
+        margin-bottom: 10px;
+      }
+      ol {
+        margin-top: 10px;
+        padding-inline-start: 20px;
+        li {
+          color: #686868;
+        }
+      }
+    }
+    .ps {
+      font-size: 0.75rem;
+      color: #686868;
+    }
+  }
+
+  section.acknowledgement {
+    background-color: #dbdbdb;
+    .title {
+      font-size: 1rem;
+      font-weight: bolder;
+      margin-bottom: 30px;
+    }
+    div,
+    p {
+      font-size: 0.75rem;
+      word-break: keep-all;
+    }
+    .division {
+      font-weight: bolder;
+      margin-bottom: 0;
+      margin-right: 5px;
+    }
+    img.logoGroup {
+      margin: 30px 0 0 0;
+      width: 100%;
+    }
+  }
+
+  section.footer {
+    background-color: #dbdbdb;
+    padding-bottom: 100px;
+    .divider {
+      margin-bottom: 60px;
+      width: 100%;
+      border-top: 1px solid #b1b1b1;
+    }
+    svg {
+      color: black;
+    }
+    .infoBlock {
+      p {
+        margin: 5px 0;
+        font-size: 0.75rem;
+        color: #686868;
+      }
+      .socialBlock {
+      }
+    }
+  }
+`;
+
+const FixedHeader = styled(Header)`
+  position: fixed;
+  width: 100vw;
+  z-index: 3;
+  p {
+    color: ${COLORS.disabled};
+  }
+
+  &.top {
+    position: absolute;
+    div.header {
+      background: none;
+      box-shadow: none;
+    }
+    svg {
+      color: white;
+    }
+    p {
+      color: white;
+    }
+  }
+
+  &.header-mobile-enter {
+    position: absolute;
+    div.header {
+      transition: 1s;
+      background: none;
+      box-shadow: none;
+    }
+    svg {
+      transition: 1s;
+      color: white;
+    }
+    p {
+      transition: 1s;
+      color: white;
+    }
+  }
+
+  &.header-mobile-enter-active {
+    position: fixed;
+    div.header {
+      background-color: white;
+      box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px;
+    }
+    svg {
+      color: ${COLORS.primary};
+    }
+    p {
+      color: ${COLORS.disabled};
+    }
+  }
+
+  &.header-mobile-exit {
+    position: fixed;
+    div.header {
+      transition: 1s;
+      background-color: white;
+      box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px;
+    }
+    svg {
+      transition: 1s;
+      color: ${COLORS.primary};
+    }
+    p {
+      transition: 1s;
+      color: ${COLORS.disabled};
+    }
+  }
+
+  &.header-mobile-exit-active {
+    position: absolute;
+    div.header {
+      background: none;
+      box-shadow: none;
+    }
+    svg {
+      color: white;
+    }
+    p {
+      color: white;
+    }
+  }
+`;
+
+const EnterButton = styled(Button)`
+  position: fixed !important;
+  bottom: 60px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 300px;
+  height: 50px;
+  background-color: white !important;
+  transition: 300ms ease;
+  border-radius: 10px;
+  span {
+    color: ${COLORS.primary};
+    font-weight: bolder;
+  }
+
+  &.stickBottom {
+    position: fixed !important;
+    bottom: 0;
+    width: 100%;
+    height: calc(50px + env(safe-area-inset-bottom) / 2);
+    padding-bottom: calc(8px + env(safe-area-inset-bottom) / 4);
+    background-color: ${COLORS.primary} !important;
+    border-radius: 0;
+    span {
+      color: white;
+    }
+  }
+
+  &.enter-button-enter {
+    bottom: 60px;
+    width: 300px;
+    height: 50px;
+    padding-bottom: 8px;
+    transition: 1s;
+    span {
+      color: ${COLORS.primary};
+      transition: 1s;
+    }
+  }
+
+  &.enter-button-enter-active {
+    bottom: 0px;
+    width: 100%;
+    height: calc(50px + env(safe-area-inset-bottom) / 2);
+    padding-bottom: calc(8px + env(safe-area-inset-bottom) / 4);
+    span {
+      color: white;
+    }
+  }
+
+  &.enter-button-exit {
+    bottom: 0px;
+    width: 100%;
+    height: calc(50px + env(safe-area-inset-bottom) / 2);
+    padding-bottom: calc(8px + env(safe-area-inset-bottom) / 4);
+    transition: 1s;
+    span {
+      color: white;
+      transition: 1s;
+    }
+  }
+
+  &.enter-button-exit-active {
+    bottom: 60px;
+    width: 300px;
+    height: 50px;
+    padding-bottom: 8px;
+    span {
+      color: ${COLORS.primary};
+    }
+  }
+`;
+
+const GoDownIconButton = styled(IconButton)`
+  position: fixed !important;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 1;
+
+  svg {
+    width: 32px;
+    height: 13px;
+    color: white;
+  }
+`;
+
 const HomePage: React.FC = () => {
+  const { y } = useWindowScroll();
+  const { innerHeight } = useWindowSize();
+  const { withLayout } = React.useContext(IndexContext);
+
+  const handleScrollDown = () => {
+    window.scroll({
+      behavior: 'smooth',
+      top: isIOS ? innerHeight + HEADER_HEIGHT : innerHeight,
+      left: 0,
+    });
+  };
+
   return (
     <>
       <Head>
         <title>onDisplay - 관악미술협회 15주년 기념전</title>
       </Head>
-      <Header />
-      <Root>
-        <h1>관악미술협회 15주년 기념전</h1>
-        <h2>전시회 준비중입니다.</h2>
-        <div className="dateBlock">
-          <h3>2020년 09월 11일 (금)</h3>
-          <h3>~</h3>
-          <h3>2020년 09월 24일 (금)</h3>
-        </div>
-      </Root>
+      <CSSTransition in={y > 10} timeout={1000} classNames="header-mobile">
+        <FixedHeader className={`${y <= 10 && 'top'}`} />
+      </CSSTransition>
+      {ISTEST ? (
+        <TestRoot>
+          <h1>관악미술협회 15주년 기념전</h1>
+          <h2>전시회 준비중입니다.</h2>
+          <div className="dateBlock">
+            <h3>2020년 09월 11일 (금)</h3>
+            <h3>~</h3>
+            <h3>2020년 09월 24일 (금)</h3>
+          </div>
+        </TestRoot>
+      ) : (
+        <Root>
+          {!withLayout ? (
+            <>
+              <img
+                className="mobilePoster"
+                alt="나의 이야기"
+                src="images/mobile_poster.jpg"
+                height={innerHeight}
+              />
+              <CSSTransition
+                in={y > 10}
+                timeout={1000}
+                classNames="enter-button"
+              >
+                <Link href="/artist">
+                  <EnterButton className={y > 10 ? 'stickBottom' : ''}>
+                    전시 입장
+                  </EnterButton>
+                </Link>
+              </CSSTransition>
+              {y <= 10 && (
+                <GoDownIconButton onClick={handleScrollDown}>
+                  <SvgIcon component={GoDown} viewBox="0 0 32.2 13.3" />
+                </GoDownIconButton>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
+          <section className="introVideo" />
+          <section className="summary">
+            <h2 className="title">
+              이번 전시는 온라인으로만 진행되는 비대면 전시회입니다
+            </h2>
+            <div className="quoteBlock">
+              <p className="quote">
+                “사람을 만나는 일에 거리를 두어야 하는 이러한 시절에
+                관악미술협회는 창립15주년 기념전이 되는 “제16회
+                관악미술협회전”을 특별히 온라인으로 개최합니다.”
+              </p>
+              <p className="name">- 관악미술협회 회장 김철성</p>
+            </div>
+            <div className="instructionBlock">
+              <h4>전시 즐기는 법</h4>
+              <ol>
+                <li>
+                  전시소개에서 15주년을 맞은 관악미술협회의 이야기를 동영상으로
+                  만나보세요
+                </li>
+                <li>
+                  전시장에서 노련하고 개성 넘치는 64인 작가의 작품을 감상하세요
+                </li>
+                <li>마지막 방명록에서 여러분의 흔적을 남겨주세요</li>
+              </ol>
+            </div>
+            <p className="ps">
+              작품을 실제로 감상하고 작가와 연락하고 싶으신 분, 또는 온라인 전시
+              개최에 관심이 있으신 분들은 본 페이지 하단의 onDisplay 대표전화
+              또는 이메일로 연락 주시기 바랍니다
+            </p>
+          </section>
+          <section className="acknowledgement">
+            <h2 className="title">
+              관악미술협회 창립15주년 기념展 “나의 이야기”
+              <br />제 16회 관악미술협회 展
+            </h2>
+            <div>
+              <span className="division">장소</span>
+              gfaa.ondisplay.co.kr
+            </div>
+            <div>
+              <span className="division">기간</span>
+              2020년 9월 11일 - 24일
+            </div>
+            <div>
+              <p className="division">참여작가</p>
+              전뢰진 송진세 홍사구 두시영 김영순 이희자 지성곤 서홍원 성낙주
+              임옥수 김철성 강명숙 강미숙 강미영 강의숙 권기순 권효진 금광복
+              김경순 김만수 김성옥 김정숙 김정임 김현숙 남행연 노혜경 도해심
+              민경숙 민병문 박경순 박귀수 박장식 박정화 박창수 서정화 선문순
+              선학균 양혜언 엄길자 엄순복 오용남 오학연 원영례 윤건섭 윤옥희
+              이길자 이명희 이석민 이영희 이치순 임인성 전경애 전인애 정귀조
+              정수복 정옥련 최영남 최영순 최영심 한광수 현연희 홍화표 황미경
+              황정숙
+            </div>
+            <div>
+              <p className="division">주최</p>
+              사단법인 관악미술협회
+            </div>
+            <div>
+              <p className="division">후원</p>
+              관악구 관악문화재단 관악문화원
+            </div>
+            <img
+              className="logoGroup"
+              alt="주최 관악미술협회 후원 관악구 관악문화재단 관악문화원"
+              src="/images/ack_logo.png"
+            />
+          </section>
+          <section className="footer">
+            <div className="divider" />
+            <Logo />
+            <div className="infoBlock">
+              <p>주식회사 온디스플레이</p>
+              <p>대표 박세정</p>
+              <p>사업자등록번호 721-86-01906</p>
+              <p>대표전화 010-6317-1498</p>
+              <p>이메일 ondisplay.art@gmail.com</p>
+            </div>
+            <div className="socialBlock" />
+          </section>
+        </Root>
+      )}
     </>
   );
 };

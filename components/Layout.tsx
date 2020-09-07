@@ -42,8 +42,17 @@ const Root = styled.div<RootProps>`
     }
 
     &.overflowAuto {
-        overflow-y: auto;
-      }
+      overflow-y: auto;
+    }
+  }
+
+  &.rootScroll {
+    position: initial;
+    height: auto;
+    min-height: 100%;
+    .main {
+      height: auto;
+      min-height: 100%;
     }
   }
 `;
@@ -119,7 +128,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <Root grid={withLayout}>
+    <Root
+      className={`${!withLayout && router.pathname === '/' && 'rootScroll'}`}
+      grid={withLayout}
+    >
       {index > 0 ? (
         <IndexContext.Provider
           value={{
