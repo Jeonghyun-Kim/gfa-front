@@ -10,7 +10,7 @@ import PlayBar from './PlayBar';
 import Loading from './Loading';
 
 import { logPageView } from '../lib/analytics';
-// import { sendCounter } from '../lib/utils';
+import { sendCounter } from '../lib/utils';
 import useWindowSize from '../lib/hooks/useWindowSize';
 
 import { PLAYBAR_HEIGHT, NAVBAR_WIDTH, NUM_ARTISTS } from '../defines';
@@ -105,9 +105,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   React.useEffect(() => {
     smoothscroll.polyfill();
+    sendCounter();
     if (process.env.NODE_ENV === 'production') {
       logPageView();
-      // sendCounter();
     }
   }, []);
 

@@ -1,9 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import useSWR from 'swr';
 import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 import { isIOS } from 'react-device-detect';
+import Countup from 'react-countup';
 
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,7 +18,7 @@ import Logo from '../components/Logo/OneLineLogo';
 import useWindowSize from '../lib/hooks/useWindowSize';
 import useWindowScroll from '../lib/hooks/useWindowScroll';
 
-import { HEADER_HEIGHT, COLORS, ISTEST } from '../defines';
+import { API_URL, HEADER_HEIGHT, COLORS, ISTEST } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -39,8 +41,22 @@ const Root = styled.div`
     object-position: center top;
   }
 
+  .counters {
+    position: fixed;
+    bottom: 110px;
+    /* top: 560px; */
+    left: 50%;
+    transform: translate(-50%, 0);
+    color: white;
+    span {
+      font-size: 1.2rem;
+      margin: 0 2px;
+    }
+  }
+
   section {
     padding: 40px 20px;
+    margin: 0 auto;
   }
 
   section.summary {
@@ -222,6 +238,7 @@ const EnterButton = styled(Button)`
   background-color: white !important;
   transition: 300ms ease;
   border-radius: 10px;
+  z-index: 2;
   span {
     color: ${COLORS.primary};
     font-weight: bolder;
@@ -299,10 +316,27 @@ const GoDownIconButton = styled(IconButton)`
   }
 `;
 
+const GoTopButton = styled(Button)`
+  position: absolute !important;
+  bottom: 120px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 50%;
+  z-index: 0;
+`;
+
 const HomePage: React.FC = () => {
   const { y } = useWindowScroll();
   const { innerHeight } = useWindowSize();
   const { withLayout } = React.useContext(IndexContext);
+  const { data: visitor } = useSWR(`${API_URL}/counter`);
+  const { data: signature } = useSWR(`${API_URL}/signature/count`);
+  const [counters, setCounters] = React.useState<{
+    visitor: number;
+    signature: number;
+  }>({ visitor: 0, signature: 0 });
 
   const handleScrollDown = () => {
     window.scroll({
@@ -311,6 +345,13 @@ const HomePage: React.FC = () => {
       left: 0,
     });
   };
+
+  React.useEffect(() => {
+    if (!visitor || !signature) return;
+    const { counts: numVisitor } = visitor;
+    const { counts: numSignature } = signature;
+    setCounters({ visitor: numVisitor, signature: numSignature });
+  }, [visitor, signature]);
 
   return (
     <>
@@ -340,6 +381,27 @@ const HomePage: React.FC = () => {
                 src="images/mobile_poster.jpg"
                 height={innerHeight}
               />
+              {y <= 10 && (
+                <div className="counters">
+                  <p>
+                    방문자{' '}
+                    <Countup
+                      start={0}
+                      end={counters.visitor}
+                      duration={2}
+                      separator=","
+                    />
+                    명 &middot; 방명록{' '}
+                    <Countup
+                      start={0}
+                      end={counters.signature}
+                      duration={2}
+                      separator=","
+                    />
+                    개
+                  </p>
+                </div>
+              )}
               <CSSTransition
                 in={y > 10}
                 timeout={1000}
@@ -442,6 +504,15 @@ const HomePage: React.FC = () => {
             </div>
             <div className="socialBlock" />
           </section>
+          <GoTopButton
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              window.scroll({ behavior: 'smooth', top: 0, left: 0 });
+            }}
+          >
+            Top
+          </GoTopButton>
         </Root>
       )}
     </>
