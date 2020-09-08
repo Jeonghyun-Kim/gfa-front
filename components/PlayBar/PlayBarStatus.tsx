@@ -27,7 +27,7 @@ const Status: React.FC<Props> = ({ index, ...props }) => {
   let content: React.ReactNode = <></>;
   switch (pathname) {
     case PAGE_ARRAY[1]:
-      content = <p>관악미술협회 이야기</p>;
+      content = <p>전시소개</p>;
       break;
     case PAGE_ARRAY[2]:
       content = (

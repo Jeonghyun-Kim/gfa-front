@@ -59,7 +59,7 @@ const NavBar: React.FC = ({ ...props }) => {
         <>
           <Link href={PAGE_ARRAY[1]}>
             <MenuItem current={router.pathname === PAGE_ARRAY[1]}>
-              관악미술협회 이야기
+              전시소개
             </MenuItem>
           </Link>
           <Link href={PAGE_ARRAY[2]}>
