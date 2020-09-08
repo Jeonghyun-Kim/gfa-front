@@ -1,7 +1,8 @@
 import React from 'react';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import Head from 'next/head';
 import styled from 'styled-components';
+import { CSSTransition } from 'react-transition-group';
 
 import Button from '@material-ui/core/Button';
 
@@ -13,6 +14,8 @@ import Footer from '../components/Footer';
 import Congrat from '../components/Congrat';
 
 import { HEADER_HEIGHT, COLORS } from '../defines';
+
+import IndexContext from '../IndexContext';
 
 import congrates from '../congrats.json';
 
@@ -41,7 +44,39 @@ const Root = styled.div<RootProps>`
       height: ${(props) => (props.videoWidth * 1080) / 1920}px;
     }
   }
-  section.welcomeGuide {
+  &.withLayout {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    section.videoBlock {
+      width: 100%;
+      height: 100%;
+      iframe.storyVideo {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  section.summary {
+    margin-top: 0;
+    min-height: calc(
+      100vh - ${HEADER_HEIGHT}px -
+        ${(props) => (props.videoWidth * 1080) / 1920}px
+    );
+    .title {
+      margin-top: 0;
+      font-size: 1.5rem;
+      word-break: keep-all;
+    }
+    .content {
+      text-indent: 0.5rem;
+    }
+    .name {
+      font-size: 0.875rem;
+      font-weight: bolder;
+    }
+  }
+  /* section.welcomeGuide {
     .division {
       margin: 0;
       letter-spacing: 10px;
@@ -59,7 +94,7 @@ const Root = styled.div<RootProps>`
       margin: 5px;
       text-indent: 0.5rem;
     }
-  }
+  } */
   section.congratsBlock {
     padding: 10px 0;
     background-color: #dbdbdb;
@@ -100,25 +135,49 @@ const FixedHeader = styled(Header)`
 
 const EnterButton = styled(Button)`
   position: fixed !important;
-  padding: 5px !important;
-  bottom: 70px;
+  padding: 10px !important;
+  bottom: 30px;
   right: 20px;
-  width: 80px;
-  height: 50px;
+  width: 60px;
   background-color: ${COLORS.primary} !important;
-  border-radius: 50%;
+  border-radius: 10px !important;
   z-index: 0;
-  span {
+  span.MuiButton-label {
     color: white;
     margin: 0;
+    font-weight: bolder;
+  }
+  z-index: 0;
+
+  &.stickBottom {
+    width: calc(100% - 40px);
+  }
+
+  &.enter-button-enter {
+    width: 60px;
+    transition: 500ms;
+  }
+
+  &.enter-button-enter-active {
+    width: calc(100% - 40px);
+  }
+
+  &.enter-button-exit {
+    width: calc(100% - 40px);
+    transition: 500ms;
+  }
+
+  &.enter-button-exit-active {
+    width: 60px;
   }
 `;
 
 const VideoPage: React.FC = () => {
-  const router = useRouter();
   const { innerWidth } = useWindowSize();
   const { y } = useWindowScroll();
-  const [open, setOpen] = React.useState<boolean>(false);
+  // const [open, setOpen] = React.useState<boolean>(false);
+
+  const { withLayout } = React.useContext(IndexContext);
 
   return (
     <>
@@ -126,18 +185,40 @@ const VideoPage: React.FC = () => {
         <title>onDisplay - 관악미술협회 이야기</title>
       </Head>
       <FixedHeader className={`${y <= 0 && 'top'}`} />
-      <Root videoWidth={innerWidth}>
+      <Root className={`${withLayout && 'withLayout'}`} videoWidth={innerWidth}>
         <section className="videoBlock">
           <iframe
             className="storyVideo"
             frameBorder="0"
             allow="autoplay; encrypted-media"
             allowFullScreen
-            title="Decorum Intro"
-            src="https://www.youtube.com/embed/EyQU-4BTf4o?enablejsapi=1"
+            title="관악미술협회 15주년 기념전"
+            src={`https://www.youtube.com/embed/EyQU-4BTf4o?enablejsapi=1&${
+              withLayout && 'autoplay=1'
+            }`}
           />
         </section>
-        <section className="welcomeGuide">
+        <section className="summary">
+          <h2 className="title">
+            관악미술협회 창립 15주년 기념전에 오신것을 환영합니다!
+          </h2>
+          <p className="content">
+            어느덧 저희 관악미술협회가 출범한 지 15년이 되었습니다. 그동안
+            관악미술협회는 ‘관악깃발전’, ‘관악미술협회전’ 그리고 ‘행복나눔전’을
+            통해 수준 높은 전시회를 개최하였습니다. 이를 통해 관악구민들과
+            문화예술을 공유하며 관악구의 대표적인 예술단체로 자리매김하게
+            되었습니다.
+          </p>
+          <p className="content">
+            이번 15주년 기념전 ‘나의 이야기’는 기존과 달리 ‘온라인 전시회’로
+            개최하게 되었습니다. 비록 코로나-19로 인하여 여러분을 한 자리에
+            초대하지는 못하지만 컴퓨터와 스마트폰을 통해 작품을 감상하며
+            관악미술협회 창립 15주년을 마음으로 축하해주시기 바랍니다.
+            감사합니다.
+          </p>
+          <p className="name">사단법인 관악미술협회 회장 김철성</p>
+        </section>
+        {/* <section className="welcomeGuide">
           <p className="division">인사말</p>
           <h2 className="title">
             관악미술협회 창립15주년 기념 &ldquo;나의 이야기&rdquo;
@@ -198,7 +279,7 @@ const VideoPage: React.FC = () => {
           <Button onClick={() => setOpen(!open)}>
             {open ? '줄이기' : '더보기'}
           </Button>
-        </section>
+        </section> */}
         <section className="congratsBlock">
           {congrates.map((congrat) => (
             <Congrat key={congrat.id} className="congrat" {...congrat} />
@@ -208,15 +289,13 @@ const VideoPage: React.FC = () => {
           <div className="divider" />
           <Footer />
         </section>
-        <EnterButton
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            router.push('/artist');
-          }}
-        >
-          전시 입장
-        </EnterButton>
+        <CSSTransition in={y <= 50} timeout={500} classNames="enter-button">
+          <Link href="/artist">
+            <EnterButton className={y > 50 ? '' : 'stickBottom'}>
+              전시장
+            </EnterButton>
+          </Link>
+        </CSSTransition>
       </Root>
     </>
   );

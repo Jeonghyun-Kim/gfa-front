@@ -30,7 +30,19 @@ const TestRoot = styled.div`
   text-align: center;
 `;
 
-const Root = styled.div`
+interface RootProps {
+  videoWidth: number;
+}
+const Root = styled.div<RootProps>`
+  .temp {
+    position: absolute;
+    color: black;
+    font-weight: bolder;
+    background-color: white;
+    top: 200px;
+    left: 30px;
+    z-index: 100;
+  }
   position: relative;
   width: 100%;
 
@@ -62,6 +74,23 @@ const Root = styled.div`
     width: 100%;
     padding: 40px 20px;
     margin: 0 auto;
+
+    * {
+      margin: 0 auto;
+      max-width: 600px;
+    }
+  }
+
+  section.introVideo {
+    margin-top: 50px;
+    padding: 0;
+    width: 100%;
+    top: ${HEADER_HEIGHT}px;
+    left: 0;
+    iframe {
+      width: 100%;
+      height: ${(props) => (props.videoWidth * 1080) / 1920}px;
+    }
   }
 
   section.summary {
@@ -143,6 +172,51 @@ const Root = styled.div`
         color: #686868;
       }
       .socialBlock {
+      }
+    }
+    div.logo {
+      margin: 0;
+    }
+  }
+
+  &.withLayout {
+    height: 100%;
+    overflow-y: auto;
+    section.summary {
+      .title {
+        font-size: 1.5rem;
+      }
+      .quoteBlock {
+        p {
+          font-size: 1.2rem;
+        }
+      }
+      .instructionBlock {
+        h4 {
+          font-size: 1.2rem;
+        }
+        ol {
+          font-size: 1.1rem;
+        }
+      }
+      .ps {
+        font-size: 1rem;
+      }
+    }
+
+    section.acknowledgement {
+      .title {
+        font-size: 1.2rem;
+      }
+      div {
+        margin: 10px auto;
+        font-size: 1rem;
+        .division {
+          font-size: 1.1rem;
+        }
+      }
+      img {
+        margin: 30px auto 0 auto;
       }
     }
   }
@@ -242,7 +316,7 @@ const EnterButton = styled(Button)`
   height: 50px;
   background-color: white !important;
   transition: 300ms ease;
-  border-radius: 10px;
+  border-radius: 10px !important;
   z-index: 2;
   span {
     color: ${COLORS.primary};
@@ -256,7 +330,7 @@ const EnterButton = styled(Button)`
     height: calc(50px + env(safe-area-inset-bottom) / 2);
     padding-bottom: calc(8px + env(safe-area-inset-bottom) / 4);
     background-color: ${COLORS.primary} !important;
-    border-radius: 0;
+    border-radius: 0 !important;
     span {
       color: white;
     }
@@ -268,6 +342,7 @@ const EnterButton = styled(Button)`
     height: 50px;
     padding-bottom: 8px;
     transition: 1s;
+    border-radius: 10px !important;
     span {
       color: ${COLORS.primary};
       transition: 1s;
@@ -279,6 +354,7 @@ const EnterButton = styled(Button)`
     width: 100%;
     height: calc(50px + env(safe-area-inset-bottom) / 2);
     padding-bottom: calc(8px + env(safe-area-inset-bottom) / 4);
+    border-radius: 0 !important;
     span {
       color: white;
     }
@@ -290,6 +366,7 @@ const EnterButton = styled(Button)`
     height: calc(50px + env(safe-area-inset-bottom) / 2);
     padding-bottom: calc(8px + env(safe-area-inset-bottom) / 4);
     transition: 1s;
+    border-radius: 0 !important;
     span {
       color: white;
       transition: 1s;
@@ -301,6 +378,7 @@ const EnterButton = styled(Button)`
     width: 300px;
     height: 50px;
     padding-bottom: 8px;
+    border-radius: 10px !important;
     span {
       color: ${COLORS.primary};
     }
@@ -325,16 +403,22 @@ const GoTopButton = styled(Button)`
   position: absolute !important;
   bottom: 120px;
   right: 20px;
-  width: 50px;
-  height: 50px;
-  background-color: white;
-  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  background-color: white !important;
+  border-radius: 50% !important;
   z-index: 0;
+  padding: 0 !important;
+  span.MuiButton-label {
+    width: 64px;
+    margin: 0;
+    color: ${COLORS.primary};
+  }
 `;
 
 const HomePage: React.FC = () => {
   const { y } = useWindowScroll();
-  const { innerHeight } = useWindowSize();
+  const { innerWidth, innerHeight } = useWindowSize();
   const { withLayout } = React.useContext(IndexContext);
   const { data: visitor } = useSWR(`${API_URL}/counter`);
   const { data: signature } = useSWR(`${API_URL}/signature/count`);
@@ -377,7 +461,10 @@ const HomePage: React.FC = () => {
           </div>
         </TestRoot>
       ) : (
-        <Root>
+        <Root
+          className={`${withLayout && 'withLayout'}`}
+          videoWidth={innerWidth}
+        >
           {!withLayout ? (
             <>
               <img
@@ -427,7 +514,17 @@ const HomePage: React.FC = () => {
           ) : (
             <></>
           )}
-          <section className="introVideo" />
+          <section className="introVideo">
+            <iframe
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              title="관악미술협회 15주년 기념전"
+              src={`https://www.youtube.com/embed/xXf40_TTVHw?enablejsapi=1&${
+                withLayout && 'autoplay=1'
+              }`}
+            />
+          </section>
           <section className="summary">
             <h2 className="title">
               이번 전시는 온라인으로만 진행되는 비대면 전시회입니다

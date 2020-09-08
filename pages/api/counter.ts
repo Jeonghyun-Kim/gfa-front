@@ -12,14 +12,21 @@ interface RequestWithSession extends NextApiRequest {
 export default withSession(
   async (req: RequestWithSession, res: NextApiResponse) => {
     const session = req.session.get('session');
-    const { href } = req.body ?? { href: '/' };
+    const { href, deviceInfo } = req.body ?? {
+      href: '/',
+      deviceInfo: 'UNDEFINED',
+    };
     if (session && session.userId) {
       fetch(`${API_URL}/counter`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: session.userId, path: href }),
+        body: JSON.stringify({
+          userId: session.userId,
+          path: href,
+          deviceInfo,
+        }),
       });
       return res.json({ userId: session.userId });
     }
@@ -29,7 +36,7 @@ export default withSession(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userId, path: href }),
+      body: JSON.stringify({ userId, path: href, deviceInfo }),
     });
     req.session.set('session', {
       userId,

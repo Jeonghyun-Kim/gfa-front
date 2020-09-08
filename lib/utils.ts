@@ -1,3 +1,5 @@
+import { deviceDetect } from 'react-device-detect';
+
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export const checkSameObject = (
   obj1: Record<string, unknown>,
@@ -10,7 +12,10 @@ export const sendCounter = () => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ href: window.location.href }),
+    body: JSON.stringify({
+      href: window.location.href,
+      deviceInfo: JSON.stringify(deviceDetect()),
+    }),
   });
 };
 

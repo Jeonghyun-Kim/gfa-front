@@ -32,7 +32,7 @@ const Root = styled.div`
 
 const OneLineLogo: React.FC = ({ ...props }) => {
   return (
-    <Root {...props}>
+    <Root className="logo" {...props}>
       <Link href="/">
         <IconButton>
           <SvgIcon component={Logo} viewBox="0 0 1175.09 255.33" />
