@@ -28,9 +28,14 @@ const Root = styled.div<RootProps>`
   }};
 
   .listTextDesktop {
+    color: white;
     @media screen and (max-width: 1000px) {
       display: none;
     }
+  }
+
+  .listText {
+    color: white;
   }
 
   &.withLayout {

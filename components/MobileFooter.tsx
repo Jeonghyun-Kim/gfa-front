@@ -82,6 +82,7 @@ const NextGroup = styled.div`
     margin: 0;
     margin-top: -13px;
     font-size: 0.7rem;
+    color: white;
   }
 `;
 

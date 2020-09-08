@@ -129,7 +129,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <Root
-      className={`${!withLayout && router.pathname === '/' && 'rootScroll'}`}
+      className={`${
+        !withLayout &&
+        (router.pathname === '/' || router.pathname === '/video') &&
+        'rootScroll'
+      }`}
       grid={withLayout}
     >
       {index > 0 ? (

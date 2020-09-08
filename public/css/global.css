@@ -29,6 +29,14 @@ a {
   text-decoration: none;
 }
 
+h2,
+h4,
+h5,
+p,
+span {
+  color: #1e1e1e;
+}
+
 img {
   display: block;
 }

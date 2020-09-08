@@ -13,7 +13,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import GoDown from '../public/icons/mobile_go_down.svg';
 
 import Header from '../components/Header';
-import Logo from '../components/Logo/OneLineLogo';
+import Footer from '../components/Footer';
 
 import useWindowSize from '../lib/hooks/useWindowSize';
 import useWindowScroll from '../lib/hooks/useWindowScroll';
@@ -48,28 +48,35 @@ const Root = styled.div`
     left: 50%;
     transform: translate(-50%, 0);
     color: white;
+    p {
+      color: inherit;
+    }
     span {
       font-size: 1.2rem;
       margin: 0 2px;
+      color: inherit;
     }
   }
 
   section {
+    width: 100%;
     padding: 40px 20px;
     margin: 0 auto;
   }
 
   section.summary {
     .title {
-      font-size: 1.25rem;
+      font-size: 1.4rem;
       color: ${COLORS.primary};
-      font-weight: normal;
+      font-weight: bolder;
       margin-bottom: 40px;
+      word-break: keep-all;
     }
     .quoteBlock {
       margin-bottom: 40px;
       .quote {
         margin-bottom: 10px;
+        line-height: 1.875rem;
       }
       .name {
         margin-top: 10px;
@@ -80,12 +87,13 @@ const Root = styled.div`
       margin-bottom: 40px;
       h4 {
         font-size: 1rem;
-        font-weight: normal;
+        font-weight: bolder;
         margin-bottom: 10px;
       }
       ol {
         margin-top: 10px;
         padding-inline-start: 20px;
+        line-height: 1.875rem;
         li {
           color: #686868;
         }
@@ -127,9 +135,6 @@ const Root = styled.div`
       margin-bottom: 60px;
       width: 100%;
       border-top: 1px solid #b1b1b1;
-    }
-    svg {
-      color: black;
     }
     .infoBlock {
       p {
@@ -407,7 +412,7 @@ const HomePage: React.FC = () => {
                 timeout={1000}
                 classNames="enter-button"
               >
-                <Link href="/artist">
+                <Link href="/video">
                   <EnterButton className={y > 10 ? 'stickBottom' : ''}>
                     전시 입장
                   </EnterButton>
@@ -494,15 +499,7 @@ const HomePage: React.FC = () => {
           </section>
           <section className="footer">
             <div className="divider" />
-            <Logo />
-            <div className="infoBlock">
-              <p>주식회사 온디스플레이</p>
-              <p>대표 박세정</p>
-              <p>사업자등록번호 721-86-01906</p>
-              <p>대표전화 010-6317-1498</p>
-              <p>이메일 ondisplay.art@gmail.com</p>
-            </div>
-            <div className="socialBlock" />
+            <Footer />
           </section>
           <GoTopButton
             variant="contained"
