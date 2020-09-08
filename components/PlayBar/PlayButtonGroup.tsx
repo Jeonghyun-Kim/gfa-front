@@ -13,8 +13,7 @@ import { ISTEST, NUM_ARTISTS, PAGE_ARRAY, COLORS } from '../../defines';
 import IndexContext from '../../IndexContext';
 
 interface RootProps {
-  isFirst: boolean;
-  isLast: boolean;
+  artistId: number;
   pageIndex: number;
 }
 const Root = styled.div<RootProps>`
@@ -29,36 +28,46 @@ const Root = styled.div<RootProps>`
   }
   .left {
     svg {
-      color: ${(props) =>
-        props.isFirst || props.pageIndex !== 2 ? COLORS.disabled : 'white'};
-    }
-    &:hover {
-      cursor: ${(props) => (props.isFirst ? 'default' : 'pointer')};
-    }
-  }
-  .right {
-    svg {
-      color: ${(props) =>
-        props.isLast || props.pageIndex !== 2 ? COLORS.disabled : 'white'};
-    }
-    &:hover {
-      cursor: ${(props) => (props.isLast ? 'default' : 'pointer')};
-    }
-  }
-  .prevPage {
-    svg {
       color: ${(props) => (props.pageIndex === 0 ? COLORS.disabled : 'white')};
     }
     &:hover {
       cursor: ${(props) => (props.pageIndex === 0 ? 'default' : 'pointer')};
     }
   }
-  .nextPage {
+  .right {
     svg {
-      color: ${(props) => (props.pageIndex === 4 ? COLORS.disabled : 'white')};
+      color: ${(props) =>
+        props.pageIndex === PAGE_ARRAY.length - 1 ? COLORS.disabled : 'white'};
     }
     &:hover {
-      cursor: ${(props) => (props.pageIndex === 4 ? 'default' : 'pointer')};
+      cursor: ${(props) =>
+        props.pageIndex === PAGE_ARRAY.length - 1 ? 'default' : 'pointer'};
+    }
+  }
+  .prevPage {
+    svg {
+      color: ${(props) =>
+        props.pageIndex === 2 && props.artistId !== 1
+          ? 'white'
+          : COLORS.disabled};
+    }
+    &:hover {
+      cursor: ${(props) =>
+        props.pageIndex === 2 && props.artistId !== 1 ? 'pointer' : 'default'};
+    }
+  }
+  .nextPage {
+    svg {
+      color: ${(props) =>
+        props.pageIndex === 2 && props.artistId !== NUM_ARTISTS
+          ? 'white'
+          : COLORS.disabled};
+    }
+    &:hover {
+      cursor: ${(props) =>
+        props.pageIndex === 2 && props.artistId !== NUM_ARTISTS
+          ? 'pointer'
+          : 'default'};
     }
   }
 `;
@@ -74,17 +83,28 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
   const pageIndex =
     PAGE_ARRAY.findIndex((elem) => router.pathname === elem) || 0;
 
-  const { setDetailModalFlag } = React.useContext(IndexContext);
+  const {
+    setDetailModalFlag,
+    setListModalFlag,
+    refSlider,
+    setIndex,
+  } = React.useContext(IndexContext);
 
   return (
-    <Root isFirst={id === 1} isLast={id === NUM_ARTISTS} pageIndex={pageIndex}>
+    <Root artistId={id} pageIndex={pageIndex}>
       <IconButton
         className="prevPage"
         onClick={() => {
-          setDetailModalFlag(false);
-          if (!ISTEST) router.push(PAGE_ARRAY[pageIndex - 1]);
+          if (ISTEST) return;
+          if (pageIndex === 2) {
+            setDetailModalFlag(false);
+            setListModalFlag(false);
+            setIndex(1);
+            sessionStorage.setItem('@artistId', '1');
+            refSlider.current?.slickGoTo(0);
+          }
         }}
-        disabled={ISTEST || pageIndex === 0}
+        disabled={ISTEST || pageIndex !== 2 || id === 1}
       >
         <FirstPage />
       </IconButton>
@@ -92,13 +112,17 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
         className="left"
         onClick={() => {
           if (!blocker) {
-            setDetailModalFlag(false);
-            setBlocker(true);
-            handleLeft();
-            setTimeout(() => setBlocker(false), 100);
+            if (pageIndex === 2 && id !== 1) {
+              setDetailModalFlag(false);
+              setBlocker(true);
+              handleLeft();
+              setTimeout(() => setBlocker(false), 100);
+            } else if (pageIndex !== 0) {
+              router.push(PAGE_ARRAY[pageIndex - 1]);
+            }
           }
         }}
-        disabled={pageIndex !== 2 || id === 1}
+        disabled={ISTEST || pageIndex === 0}
       >
         <ChevronLeft />
       </IconButton>
@@ -106,23 +130,33 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
         className="right"
         onClick={() => {
           if (!blocker) {
-            setDetailModalFlag(false);
-            setBlocker(true);
-            handleRight();
-            setTimeout(() => setBlocker(false), 100);
+            if (pageIndex === 2 && id !== NUM_ARTISTS) {
+              setDetailModalFlag(false);
+              setBlocker(true);
+              handleRight();
+              setTimeout(() => setBlocker(false), 100);
+            } else if (pageIndex !== PAGE_ARRAY.length - 1) {
+              router.push(PAGE_ARRAY[pageIndex + 1]);
+            }
           }
         }}
-        disabled={pageIndex !== 2 || id === NUM_ARTISTS}
+        disabled={ISTEST || pageIndex === PAGE_ARRAY.length - 1}
       >
         <ChevronRight />
       </IconButton>
       <IconButton
         className="nextPage"
         onClick={() => {
-          setDetailModalFlag(false);
-          if (!ISTEST) router.push(PAGE_ARRAY[pageIndex + 1]);
+          if (ISTEST) return;
+          if (pageIndex === 2) {
+            setDetailModalFlag(false);
+            setListModalFlag(false);
+            setIndex(NUM_ARTISTS);
+            sessionStorage.setItem('@artistId', `${NUM_ARTISTS}`);
+            refSlider.current?.slickGoTo(NUM_ARTISTS - 1);
+          }
         }}
-        disabled={ISTEST || pageIndex === PAGE_ARRAY.length - 1}
+        disabled={ISTEST || pageIndex !== 2 || id === NUM_ARTISTS}
       >
         <LastPage />
       </IconButton>
