@@ -24,7 +24,9 @@ import MobileDetailModal from '../components/Modal/MobileDetailModal';
 import ZoomInModal from '../components/Modal/ZoomInModal';
 import DesktopDetail from '../components/DesktopDetail';
 import DetailGroup from '../components/DetailGroup';
+import ManualModal from '../components/Modal/ManualModal';
 
+import { artistHit } from '../lib/utils';
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
 
@@ -71,6 +73,7 @@ const ZoomInButton = styled(IconButton)`
 const MyDetailGroup = styled(DetailGroup)`
   bottom: 30px;
   transition: 300ms ease;
+  z-index: 2;
 
   button {
     width: 60px;
@@ -99,6 +102,13 @@ const Root = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+
+  .withLayoutBox {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
 
   .sliderContainer {
     width: 100%;
@@ -221,6 +231,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
   const [firstDist, setFirstDist] = React.useState<number | null>(null);
+  const refBox = React.useRef<HTMLDivElement>(null);
 
   const artwork = artists[index - 1].artworks[0];
 
@@ -262,12 +273,18 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     },
   });
 
+  // React.useEffect(() => {
+  //   if (sessionStorage.getItem('@manual')) {
+  //     setManualOpen(false);
+  //   }
+  // }, []);
+
   React.useEffect(() => {
     // Set initial slide (react-slick's initialSlide property is now working properly.)
     if (refSlider.current) {
       refSlider.current.slickGoTo(index - 1);
     }
-  }, [index]);
+  }, []);
 
   React.useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
@@ -305,9 +322,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               shallow: true,
             });
           break;
-        case 38:
-          handleDetailOpen();
-          break;
+        // case 38:
+        //   handleDetailOpen();
+        //   break;
         case 40:
           handleDetailOpen();
           break;
@@ -448,6 +465,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       />
       <Root>
         <>
+          {withLayout && <div ref={refBox} className="withLayoutBox" />}
           <div className="sliderContainer" {...handleSwipe} {...handlePinch()}>
             <Slider
               ref={refSlider}
@@ -463,6 +481,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               speed={180}
               waitForAnimate
               beforeChange={(_, afterSlide) => {
+                artistHit(afterSlide + 1);
                 if (withLayout) {
                   sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
                   setSlideChangedFlag(false);
@@ -562,6 +581,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
           )}
           {!withLayout ? (
             <>
+              <ManualModal />
               <MobileFooter
                 artworkData={artwork}
                 onClick={() => toggleHeader()}

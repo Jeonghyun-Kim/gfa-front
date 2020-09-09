@@ -27,9 +27,9 @@ export default class MyApp extends App {
 
     if (/Web/.test(browserName)) {
       if (isAndroid)
-        window.location.href = `intent://gfaa.ondisplay.co.kr/${Router.pathname}#Intent;scheme=https;package=com.android.chrome;end`;
+        window.location.href = `intent://gfaa.ondisplay.co.kr${Router.asPath}#Intent;scheme=https;package=com.android.chrome;end`;
       else
-        window.location.href = `https://urlopen.link/gfaa.ondisplay.co.kr/${Router.pathname}`;
+        window.location.href = `https://urlopen.link/gfaa.ondisplay.co.kr${Router.asPath}`;
     }
   }
 
@@ -43,13 +43,10 @@ export default class MyApp extends App {
             content="width=device-width, initial-scale=1.0"
           />
           <meta name="theme-color" content="#000000" />
-          <meta
-            property="og:title"
-            content="onDisplay - 관악미술협회 15주년 정기전"
-          />
+          <meta property="og:title" content="온라인 전시공간 onDisplay" />
           <meta
             property="og:description"
-            content="수준 높은 작가들의 온라인 전시를 감상해보세요."
+            content="관악미술협회 창립15주년 기념전"
           />
           <meta
             property="og:image"

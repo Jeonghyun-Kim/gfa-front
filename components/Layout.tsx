@@ -105,11 +105,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   React.useEffect(() => {
     smoothscroll.polyfill();
+  }, []);
+
+  React.useEffect(() => {
     sendCounter();
     if (process.env.NODE_ENV === 'production') {
       logPageView();
     }
-  }, []);
+  }, [router.asPath]);
 
   if (isIE) {
     return (

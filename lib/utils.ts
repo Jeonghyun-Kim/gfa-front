@@ -1,5 +1,7 @@
 import { deviceDetect } from 'react-device-detect';
 
+import { API_URL } from '../defines';
+
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export const checkSameObject = (
   obj1: Record<string, unknown>,
@@ -7,7 +9,7 @@ export const checkSameObject = (
 ) => JSON.stringify(obj1) === JSON.stringify(obj2);
 
 export const sendCounter = () => {
-  fetch(`api/counter`, {
+  fetch('/api/counter', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -16,6 +18,18 @@ export const sendCounter = () => {
       href: window.location.href,
       deviceInfo: JSON.stringify(deviceDetect()),
     }),
+  });
+};
+
+export const artistHit = (id: number) => {
+  fetch(`${API_URL}/artist/hit/${id}`, {
+    method: 'POST',
+  });
+};
+
+export const detailHit = (id: number) => {
+  fetch(`${API_URL}/artist/seemore/${id}`, {
+    method: 'POST',
   });
 };
 
@@ -61,6 +75,8 @@ export const splitLongText = (input: string, splitHeight: number) => {
 export default {
   checkSameObject,
   sendCounter,
+  artistHit,
+  detailHit,
   checkLength,
   splitLongText,
 };

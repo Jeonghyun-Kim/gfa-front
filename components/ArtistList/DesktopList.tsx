@@ -87,7 +87,7 @@ const DarkBackground = styled.div`
   height: calc(100% - ${PLAYBAR_HEIGHT}px);
   background-color: #000;
   opacity: 0.85;
-  z-index: 1;
+  z-index: 3;
 `;
 
 const MyArtistLists = styled(ArtistLists)`

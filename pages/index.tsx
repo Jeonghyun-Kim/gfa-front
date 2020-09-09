@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
 import useSWR from 'swr';
@@ -10,15 +11,25 @@ import Countup from 'react-countup';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import Visibility from '@material-ui/icons/Visibility';
+import Create from '@material-ui/icons/Create';
 import GoDown from '../public/icons/mobile_go_down.svg';
+import GoDownDesktop from '../public/icons/go_down.svg';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
+import fetcher from '../lib/fetcher';
 import useWindowSize from '../lib/hooks/useWindowSize';
 import useWindowScroll from '../lib/hooks/useWindowScroll';
 
-import { API_URL, HEADER_HEIGHT, COLORS, ISTEST } from '../defines';
+import {
+  API_URL,
+  HEADER_HEIGHT,
+  COLORS,
+  ISTEST,
+  PLAYBAR_HEIGHT,
+} from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -34,17 +45,146 @@ interface RootProps {
   videoWidth: number;
 }
 const Root = styled.div<RootProps>`
-  .temp {
-    position: absolute;
-    color: black;
-    font-weight: bolder;
-    background-color: white;
-    top: 200px;
-    left: 30px;
-    z-index: 100;
+  .desktopPoster {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/poster_bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    z-index: 1;
+
+    .bannerBox {
+      position: absolute;
+      top: 50%;
+      right: calc(50% - 668px);
+      transform: translate(0, -50%);
+      width: calc(45vw);
+      height: calc(30vw);
+      max-width: 600px;
+      max-height: 400px;
+      display: flex;
+      flex-direction: column;
+      z-index: 3;
+
+      img.bannerText {
+        width: 100%;
+        object-fit: contain;
+      }
+      .grow {
+        flex-grow: 1;
+      }
+      .counterBox {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        p {
+          margin: 10px 0;
+          color: white;
+          font-size: 1.5rem;
+          svg.icons {
+            font-size: 1.8rem;
+            width: 1.8rem;
+            height: 1.8rem;
+            transform: translateY(5px);
+            margin-right: 10px;
+          }
+          span {
+            margin: 0 10px;
+            color: white;
+            font-size: 2rem;
+            font-weight: bolder;
+          }
+          span.space {
+            margin: 0 20px;
+          }
+        }
+      }
+      button {
+        background-color: white !important;
+        border-radius: 10px !important;
+        width: 100%;
+        height: 60px;
+        span.MuiButton-label {
+          color: ${COLORS.primary};
+          font-size: 1.5rem;
+          font-weight: bolder;
+        }
+      }
+    }
+    .goDownButton {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      transition: 500ms ease;
+      background: none !important;
+      svg {
+        color: white;
+        font-size: 3rem;
+      }
+      &:hover {
+        bottom: 40px;
+      }
+    }
+
+    @media screen and (max-width: 1720px) {
+      background-position: calc(50% + 50vw - 860px) 50%;
+      .bannerBox {
+        right: 80px;
+      }
+    }
+
+    @media screen and (max-width: 1200px) {
+      background-position: calc(50% + 50vw - 660px) 50%;
+      .bannerBox {
+        width: 400px;
+        height: ${800 / 3}px;
+        .counterBox {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          p {
+            margin: 10px 0;
+            color: white;
+            font-size: 1.25rem;
+            svg.icons {
+              font-size: 1.4rem;
+              width: 1.4rem;
+              height: 1.4rem;
+              transform: translateY(5px);
+              margin-right: 10px;
+            }
+            span {
+              margin: 0 10px;
+              color: white;
+              font-size: 1.5rem;
+              font-weight: bolder;
+            }
+            span.space {
+              margin: 0 15px;
+            }
+          }
+        }
+        button {
+          height: 40px;
+          border-radius: 5px !important;
+          span.MuiButton-label {
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 1000px) {
+      .bannerBox {
+        position: absolute;
+        right: 50%;
+        transform: translate(50%, -50%);
+      }
+    }
   }
-  position: relative;
-  width: 100%;
 
   .mobilePoster {
     width: 100%;
@@ -55,13 +195,22 @@ const Root = styled.div<RootProps>`
 
   .counters {
     position: fixed;
-    bottom: 110px;
-    /* top: 560px; */
+    width: 100%;
+    bottom: 90px;
     left: 50%;
     transform: translate(-50%, 0);
     color: white;
+    p,
+    span {
+      text-align: center;
+    }
     p {
+      padding: 0 20px;
+      margin: 8px auto;
+      width: fit-content;
       color: inherit;
+      background-color: rgba(95, 167, 165, 0.7);
+      border-radius: 10px;
     }
     span {
       font-size: 1.2rem;
@@ -82,14 +231,19 @@ const Root = styled.div<RootProps>`
   }
 
   section.introVideo {
+    margin: 0 auto;
     margin-top: 50px;
     padding: 0;
     width: 100%;
     top: ${HEADER_HEIGHT}px;
     left: 0;
+    display: flex;
+    justify-content: center;
     iframe {
       width: 100%;
+      max-width: 600px;
       height: ${(props) => (props.videoWidth * 1080) / 1920}px;
+      max-height: ${(600 * 1080) / 1920}px;
     }
   }
 
@@ -309,7 +463,7 @@ const FixedHeader = styled(Header)`
 
 const EnterButton = styled(Button)`
   position: fixed !important;
-  bottom: 60px;
+  bottom: 40px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 300px;
@@ -337,7 +491,7 @@ const EnterButton = styled(Button)`
   }
 
   &.enter-button-enter {
-    bottom: 60px;
+    bottom: 40px;
     width: 300px;
     height: 50px;
     padding-bottom: 8px;
@@ -374,7 +528,7 @@ const EnterButton = styled(Button)`
   }
 
   &.enter-button-exit-active {
-    bottom: 60px;
+    bottom: 40px;
     width: 300px;
     height: 50px;
     padding-bottom: 8px;
@@ -385,9 +539,11 @@ const EnterButton = styled(Button)`
   }
 `;
 
+const EnterButtonDesktop = styled(Button)``;
+
 const GoDownIconButton = styled(IconButton)`
   position: fixed !important;
-  bottom: 10px;
+  bottom: 3px;
   left: 50%;
   transform: translate(-50%, 0);
   z-index: 1;
@@ -414,18 +570,30 @@ const GoTopButton = styled(Button)`
     margin: 0;
     color: ${COLORS.primary};
   }
+
+  &.withLayout {
+    position: fixed !important;
+    right: 60px;
+    bottom: calc(60px + ${PLAYBAR_HEIGHT}px);
+  }
 `;
 
-const HomePage: React.FC = () => {
+interface Props {
+  artists: Artist[];
+}
+const HomePage: React.FC<Props> = ({ artists }) => {
+  const router = useRouter();
   const { y } = useWindowScroll();
   const { innerWidth, innerHeight } = useWindowSize();
-  const { withLayout } = React.useContext(IndexContext);
+  const { withLayout, setIndex } = React.useContext(IndexContext);
   const { data: visitor } = useSWR(`${API_URL}/counter`);
   const { data: signature } = useSWR(`${API_URL}/signature/count`);
   const [counters, setCounters] = React.useState<{
     visitor: number;
     signature: number;
   }>({ visitor: 0, signature: 0 });
+
+  const refRoot = React.useRef<HTMLDivElement>(null);
 
   const handleScrollDown = () => {
     window.scroll({
@@ -434,6 +602,19 @@ const HomePage: React.FC = () => {
       left: 0,
     });
   };
+
+  React.useEffect(() => {
+    if (router.query.start) {
+      const startArtist = artists.find(
+        (artist) => artist.artistName === (router.query.start as string),
+      );
+      if (startArtist) {
+        sessionStorage.setItem('@artistId', `${startArtist.id}`);
+        setIndex(startArtist.id);
+        router.replace('/', undefined, { shallow: true });
+      }
+    }
+  }, [artists, router, setIndex]);
 
   React.useEffect(() => {
     if (!visitor || !signature) return;
@@ -464,16 +645,17 @@ const HomePage: React.FC = () => {
         <Root
           className={`${withLayout && 'withLayout'}`}
           videoWidth={innerWidth}
+          ref={refRoot}
         >
           {!withLayout ? (
             <>
               <img
-                className="mobilePoster"
+                className="mobilePoster unselectable"
                 alt="나의 이야기"
                 src="images/mobile_poster.jpg"
                 height={innerHeight}
               />
-              {y <= 10 && (
+              {y <= 120 && (
                 <div className="counters">
                   <p>
                     방문자{' '}
@@ -512,7 +694,60 @@ const HomePage: React.FC = () => {
               )}
             </>
           ) : (
-            <></>
+            <>
+              <div className="desktopPoster unselectable">
+                <div className="bannerBox">
+                  <img
+                    className="bannerText"
+                    alt="관악미술협회 창립15주년 기념전 09.11 ~ 09.24 2020"
+                    src="/images/banner.png"
+                  />
+                  <div className="grow" />
+                  <div className="counterBox">
+                    <p>
+                      <Visibility className="icons" />
+                      방문자{' '}
+                      <Countup
+                        className="count"
+                        start={0}
+                        end={counters.visitor}
+                        duration={2}
+                        separator=","
+                      />
+                      명
+                      <span className="space" />
+                      <Create className="icons" />
+                      방명록{' '}
+                      <Countup
+                        className="count"
+                        start={0}
+                        end={counters.signature}
+                        duration={2}
+                        separator=","
+                      />
+                      개
+                    </p>
+                  </div>
+                  <Link href="/video">
+                    <EnterButtonDesktop variant="contained">
+                      전시 입장
+                    </EnterButtonDesktop>
+                  </Link>
+                </div>
+                <IconButton
+                  className="goDownButton"
+                  onClick={() => {
+                    refRoot.current?.scroll({
+                      behavior: 'smooth',
+                      top: innerHeight - PLAYBAR_HEIGHT,
+                      left: 0,
+                    });
+                  }}
+                >
+                  <SvgIcon component={GoDownDesktop} viewBox="0 0 56.9 22.1" />
+                </IconButton>
+              </div>
+            </>
           )}
           <section className="introVideo">
             <iframe
@@ -520,9 +755,7 @@ const HomePage: React.FC = () => {
               allow="autoplay; encrypted-media"
               allowFullScreen
               title="관악미술협회 15주년 기념전"
-              src={`https://www.youtube.com/embed/xXf40_TTVHw?enablejsapi=1&${
-                withLayout && 'autoplay=1'
-              }`}
+              src="https://www.youtube.com/embed/xXf40_TTVHw?enablejsapi=1"
             />
           </section>
           <section className="summary">
@@ -532,8 +765,8 @@ const HomePage: React.FC = () => {
             <div className="quoteBlock">
               <p className="quote">
                 “사람을 만나는 일에 거리를 두어야 하는 이러한 시절에
-                관악미술협회는 창립15주년 기념전이 되는 “제16회
-                관악미술협회전”을 특별히 온라인으로 개최합니다.”
+                관악미술협회는 창립 15주년 기념전이 되는 &lsquo;제16회
+                관악미술협회전&rsquo;을 특별히 온라인으로 개최합니다.”
               </p>
               <p className="name">- 관악미술협회 회장 김철성</p>
             </div>
@@ -597,16 +830,22 @@ const HomePage: React.FC = () => {
           <section className="footer">
             <div className="divider" />
             <Footer />
+            <GoTopButton
+              className={`${withLayout && 'withLayout'}`}
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                window.scroll({ behavior: 'smooth', top: 0, left: 0 });
+                refRoot.current?.scroll({
+                  behavior: 'smooth',
+                  top: 0,
+                  left: 0,
+                });
+              }}
+            >
+              Top
+            </GoTopButton>
           </section>
-          <GoTopButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              window.scroll({ behavior: 'smooth', top: 0, left: 0 });
-            }}
-          >
-            Top
-          </GoTopButton>
         </Root>
       )}
     </>
@@ -614,3 +853,25 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
+export async function getStaticProps(): Promise<{
+  props: {
+    artists: Artist[];
+  };
+}> {
+  try {
+    const { artists } = await fetcher(`${API_URL}/artist`);
+
+    return {
+      props: {
+        artists,
+      },
+    };
+  } catch (err) {
+    return {
+      props: {
+        artists: [],
+      },
+    };
+  }
+}

@@ -10,17 +10,17 @@ import IndexContext from '../../IndexContext';
 const Root = styled.div`
   .modal-enter {
     opacity: 0;
+    transition: opacity 300ms;
   }
   .modal-enter-active {
     opacity: 1;
-    transition: opacity 300ms;
   }
   .modal-exit {
     opacity: 1;
+    transition: opacity 300ms;
   }
   .modal-exit-active {
     opacity: 0;
-    transition: opacity 300ms;
   }
 `;
 
