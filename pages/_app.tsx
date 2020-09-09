@@ -27,9 +27,9 @@ export default class MyApp extends App {
 
     if (/Web/.test(browserName)) {
       if (isAndroid)
-        window.location.href = `intent://gfaa.ondisplay.co.kr${Router.asPath}#Intent;scheme=https;package=com.android.chrome;end`;
+        window.location.href = `intent://dev.ondisplay.co.kr${Router.asPath}#Intent;scheme=https;package=com.android.chrome;end`;
       else
-        window.location.href = `https://urlopen.link/gfaa.ondisplay.co.kr${Router.asPath}`;
+        window.location.href = `https://urlopen.link/dev.ondisplay.co.kr${Router.asPath}`;
     }
   }
 
