@@ -532,8 +532,8 @@ const HomePage: React.FC = () => {
             <div className="quoteBlock">
               <p className="quote">
                 “사람을 만나는 일에 거리를 두어야 하는 이러한 시절에
-                관악미술협회는 창립15주년 기념전이 되는 “제16회
-                관악미술협회전”을 특별히 온라인으로 개최합니다.”
+                관악미술협회는 창립 15주년 기념전이 되는 &lsquo;제16회
+                관악미술협회전&rsquo;을 특별히 온라인으로 개최합니다.”
               </p>
               <p className="name">- 관악미술협회 회장 김철성</p>
             </div>

@@ -200,7 +200,7 @@ const VideoPage: React.FC = () => {
         </section>
         <section className="summary">
           <h2 className="title">
-            관악미술협회 창립 15주년 기념전에 오신것을 환영합니다!
+            관악미술협회 창립 15주년 기념전에 오신 것을 환영합니다!
           </h2>
           <p className="content">
             어느덧 저희 관악미술협회가 출범한 지 15년이 되었습니다. 그동안
