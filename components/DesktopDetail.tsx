@@ -9,6 +9,7 @@ import GoUp from '../public/icons/go_up.svg';
 import Profile from './Profile';
 import Artwork from './Artwork';
 
+import { detailHit } from '../lib/utils';
 import useWindowSize from '../lib/hooks/useWindowSize';
 
 import { NAVBAR_WIDTH, BUCKET_URL, PLAYBAR_HEIGHT } from '../defines';
@@ -172,6 +173,10 @@ const DesktopDetail: React.FC<Props> = ({ artist, ...props }) => {
         artworksPerLine;
 
   const detail = artist.detail ? artist.detail.split('\n').join('<br />') : '';
+
+  React.useEffect(() => {
+    detailHit(artist.id);
+  }, [artist.id]);
 
   React.useEffect(() => {
     const handleSetScroll = () => {
