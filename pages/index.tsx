@@ -313,9 +313,10 @@ const Root = styled.div<RootProps>`
 
   section.footer {
     background-color: #dbdbdb;
+    padding-top: 15px;
     padding-bottom: 100px;
     .divider {
-      margin-bottom: 60px;
+      margin-bottom: 20px;
       width: 100%;
       border-top: 1px solid #b1b1b1;
     }
@@ -330,6 +331,7 @@ const Root = styled.div<RootProps>`
     }
     div.logo {
       margin: 0;
+      margin-bottom: 10px;
     }
   }
 
@@ -610,6 +612,7 @@ const HomePage: React.FC<Props> = ({ artists }) => {
       );
       if (startArtist) {
         sessionStorage.setItem('@artistId', `${startArtist.id}`);
+        sessionStorage.setItem('@artistName', startArtist.artistName);
         setIndex(startArtist.id);
         router.replace('/', undefined, { shallow: true });
       }
@@ -760,7 +763,7 @@ const HomePage: React.FC<Props> = ({ artists }) => {
           </section>
           <section className="summary">
             <h2 className="title">
-              이번 전시는 온라인으로만 진행되는 비대면 전시회입니다
+              이번 전시는 온라인으로만 진행되는 비대면 전시회입니다.
             </h2>
             <div className="quoteBlock">
               <p className="quote">
@@ -775,18 +778,18 @@ const HomePage: React.FC<Props> = ({ artists }) => {
               <ol>
                 <li>
                   전시소개에서 15주년을 맞은 관악미술협회의 이야기를 동영상으로
-                  만나보세요
+                  만나보세요.
                 </li>
                 <li>
-                  전시장에서 노련하고 개성 넘치는 64인 작가의 작품을 감상하세요
+                  전시장에서 노련하고 개성 넘치는 64인 작가의 작품을 감상하세요.
                 </li>
-                <li>마지막 방명록에서 여러분의 흔적을 남겨주세요</li>
+                <li>마지막 방명록에서 여러분의 흔적을 남겨주세요.</li>
               </ol>
             </div>
             <p className="ps">
-              작품을 실제로 감상하고 작가와 연락하고 싶으신 분, 또는 온라인 전시
+              작품을 실제로 감상하거나 작가와 연락하고 싶으신 분, 온라인 전시
               개최에 관심이 있으신 분들은 본 페이지 하단의 onDisplay 대표전화
-              또는 이메일로 연락 주시기 바랍니다
+              또는 이메일로 연락 주시기 바랍니다.
             </p>
           </section>
           <section className="acknowledgement">
@@ -795,11 +798,11 @@ const HomePage: React.FC<Props> = ({ artists }) => {
               <br />제 16회 관악미술협회 展
             </h2>
             <div>
-              <span className="division">장소</span>
+              <p className="division">장소</p>
               gfaa.ondisplay.co.kr
             </div>
             <div>
-              <span className="division">기간</span>
+              <p className="division">기간</p>
               2020년 9월 11일 - 24일
             </div>
             <div>

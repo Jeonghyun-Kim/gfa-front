@@ -25,13 +25,15 @@ import ZoomInModal from '../components/Modal/ZoomInModal';
 import DesktopDetail from '../components/DesktopDetail';
 import DetailGroup from '../components/DetailGroup';
 import ManualModal from '../components/Modal/ManualModal';
+import EdgeModal from '../components/Modal/EdgeModal';
+import InvitedModal from '../components/Modal/InvitedModal';
 
 import { artistHit } from '../lib/utils';
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
 
 // import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
-import { API_URL, HEADER_HEIGHT } from '../defines';
+import { API_URL, HEADER_HEIGHT, NUM_ARTISTS } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -103,6 +105,11 @@ const Root = styled.div`
   height: 100%;
   box-sizing: border-box;
 
+  .lastModal {
+    width: 100%;
+    height: 100%;
+  }
+
   .withLayoutBox {
     position: absolute;
     width: 100%;
@@ -129,10 +136,8 @@ const Root = styled.div`
     position: absolute;
   }
 
-  .slick-slide {
-    div {
-      height: 100%;
-    }
+  .slick-slide > div {
+    height: 100%;
   }
 
   .mobile-modal-enter {
@@ -231,6 +236,11 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
   const [firstDist, setFirstDist] = React.useState<number | null>(null);
+  const invitedArtistName = sessionStorage.getItem('@artistName');
+  const [firstModal, setFirstModal] = React.useState<boolean>(
+    Boolean(invitedArtistName),
+  );
+  const [lastModal, setLastModal] = React.useState<boolean>(false);
   const refBox = React.useRef<HTMLDivElement>(null);
 
   const artwork = artists[index - 1].artworks[0];
@@ -465,7 +475,14 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       />
       <Root>
         <>
-          {withLayout && <div ref={refBox} className="withLayoutBox" />}
+          {withLayout && !firstModal && !lastModal && (
+            <div ref={refBox} className="withLayoutBox" />
+          )}
+          <InvitedModal
+            open={firstModal}
+            setOpen={setFirstModal}
+            artistName={invitedArtistName || ''}
+          />
           <div className="sliderContainer" {...handleSwipe} {...handlePinch()}>
             <Slider
               ref={refSlider}
@@ -481,23 +498,27 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               speed={180}
               waitForAnimate
               beforeChange={(_, afterSlide) => {
-                artistHit(afterSlide + 1);
-                if (withLayout) {
-                  sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
-                  setSlideChangedFlag(false);
-                  setIndex(afterSlide + 1);
-                } else {
-                  setTimeout(() => {
+                if (afterSlide < NUM_ARTISTS) {
+                  setLastModal(false);
+                  artistHit(afterSlide + 1);
+                  if (withLayout) {
                     sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
                     setSlideChangedFlag(false);
                     setIndex(afterSlide + 1);
-                  }, 180);
+                  } else {
+                    setTimeout(() => {
+                      sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
+                      setSlideChangedFlag(false);
+                      setIndex(afterSlide + 1);
+                    }, 180);
+                  }
+                } else {
+                  setLastModal(true);
                 }
               }}
               onSwipe={() => setSlideChangedFlag(true)}
               onEdge={(swipeDirection) => {
                 if (swipeDirection === 'left') router.push('/visitor');
-                else router.push('/video');
               }}
               accessibility={!detailModalFlag && !zoomInModal}
             >
@@ -510,6 +531,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   />
                 );
               })}
+              <div className="lastModal">
+                <EdgeModal />
+              </div>
             </Slider>
           </div>
           {withLayout ? (

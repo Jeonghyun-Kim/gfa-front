@@ -9,7 +9,7 @@ const Root = styled.div`
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: 9;
   display: grid;
   place-items: center;
 
