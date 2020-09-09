@@ -24,6 +24,7 @@ import MobileDetailModal from '../components/Modal/MobileDetailModal';
 import ZoomInModal from '../components/Modal/ZoomInModal';
 import DesktopDetail from '../components/DesktopDetail';
 import DetailGroup from '../components/DetailGroup';
+import ManualModal from '../components/Modal/ManualModal';
 
 import { artistHit } from '../lib/utils';
 import fetcher from '../lib/fetcher';
@@ -272,6 +273,12 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     },
   });
 
+  // React.useEffect(() => {
+  //   if (sessionStorage.getItem('@manual')) {
+  //     setManualOpen(false);
+  //   }
+  // }, []);
+
   React.useEffect(() => {
     // Set initial slide (react-slick's initialSlide property is now working properly.)
     if (refSlider.current) {
@@ -464,7 +471,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               ref={refSlider}
               dots={false}
               arrows={false}
-              infinite={false}
+              infinite
               lazyLoad={withLayout ? undefined : 'progressive'}
               initialSlide={index - 1}
               focusOnSelect
@@ -489,10 +496,10 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 }
               }}
               onSwipe={() => setSlideChangedFlag(true)}
-              onEdge={(swipeDirection) => {
-                if (swipeDirection === 'left') router.push('/visitor');
-                else router.push('/video');
-              }}
+              // onEdge={(swipeDirection) => {
+              //   if (swipeDirection === 'left') router.push('/visitor');
+              //   else router.push('/video');
+              // }}
               accessibility={!detailModalFlag && !zoomInModal}
             >
               {artists.map((artist) => {
@@ -575,6 +582,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
           )}
           {!withLayout ? (
             <>
+              <ManualModal />
               <MobileFooter
                 artworkData={artwork}
                 onClick={() => toggleHeader()}
