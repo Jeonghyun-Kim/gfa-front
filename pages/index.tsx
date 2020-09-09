@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
 import useSWR from 'swr';
@@ -28,7 +27,6 @@ import {
   COLORS,
   ISTEST,
   PLAYBAR_HEIGHT,
-  NUM_ARTISTS,
 } from '../defines';
 
 import IndexContext from '../IndexContext';
@@ -579,10 +577,9 @@ const GoTopButton = styled(Button)`
 `;
 
 const HomePage: React.FC = () => {
-  const router = useRouter();
   const { y } = useWindowScroll();
   const { innerWidth, innerHeight } = useWindowSize();
-  const { withLayout, setIndex } = React.useContext(IndexContext);
+  const { withLayout } = React.useContext(IndexContext);
   const { data: visitor } = useSWR(`${API_URL}/counter`);
   const { data: signature } = useSWR(`${API_URL}/signature/count`);
   const [counters, setCounters] = React.useState<{
@@ -591,20 +588,6 @@ const HomePage: React.FC = () => {
   }>({ visitor: 0, signature: 0 });
 
   const refRoot = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    const { start } = router.query;
-    if (
-      start &&
-      /^\d+$/.test(start as string) &&
-      Number(start) >= 1 &&
-      Number(start) <= NUM_ARTISTS
-    ) {
-      sessionStorage.setItem('@artistId', start as string);
-      setIndex(Number(start));
-      router.replace('/', undefined, { shallow: true });
-    }
-  }, [router, setIndex]);
 
   const handleScrollDown = () => {
     window.scroll({
