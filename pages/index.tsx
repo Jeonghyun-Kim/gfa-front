@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
 import useSWR from 'swr';
@@ -18,6 +19,7 @@ import GoDownDesktop from '../public/icons/go_down.svg';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
+import fetcher from '../lib/fetcher';
 import useWindowSize from '../lib/hooks/useWindowSize';
 import useWindowScroll from '../lib/hooks/useWindowScroll';
 
@@ -576,10 +578,14 @@ const GoTopButton = styled(Button)`
   }
 `;
 
-const HomePage: React.FC = () => {
+interface Props {
+  artists: Artist[];
+}
+const HomePage: React.FC<Props> = ({ artists }) => {
+  const router = useRouter();
   const { y } = useWindowScroll();
   const { innerWidth, innerHeight } = useWindowSize();
-  const { withLayout } = React.useContext(IndexContext);
+  const { withLayout, setIndex } = React.useContext(IndexContext);
   const { data: visitor } = useSWR(`${API_URL}/counter`);
   const { data: signature } = useSWR(`${API_URL}/signature/count`);
   const [counters, setCounters] = React.useState<{
@@ -596,6 +602,20 @@ const HomePage: React.FC = () => {
       left: 0,
     });
   };
+
+  React.useEffect(() => {
+    if (router.query.start) {
+      console.log(router.query.start);
+      const startArtist = artists.find(
+        (artist) => artist.artistName === (router.query.start as string),
+      );
+      if (startArtist) {
+        sessionStorage.setItem('@artistId', `${startArtist.id}`);
+        setIndex(startArtist.id);
+        router.replace('/', undefined, { shallow: true });
+      }
+    }
+  }, [artists, router, setIndex]);
 
   React.useEffect(() => {
     if (!visitor || !signature) return;
@@ -834,3 +854,25 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
+export async function getStaticProps(): Promise<{
+  props: {
+    artists: Artist[];
+  };
+}> {
+  try {
+    const { artists } = await fetcher(`${API_URL}/artist`);
+
+    return {
+      props: {
+        artists,
+      },
+    };
+  } catch (err) {
+    return {
+      props: {
+        artists: [],
+      },
+    };
+  }
+}
