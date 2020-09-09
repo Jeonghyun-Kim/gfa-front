@@ -471,7 +471,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               ref={refSlider}
               dots={false}
               arrows={false}
-              infinite
+              infinite={false}
               lazyLoad={withLayout ? undefined : 'progressive'}
               initialSlide={index - 1}
               focusOnSelect
@@ -481,7 +481,6 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               speed={180}
               waitForAnimate
               beforeChange={(_, afterSlide) => {
-                // console.log('artist called! id:', afterSlide + 1);
                 artistHit(afterSlide + 1);
                 if (withLayout) {
                   sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
@@ -496,10 +495,10 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 }
               }}
               onSwipe={() => setSlideChangedFlag(true)}
-              // onEdge={(swipeDirection) => {
-              //   if (swipeDirection === 'left') router.push('/visitor');
-              //   else router.push('/video');
-              // }}
+              onEdge={(swipeDirection) => {
+                if (swipeDirection === 'left') router.push('/visitor');
+                else router.push('/video');
+              }}
               accessibility={!detailModalFlag && !zoomInModal}
             >
               {artists.map((artist) => {
