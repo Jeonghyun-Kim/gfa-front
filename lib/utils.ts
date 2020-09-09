@@ -9,7 +9,7 @@ export const checkSameObject = (
 ) => JSON.stringify(obj1) === JSON.stringify(obj2);
 
 export const sendCounter = () => {
-  fetch('api/counter', {
+  fetch('/api/counter', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

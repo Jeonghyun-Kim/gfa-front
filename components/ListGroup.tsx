@@ -28,14 +28,22 @@ const Root = styled.div<RootProps>`
   }};
 
   .listTextDesktop {
-    color: white;
+    color: ${(props) => {
+      if (props.disabled) return COLORS.disabled;
+      if (props.active) return COLORS.primary;
+      return 'white';
+    }};
     @media screen and (max-width: 1000px) {
       display: none;
     }
   }
 
   .listText {
-    color: white;
+    color: ${(props) => {
+      if (props.disabled) return COLORS.disabled;
+      if (props.active) return COLORS.primary;
+      return 'white';
+    }};
   }
 
   &.withLayout {
@@ -56,6 +64,10 @@ const Root = styled.div<RootProps>`
   }
   &:hover {
     cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+
+    button {
+      cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    }
   }
 `;
 
