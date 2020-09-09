@@ -605,7 +605,6 @@ const HomePage: React.FC<Props> = ({ artists }) => {
 
   React.useEffect(() => {
     if (router.query.start) {
-      console.log(router.query.start);
       const startArtist = artists.find(
         (artist) => artist.artistName === (router.query.start as string),
       );

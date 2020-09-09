@@ -1,4 +1,4 @@
-export const ISTEST = false;
+export const ISTEST = true;
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
