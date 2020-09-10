@@ -296,6 +296,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       e.preventDefault();
     };
     window.addEventListener('keydown', handleKeyboardEvent);
+    return () => window.removeEventListener('keydown', handleKeyboardEvent);
   }, []);
 
   React.useEffect(() => {
