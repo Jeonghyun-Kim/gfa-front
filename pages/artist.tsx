@@ -292,6 +292,13 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   // }, []);
 
   React.useEffect(() => {
+    const handleKeyboardEvent = (e: KeyboardEvent) => {
+      e.preventDefault();
+    };
+    window.addEventListener('keydown', handleKeyboardEvent);
+  }, []);
+
+  React.useEffect(() => {
     // Set initial slide (react-slick's initialSlide property is now working properly.)
     if (refSlider.current) {
       refSlider.current.slickGoTo(index - 1);
@@ -303,6 +310,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       const { keyCode } = e;
 
       switch (keyCode) {
+        case 9:
+          break;
         case 27:
           if (withLayout || isIOS) {
             if (zoomInModal) setZoomInModal(0);
@@ -530,7 +539,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   />
                 );
               })}
-              <div className="lastModal">
+              <div className="lastModal undraggable">
                 <EdgeModal />
               </div>
             </Slider>

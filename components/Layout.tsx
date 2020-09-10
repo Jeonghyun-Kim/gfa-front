@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Slider from 'react-slick';
-import { isIE } from 'react-device-detect';
+import { isIE, isEdgeChromium } from 'react-device-detect';
 import smoothscroll from 'smoothscroll-polyfill';
 
 import NavBar from './NavBar';
@@ -114,6 +114,25 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       logPageView();
     }
   }, [router.asPath]);
+
+  if (!isEdgeChromium) {
+    return (
+      <ForIE>
+        <h2>예전 엣지 브라우저에서는 전시를 감상할 수 없어요ㅜ.ㅜ</h2>
+        <h2>
+          보다 원활한 전시 감상을 위해 엣지를 업데이트 하시거나 크롬 브라우저
+          사용을 권장합니다.
+        </h2>
+        <a
+          href="https://www.google.com/chrome/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <h4>크롬 다운받기</h4>
+        </a>
+      </ForIE>
+    );
+  }
 
   if (isIE) {
     return (

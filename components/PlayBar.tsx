@@ -22,7 +22,7 @@ const Root = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #222222f7;
+  background-color: #222222;
   z-index: 9;
 `;
 
