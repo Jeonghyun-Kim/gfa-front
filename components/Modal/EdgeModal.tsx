@@ -71,11 +71,11 @@ const Root = styled.div`
       .situation {
         color: #686868;
         font-size: 0.75rem;
-        font-weight: bolder;
+        font-weight: 500;
         margin-bottom: 5px;
       }
       .question {
-        font-weight: bolder;
+        font-weight: 500;
       }
       .exitButton {
         border-radius: 5px !important;
@@ -91,7 +91,7 @@ const Root = styled.div`
         span {
           text-decoration: underline;
           font-size: 0.75rem;
-          font-weight: bolder;
+          font-weight: 500;
           color: #7d7d7d;
         }
       }

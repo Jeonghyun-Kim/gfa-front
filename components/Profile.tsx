@@ -31,7 +31,7 @@ const Root = styled.span<RootProps>`
 
     .name {
       color: #1e1e1e;
-      /* font-weight: bolder; */
+      font-weight: 500;
     }
   }
 `;

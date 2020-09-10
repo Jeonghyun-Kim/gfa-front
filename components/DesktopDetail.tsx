@@ -50,7 +50,7 @@ const Root = styled.div<RootProps>`
       .sectionTitle {
         color: #1e1e1e;
         font-size: 1.5rem;
-        font-weight: bolder;
+        font-weight: 500;
         margin-top: 0;
         margin-bottom: 10px;
       }
@@ -138,7 +138,7 @@ const GoUpButtonGroup = styled.div`
     .goUpTitle {
       margin: 5px;
       font-size: 1.5rem;
-      font-weight: bolder;
+      font-weight: 500;
     }
   }
 

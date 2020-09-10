@@ -16,7 +16,7 @@ const Root = styled.a<RootProps>`
   height: 100%;
   margin: 0 0.2rem;
   font-size: 0.8rem;
-  font-weight: ${(props) => (props.current ? 'bolder' : 'normal')};
+  font-weight: ${(props) => (props.current ? '500' : 'normal')};
   color: ${(props) => (props.current ? COLORS.primary : '#676F7F')};
   border-color: ${COLORS.primary} !important;
   border-bottom: ${(props) => (props.current ? '5px solid' : 'none')};

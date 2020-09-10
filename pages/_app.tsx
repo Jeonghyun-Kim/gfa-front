@@ -53,6 +53,10 @@ export default class MyApp extends App {
             content="https://gfaa.ondisplay.co.kr/images/og-image.jpg"
           />
           <title>onDisplay</title>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <SWRConfig
           value={{

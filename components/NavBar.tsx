@@ -32,7 +32,7 @@ const MenuItem = styled.a<MenuProps>`
   margin: 1rem 0;
   color: ${(props) => (props.current ? COLORS.primary : '#7D7D7D')};
   font-size: ${(props) => (props.current ? 1.1 : 1)}rem;
-  font-weight: ${(props) => (props.current ? 'bolder' : 'normal')};
+  font-weight: ${(props) => (props.current ? '500' : 'normal')};
   &:hover {
     cursor: pointer;
     color: ${(props) => (props.current ? COLORS.primary : 'white')};

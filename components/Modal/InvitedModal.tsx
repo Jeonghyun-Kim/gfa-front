@@ -84,11 +84,11 @@ const Root = styled.div`
       .situation {
         color: #686868;
         font-size: 0.75rem;
-        font-weight: bolder;
+        font-weight: 500;
         margin-bottom: 5px;
       }
       .question {
-        font-weight: bolder;
+        font-weight: 500;
       }
       .buttonGroup {
         width: 100%;
@@ -99,7 +99,7 @@ const Root = styled.div`
           height: 100%;
           span {
             font-size: 0.9rem;
-            font-weight: bolder;
+            font-weight: 500;
           }
           &.goFirst {
             border-right: 1px solid #f0f0f0;

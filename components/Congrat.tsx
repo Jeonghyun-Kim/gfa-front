@@ -36,7 +36,7 @@ const Root = styled.div`
       }
       .name {
         font-size: 0.875rem;
-        font-weight: bolder;
+        font-weight: 500;
       }
       .smallTitle {
         font-size: 0.875rem;

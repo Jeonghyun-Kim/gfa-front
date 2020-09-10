@@ -94,7 +94,7 @@ const Root = styled.div<RootProps>`
             margin: 0 10px;
             color: white;
             font-size: 2rem;
-            font-weight: bolder;
+            font-weight: 500;
           }
           span.space {
             margin: 0 20px;
@@ -109,7 +109,7 @@ const Root = styled.div<RootProps>`
         span.MuiButton-label {
           color: ${COLORS.primary};
           font-size: 1.5rem;
-          font-weight: bolder;
+          font-weight: 500;
         }
       }
     }
@@ -160,7 +160,7 @@ const Root = styled.div<RootProps>`
               margin: 0 10px;
               color: white;
               font-size: 1.5rem;
-              font-weight: bolder;
+              font-weight: 500;
             }
             span.space {
               margin: 0 15px;
@@ -251,7 +251,7 @@ const Root = styled.div<RootProps>`
     .title {
       font-size: 1.4rem;
       color: ${COLORS.primary};
-      font-weight: bolder;
+      font-weight: 500;
       margin-bottom: 40px;
       word-break: keep-all;
     }
@@ -270,7 +270,7 @@ const Root = styled.div<RootProps>`
       margin-bottom: 40px;
       h4 {
         font-size: 1rem;
-        font-weight: bolder;
+        font-weight: 500;
         margin-bottom: 10px;
       }
       ol {
@@ -292,7 +292,7 @@ const Root = styled.div<RootProps>`
     background-color: #dbdbdb;
     .title {
       font-size: 1rem;
-      font-weight: bolder;
+      font-weight: 500;
       margin-bottom: 30px;
     }
     div,
@@ -301,7 +301,7 @@ const Root = styled.div<RootProps>`
       word-break: keep-all;
     }
     .division {
-      font-weight: bolder;
+      font-weight: 500;
       margin-bottom: 0;
       margin-right: 5px;
     }
@@ -476,7 +476,7 @@ const EnterButton = styled(Button)`
   z-index: 2;
   span {
     color: ${COLORS.primary};
-    font-weight: bolder;
+    font-weight: 500;
   }
 
   &.stickBottom {
