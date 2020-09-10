@@ -5,6 +5,8 @@ import ScrollLock from 'react-scrolllock';
 import { CSSTransition } from 'react-transition-group';
 
 import Button from '@material-ui/core/Button';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import Curator from '../../public/icons/curator.svg';
 
 import { COLORS } from '../../defines';
 
@@ -55,16 +57,24 @@ const Root = styled.div`
     background-color: white;
     z-index: 10;
     .top {
+      position: relative;
       height: 80px;
-      background-color: #d7dede;
+      background-color: #ededed;
       border-radius: 10px 10px 0 0;
+      svg {
+        position: absolute;
+        width: 95px;
+        height: 95px;
+        bottom: -3px;
+        left: 50%;
+        transform: translate(-50%, 0);
+      }
     }
     .bottom {
       height: 200px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px 0 0 0;
       .grow {
         flex-grow: 1;
       }
@@ -107,10 +117,14 @@ const Root = styled.div`
       height: 440px;
       .top {
         height: 130px;
+        svg {
+          bottom: -5px;
+          width: 150px;
+          height: 150px;
+        }
       }
       .bottom {
         height: 310px;
-        padding: 40px 0 0 0;
         .situation {
           font-size: 1.2rem;
           margin-bottom: 15px;
@@ -151,7 +165,9 @@ const InvitedModal: React.FC<Props> = ({
         <ScrollLock />
         <div className="blurBackground" />
         <div className={`modalBox ${withLayout && 'withLayout'}`}>
-          <div className="top" />
+          <div className="top">
+            <SvgIcon component={Curator} viewBox="0 0 300 300" />
+          </div>
           <div className="bottom">
             <div className="grow" />
             <p className="situation">

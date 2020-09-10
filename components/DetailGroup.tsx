@@ -46,9 +46,12 @@ const Root = styled.div`
 
 const DetailGroup: React.FC = ({ ...props }) => {
   const router = useRouter();
-  const { withLayout, detailModalFlag, setDetailModalFlag } = React.useContext(
-    IndexContext,
-  );
+  const {
+    withLayout,
+    detailModalFlag,
+    setDetailModalFlag,
+    lastModal,
+  } = React.useContext(IndexContext);
 
   const handleDetailOpen = () => {
     if (withLayout || isIOS) {
@@ -68,14 +71,19 @@ const DetailGroup: React.FC = ({ ...props }) => {
     },
   });
 
+  if (lastModal) return <Root />;
+
   return (
     <Root
+      className="unselectable"
       onClick={() => {
-        if (withLayout || isIOS) setDetailModalFlag(!detailModalFlag);
-        else if (router.query.listOpen) {
-          router.back();
-        } else {
-          router.push('?detailOpen=1', undefined, { shallow: true });
+        if (!lastModal) {
+          if (withLayout || isIOS) setDetailModalFlag(!detailModalFlag);
+          else if (router.query.listOpen) {
+            router.back();
+          } else {
+            router.push('?detailOpen=1', undefined, { shallow: true });
+          }
         }
       }}
       {...handleSwipe}

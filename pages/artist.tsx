@@ -230,6 +230,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     setDetailModalFlag,
     zoomInModal,
     setZoomInModal,
+    lastModal,
+    setLastModal,
   } = React.useContext(IndexContext);
   // Use screen size and orientation (hooks)
   const { isPortrait } = useMobileOrientation();
@@ -240,7 +242,6 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
   const [firstModal, setFirstModal] = React.useState<boolean>(
     Boolean(invitedArtistName),
   );
-  const [lastModal, setLastModal] = React.useState<boolean>(false);
   const refBox = React.useRef<HTMLDivElement>(null);
 
   const artwork = artists[index - 1].artworks[0];
@@ -374,6 +375,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       }
       if (zoomInModal) {
         setZoomInModal(0);
+      }
+      if (lastModal) {
+        setLastModal(false);
       }
       if (
         router.query.listOpen ||
@@ -517,9 +521,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 }
               }}
               onSwipe={() => setSlideChangedFlag(true)}
-              onEdge={(swipeDirection) => {
-                if (swipeDirection === 'left') router.push('/visitor');
-              }}
+              // onEdge={(swipeDirection) => {
+              //   if (swipeDirection === 'left') router.push('/visitor');
+              // }}
               accessibility={!detailModalFlag && !zoomInModal}
             >
               {artists.map((artist) => {
@@ -536,36 +540,37 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               </div>
             </Slider>
           </div>
-          {withLayout ? (
-            <>
-              <ZoomInButton
-                className="desktop"
-                onClick={() => {
-                  handleModalOpen();
-                }}
-              >
-                <ZoomIn />
-              </ZoomInButton>
-              <MyDetailGroup />
-            </>
-          ) : (
-            <>
-              <CSSTransition
-                in={headerFlag}
-                timeout={300}
-                // unmountOnExit
-                classNames="header-toggle"
-              >
+          {!lastModal &&
+            (withLayout ? (
+              <>
                 <ZoomInButton
-                  className={headerFlag ? 'headerFlag mobile' : 'mobile'}
+                  className="desktop"
                   onClick={() => {
                     handleModalOpen();
                   }}
                 >
-                  <SvgIcon component={ZoomInShadow} viewBox="0 0 24 24" />
+                  <ZoomIn />
                 </ZoomInButton>
-              </CSSTransition>
-              {/* <CSSTransition
+                <MyDetailGroup />
+              </>
+            ) : (
+              <>
+                <CSSTransition
+                  in={headerFlag}
+                  timeout={300}
+                  // unmountOnExit
+                  classNames="header-toggle"
+                >
+                  <ZoomInButton
+                    className={headerFlag ? 'headerFlag mobile' : 'mobile'}
+                    onClick={() => {
+                      handleModalOpen();
+                    }}
+                  >
+                    <SvgIcon component={ZoomInShadow} viewBox="0 0 24 24" />
+                  </ZoomInButton>
+                </CSSTransition>
+                {/* <CSSTransition
                 in={headerFlag}
                 timeout={300}
                 unmountOnExit
@@ -583,7 +588,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   <SvgIcon component={LeftArrow} viewBox="0 0 24 24" />
                 </ArrowButton>
               </CSSTransition> */}
-              {/* <CSSTransition
+                {/* <CSSTransition
                 in={headerFlag}
                 timeout={300}
                 unmountOnExit
@@ -601,8 +606,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   <SvgIcon component={RightArrow} viewBox="0 0 24 24" />
                 </ArrowButton>
               </CSSTransition> */}
-            </>
-          )}
+              </>
+            ))}
           {!withLayout ? (
             <>
               <ManualModal />

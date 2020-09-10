@@ -62,8 +62,9 @@ const SimpleInfo: React.FC<Props> = ({
   const router = useRouter();
   const { artistName, title } = artworkData;
 
-  const { withLayout } = React.useContext(IndexContext);
+  const { withLayout, lastModal } = React.useContext(IndexContext);
 
+  if (lastModal) return <Root animation={false} />;
   return (
     <Root
       animation={animation}

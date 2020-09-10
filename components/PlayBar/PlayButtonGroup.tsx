@@ -88,6 +88,8 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
     setListModalFlag,
     refSlider,
     setIndex,
+    lastModal,
+    setLastModal,
   } = React.useContext(IndexContext);
 
   return (
@@ -134,6 +136,15 @@ const PlayButtonGroup: React.FC<Props> = ({ handleLeft, handleRight, id }) => {
               setDetailModalFlag(false);
               setBlocker(true);
               handleRight();
+              setTimeout(() => setBlocker(false), 100);
+            } else if (lastModal) {
+              setLastModal(false);
+              router.push(PAGE_ARRAY[pageIndex + 1]);
+            } else if (pageIndex === 2 && id === NUM_ARTISTS) {
+              setDetailModalFlag(false);
+              setBlocker(true);
+              setLastModal(true);
+              refSlider.current?.slickNext();
               setTimeout(() => setBlocker(false), 100);
             } else if (pageIndex !== PAGE_ARRAY.length - 1) {
               router.push(PAGE_ARRAY[pageIndex + 1]);
