@@ -561,14 +561,15 @@ const GoDownIconButton = styled(IconButton)`
   }
 `;
 
-const DesktopEnterButton = styled(Button)`
+const GoTopButton = styled(Button)`
   position: fixed !important;
   right: 60px;
   bottom: calc(60px + ${PLAYBAR_HEIGHT}px);
-  width: 100px;
-  height: 50px;
+  width: 64px;
+  height: 64px;
   background-color: white !important;
-  border-radius: 10px !important;
+  border-radius: 50% !important;
+  font-size: 1rem !important;
   z-index: 0;
   padding: 0 !important;
   span.MuiButton-label {
@@ -832,15 +833,20 @@ const HomePage: React.FC<Props> = ({ artists }) => {
             <div className="divider" />
             <Footer />
             {withLayout && (
-              <Link href="/video">
-                <DesktopEnterButton
-                  className={`${withLayout && 'withLayout'}`}
-                  variant="contained"
-                  color="primary"
-                >
-                  전시 입장
-                </DesktopEnterButton>
-              </Link>
+              <GoTopButton
+                className={`${withLayout && 'withLayout'}`}
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  refRoot.current?.scroll({
+                    behavior: 'smooth',
+                    top: 0,
+                    left: 0,
+                  })
+                }
+              >
+                TOP
+              </GoTopButton>
             )}
           </section>
         </Root>
