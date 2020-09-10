@@ -7,6 +7,7 @@ import Countup from 'react-countup';
 import Loading from '../components/Loading';
 import Header from '../components/Header';
 import VisitorForm from '../components/Visitor/VisitorForm';
+import Footer from '../components/Footer';
 // import VisitorSignPad from '../components/Visitor/VisitorSignPad';
 
 import { API_URL } from '../defines';
@@ -53,6 +54,29 @@ const Root = styled.div<RootProps>`
       margin: 0 5px;
       font-size: 1.1rem;
       font-weight: normal;
+    }
+  }
+  .spacer {
+    height: 300px;
+  }
+  .mobileAbout {
+    margin-top: 50px;
+    background-color: #dbdbdb;
+    padding: 50px 15px 20px 15px;
+    .subTitle {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    .instruction {
+      margin: 50px 0 50px 0;
+      font-size: 1rem;
+      font-weight: normal;
+      line-height: 1.8rem;
+    }
+    .infoBlock {
+      p {
+        margin: 5px 0;
+      }
     }
   }
 
@@ -215,6 +239,7 @@ const VisitorPage: React.FC = () => {
         />
         {withLayout && <div className="grow" />}
         <p className="helpText">보내주신 방명록은 작가님들께 전달됩니다.</p>
+        {!withLayout && open && <div className="spacer" />}
         {(withLayout || !open) && counts && (
           <p className="counterText">
             지금까지{' '}
@@ -233,7 +258,20 @@ const VisitorPage: React.FC = () => {
             명 참여
           </p>
         )}
-        {withLayout || !open ? <></> : <></>}
+        {!withLayout && (
+          <section className="mobileAbout">
+            <h2 className="subTitle">
+              온디스플레이는 코로나의 영향으로 침체된 미술계, 작가, 관객,
+              미술관, 갤러리 모두를 응원합니다.
+            </h2>
+            <p className="instruction">
+              - 9월 25일에 예정된 다음 전시를 받아보시려면 인스타그램 채널을
+              팔로우해주세요. <br />- 작품 구매, 작가 연락처, 전시 기획 문의는
+              대표전화 또는 이메일로 문의해주세요.
+            </p>
+            <Footer />
+          </section>
+        )}
         {/* {!withLayout && open && <VisitorSignPad refName={refName} />} */}
       </Root>
     </>

@@ -31,6 +31,10 @@ a {
   text-decoration: none;
 }
 
+b {
+  font-weight: 500;
+}
+
 h2,
 h4,
 h5,

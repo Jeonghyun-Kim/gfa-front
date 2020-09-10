@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import TextField from '@material-ui/core/TextField';
@@ -163,6 +164,7 @@ const VisitorForm: React.FC<Props> = ({
   handleClose,
   ...props
 }) => {
+  const router = useRouter();
   const [name, setName] = React.useState<string>('');
   const [content, setContent] = React.useState<string>('');
   const [timer, setTimer] = React.useState<NodeJS.Timeout | null>(null);
@@ -314,22 +316,51 @@ const VisitorForm: React.FC<Props> = ({
       >
         <h4 className="title">방명록 남기기</h4>
         {res !== null ? (
-          <MyButton disabled>
-            <span>보냈습니다!</span>
-          </MyButton>
+          <>
+            {res ? (
+              <MyButton
+                onClick={async () => {
+                  await sendData();
+                  if (withLayout) {
+                    router.push('/about');
+                  } else {
+                    mutateData(`${API_URL}/signature/count`);
+                    setTimeout(() => {
+                      clearInputs();
+                      handleEnable(false);
+                      handleClose();
+                      setRes(null);
+                      window.scroll({ behavior: 'smooth', top: 450, left: 0 });
+                    }, 1000);
+                  }
+                }}
+              >
+                <span>전송실패. 잠시 뒤 다시 시도해주세요.</span>
+              </MyButton>
+            ) : (
+              <MyButton disabled>
+                <span>보냈습니다!</span>
+              </MyButton>
+            )}
+          </>
         ) : (
           <>
             {enabled ? (
               <MyButton
                 onClick={async () => {
                   await sendData();
-                  mutateData(`${API_URL}/signature/count`);
-                  setTimeout(() => {
-                    clearInputs();
-                    handleEnable(false);
-                    setRes(null);
-                    handleClose();
-                  }, 3000);
+                  if (withLayout) {
+                    router.push('/about');
+                  } else {
+                    mutateData(`${API_URL}/signature/count`);
+                    setTimeout(() => {
+                      clearInputs();
+                      handleEnable(false);
+                      handleClose();
+                      setRes(null);
+                      window.scroll({ behavior: 'smooth', top: 450, left: 0 });
+                    }, 1000);
+                  }
                 }}
               >
                 <span>보내기</span>

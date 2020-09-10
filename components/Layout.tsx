@@ -135,7 +135,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <Root
       className={`${
         !withLayout &&
-        (router.pathname === '/' || router.pathname === '/video') &&
+        (router.pathname === '/' ||
+          router.pathname === '/video' ||
+          router.pathname === '/visitor') &&
         'rootScroll'
       }`}
       grid={withLayout}

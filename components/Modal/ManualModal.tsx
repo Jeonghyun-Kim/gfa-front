@@ -15,8 +15,8 @@ const Root = styled.div`
 
   img.manualImage {
     /* margin: 150px auto; */
-    width: 250px;
-    height: 250px;
+    width: 125px;
+    height: 125px;
   }
 
   &.manual-modal-enter {
