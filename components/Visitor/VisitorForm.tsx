@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Modal from '../Modal/Modal';
+// import Modal from '../Modal/Modal';
 
 import fetcher from '../../lib/fetcher';
 
@@ -128,13 +128,13 @@ const MyButton = styled(Button)`
   }
 `;
 
-const ResModal = styled(Modal)`
-  width: 500px;
-  max-width: 80%;
-  button {
-    float: right;
-  }
-`;
+// const ResModal = styled(Modal)`
+//   width: 500px;
+//   max-width: 80%;
+//   button {
+//     float: right;
+//   }
+// `;
 
 interface MyInputProps {
   name: boolean;
@@ -203,6 +203,13 @@ const VisitorForm: React.FC<Props> = ({
     setContent('');
   };
 
+  const setColor = () => {
+    if (res) return '#ff3100';
+    if (res !== null) return '#4eaf41';
+    if (!open || enabled) return COLORS.primary;
+    return COLORS.disabled;
+  };
+
   // TODO: input maxlength.
   return (
     <Root {...props}>
@@ -213,7 +220,7 @@ const VisitorForm: React.FC<Props> = ({
           </Button>
         </ExitHeader>
       )}
-      <ResModal visible={res !== null}>
+      {/* <ResModal visible={res !== null}>
         <h3>성공적으로 업로드하였습니다.</h3>
         <Button
           variant="contained"
@@ -227,7 +234,7 @@ const VisitorForm: React.FC<Props> = ({
         >
           확인
         </Button>
-      </ResModal>
+      </ResModal> */}
       <Container
         color="white"
         position={{ x: 0, y: open ? 25 : -10 }}
@@ -300,25 +307,39 @@ const VisitorForm: React.FC<Props> = ({
         />
       </Container>
       <Container
-        color={!open || enabled ? COLORS.primary : COLORS.disabled}
+        // color={!open || enabled ? COLORS.primary : COLORS.disabled}
+        color={setColor()}
         position={{ x: 0, y: open ? -25 : 35 }}
         zIndex={4}
       >
         <h4 className="title">방명록 남기기</h4>
-        {enabled ? (
-          <MyButton
-            onClick={() => {
-              sendData();
-              handleEnable(false);
-              handleClose();
-            }}
-          >
-            <span>보내기</span>
+        {res !== null ? (
+          <MyButton disabled>
+            <span>보냈습니다!</span>
           </MyButton>
         ) : (
-          <MyButton disabled>
-            <span>이름을 입력해주세요</span>
-          </MyButton>
+          <>
+            {enabled ? (
+              <MyButton
+                onClick={async () => {
+                  await sendData();
+                  mutateData(`${API_URL}/signature/count`);
+                  setTimeout(() => {
+                    clearInputs();
+                    handleEnable(false);
+                    setRes(null);
+                    handleClose();
+                  }, 3000);
+                }}
+              >
+                <span>보내기</span>
+              </MyButton>
+            ) : (
+              <MyButton disabled>
+                <span>이름을 입력해주세요</span>
+              </MyButton>
+            )}
+          </>
         )}
       </Container>
     </Root>

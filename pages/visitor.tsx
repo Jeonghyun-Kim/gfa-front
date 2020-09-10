@@ -28,6 +28,78 @@ const Root = styled.div<RootProps>`
   align-items: center;
   margin-top: ${(props) => (props.up ? '60px' : '0px')};
 
+  .thankMessage {
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  .requestMessage {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #707070;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .helpText {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: normal;
+  }
+  .counterText {
+    font-size: 0.9rem;
+    font-weight: normal;
+    .counter {
+      margin: 0 5px;
+      font-size: 1.1rem;
+      font-weight: normal;
+    }
+  }
+
+  &.withLayout {
+    position: initial;
+    padding: 50px 0;
+    overflow-y: auto;
+    .grow {
+      flex-grow: 1;
+    }
+    .touchableBackground {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    .thankMessage {
+      margin-top: 30px;
+      margin-bottom: 0;
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+    .requestMessage {
+      font-size: 1.2rem;
+      font-weight: normal;
+      color: #707070;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .helpText {
+      margin-top: 10px;
+      font-size: 1.1rem;
+      font-weight: normal;
+    }
+    .counterText {
+      font-size: 1.1rem;
+      font-weight: normal;
+      .counter {
+        margin: 0 5px;
+        font-size: 1.3rem;
+        font-weight: normal;
+      }
+    }
+  }
+
   .signPad-enter {
     bottom: -300px;
   }
@@ -78,7 +150,7 @@ const VisitorPage: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setInputFocuses({ name: false, content: false });
+    // setInputFocuses({ name: false, content: false });
   };
 
   // React.useLayoutEffect(() => {
@@ -105,7 +177,22 @@ const VisitorPage: React.FC = () => {
         <title>onDisplay - 방명록</title>
       </Head>
       {!withLayout && !open && <Header />}
-      <Root up={!withLayout && open}>
+      <Root
+        className={`${withLayout && 'withLayout'}`}
+        up={!withLayout && open}
+      >
+        {withLayout && (
+          // eslint-disable-next-line jsx-a11y/control-has-associated-label
+          <div
+            className="touchableBackground"
+            onClick={() => {
+              setOpen(false);
+            }}
+            role="button"
+            tabIndex={-1}
+            onKeyDown={() => {}}
+          />
+        )}
         {(withLayout || !open) && (
           <>
             <h2 className="thankMessage">끝까지 감상해주셔서 감사합니다.</h2>
@@ -116,6 +203,7 @@ const VisitorPage: React.FC = () => {
             </p>
           </>
         )}
+        {withLayout && <div className="grow" />}
         <VisitorForm
           mutateData={mutate}
           refName={refName}
@@ -125,22 +213,26 @@ const VisitorPage: React.FC = () => {
           setInputFocuses={setInputFocuses}
           handleClose={handleClose}
         />
-        <p>
-          지금까지{' '}
-          <Countup
-            className="counter"
-            start={counter}
-            end={counts}
-            duration={3}
-            delay={0.2}
-            separator=","
-            // onStart={() => {}}
-            onEnd={() => {
-              setCounter(counts);
-            }}
-          />
-          명이 방명록을 남겨주셨어요!
-        </p>
+        {withLayout && <div className="grow" />}
+        <p className="helpText">보내주신 방명록은 작가님들께 전달됩니다.</p>
+        {(withLayout || !open) && counts && (
+          <p className="counterText">
+            지금까지{' '}
+            <Countup
+              className="counter"
+              start={counter}
+              end={counts}
+              duration={3}
+              delay={0.2}
+              separator=","
+              // onStart={() => {}}
+              onEnd={() => {
+                setCounter(counts);
+              }}
+            />
+            명 참여
+          </p>
+        )}
         {withLayout || !open ? <></> : <></>}
         {/* {!withLayout && open && <VisitorSignPad refName={refName} />} */}
       </Root>
