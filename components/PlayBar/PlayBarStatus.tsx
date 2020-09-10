@@ -35,8 +35,8 @@ const Status: React.FC<Props> = ({ index, ...props }) => {
     case PAGE_ARRAY[2]:
       content = !lastModal ? (
         <>
-          <p style={{ width: 50 }}>전시장</p>
-          <p style={{ width: 50 }}>
+          <p style={{ width: 70 }}>전시장</p>
+          <p style={{ width: 70 }}>
             {index} / {NUM_ARTISTS}
           </p>
         </>
