@@ -83,25 +83,26 @@ const ListGroup: React.FC<Props> = ({ ...props }) => {
     listModalFlag,
     setListModalFlag,
   } = React.useContext(IndexContext);
-  const disabled = router.pathname !== '/artist';
 
   return (
     <Root
       onClick={() => {
-        if (withLayout || isIOS) {
-          if (detailModalFlag) setDetailModalFlag(false);
-          setListModalFlag(!listModalFlag);
-        } else if (router.query.listOpen) {
-          // router.push(router.pathname.split('?')[0], undefined, {
-          //   shallow: true,
-          // });
-          router.back();
-        } else {
-          router.push('?listOpen=1', undefined, { shallow: true });
+        if (router.pathname === '/artist') {
+          if (withLayout || isIOS) {
+            if (detailModalFlag) setDetailModalFlag(false);
+            setListModalFlag(!listModalFlag);
+          } else if (router.query.listOpen) {
+            // router.push(router.pathname.split('?')[0], undefined, {
+            //   shallow: true,
+            // });
+            router.back();
+          } else {
+            router.push('?listOpen=1', undefined, { shallow: true });
+          }
         }
       }}
       active={listModalFlag}
-      disabled={disabled}
+      disabled={router.pathname !== '/artist'}
       className={withLayout ? 'withLayout' : ''}
       {...props}
     >

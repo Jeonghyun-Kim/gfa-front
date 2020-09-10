@@ -9,16 +9,18 @@ import ProgressBar from './ProgressBar';
 
 import { checkLength } from '../lib/utils';
 
-import { NUM_ARTISTS } from '../defines';
+import { NUM_ARTISTS, PLAYBAR_HEIGHT } from '../defines';
 
 import IndexContext from '../IndexContext';
 
 import ArtworkData from '../artworks.json';
 
 const Root = styled.div`
-  position: relative;
-  grid-column: 1 / 3;
-  grid-row: 2 / 3;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: ${PLAYBAR_HEIGHT}px;
   display: flex;
   align-items: center;
   justify-content: center;

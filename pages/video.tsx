@@ -58,6 +58,7 @@ const Root = styled.div<RootProps>`
     }
   }
   section.summary {
+    max-width: 800px;
     margin-top: 0;
     min-height: calc(
       100vh - ${HEADER_HEIGHT}px -
@@ -108,11 +109,15 @@ const Root = styled.div<RootProps>`
     background-color: #dbdbdb;
     padding-bottom: 100px;
     .divider {
-      margin-bottom: 60px;
+      margin-bottom: 20px;
       width: 100%;
       border-top: 1px solid #b1b1b1;
     }
+    .logo {
+      margin-bottom: 10px;
+    }
     .infoBlock {
+      margin: 0 auto;
       p {
         margin: 5px 0;
         font-size: 0.75rem;

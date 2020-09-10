@@ -28,14 +28,18 @@ const Root = styled.div`
       height: 40px;
       object-fit: contain;
     }
+
+    @media screen and (min-width: 801px) {
+      display: none;
+    }
   }
 `;
 
 const Footer: React.FC = ({ ...props }) => {
   return (
     <Root {...props}>
-      <Logo />
       <div className="infoBlock">
+        <Logo />
         <p>
           <b>주식회사 온디스플레이</b>
         </p>

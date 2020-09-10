@@ -69,7 +69,7 @@ const ExitHeader = styled.div`
   width: 100%;
   height: ${HEADER_HEIGHT}px;
   background-color: white;
-  z-index: 2;
+  z-index: 6;
 
   display: flex;
   justify-content: flex-end;

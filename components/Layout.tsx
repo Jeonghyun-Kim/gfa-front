@@ -25,24 +25,23 @@ const Root = styled.div<RootProps>`
   width: 100%;
   height: 100%;
 
-  display: ${(props) => (props.grid ? 'grid' : 'block')};
-  grid-template: 1fr ${PLAYBAR_HEIGHT}px / ${NAVBAR_WIDTH}px 1fr;
-
   .main {
     position: relative;
-    overflow-y: hidden;
+    overflow-y: auto;
     scroll-behavior: smooth;
     width: 100%;
     height: 100%;
-    ${(props) => props.grid && 'grid-column: 2 / 3'};
-    ${(props) => props.grid && 'grid-row: 1 / 2'};
-
-    &.withLayout {
-      height: calc(100vh - ${PLAYBAR_HEIGHT}px);
-    }
 
     &.overflowAuto {
       overflow-y: auto;
+    }
+  }
+
+  &.withLayout {
+    display: flex;
+    height: calc(100% - ${PLAYBAR_HEIGHT}px);
+    .main {
+      width: calc(100% - ${NAVBAR_WIDTH}px);
     }
   }
 
@@ -158,7 +157,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           router.pathname === '/video' ||
           router.pathname === '/visitor') &&
         'rootScroll'
-      }`}
+      } ${withLayout && 'withLayout'}`}
       grid={withLayout}
     >
       {index > 0 ? (

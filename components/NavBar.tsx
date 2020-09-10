@@ -5,13 +5,13 @@ import styled from 'styled-components';
 
 import Logo from './Logo/OneLineLogo';
 
-import { ISTEST, COLORS, PAGE_ARRAY } from '../defines';
+import { ISTEST, COLORS, PAGE_ARRAY, NAVBAR_WIDTH } from '../defines';
 
 const Root = styled.div`
-  grid-column: 1 / 2;
-  grid-row: 1 / 2;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  width: ${NAVBAR_WIDTH}px;
   padding: 30px 30px;
 
   background-color: #121212;
