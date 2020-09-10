@@ -3,12 +3,11 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import Countup from 'react-countup';
-import { CSSTransition } from 'react-transition-group';
 
 import Loading from '../components/Loading';
 import Header from '../components/Header';
 import VisitorForm from '../components/Visitor/VisitorForm';
-import VisitorSignPad from '../components/Visitor/VisitorSignPad';
+// import VisitorSignPad from '../components/Visitor/VisitorSignPad';
 
 import { API_URL } from '../defines';
 
@@ -20,6 +19,8 @@ interface RootProps {
 const Root = styled.div<RootProps>`
   position: relative;
   width: 100%;
+  /* height: 100%; */
+  height: ${(props) => (props.up ? `calc(100% - ${60}px)` : 'auto')};
   max-width: 500px;
   margin: 0 auto;
   display: flex;
@@ -68,6 +69,7 @@ const VisitorPage: React.FC = () => {
   const { data, mutate, error } = useSWR(`${API_URL}/signature/count`);
   const [counter, setCounter] = React.useState<number>(0);
   const [open, setOpen] = React.useState<boolean>(false);
+  const refName = React.useRef<HTMLInputElement>(null);
 
   const [inputFocuses, setInputFocuses] = React.useState<MyInputProps>({
     name: false,
@@ -106,43 +108,41 @@ const VisitorPage: React.FC = () => {
       <Root up={!withLayout && open}>
         {(withLayout || !open) && (
           <>
-            <p>이번 전시 어떠셨나요?</p>
-            <p>
-              지금까지{' '}
-              <Countup
-                className="counter"
-                start={counter}
-                end={counts + 50253}
-                duration={3}
-                delay={0.2}
-                separator=","
-                // onStart={() => {}}
-                onEnd={() => {
-                  setCounter(counts + 50253);
-                }}
-              />
-              명이 방명록을 남겨주셨어요!
+            <h2 className="thankMessage">끝까지 감상해주셔서 감사합니다.</h2>
+            <p className="requestMessage">
+              고생하신 작가님들을 위해
+              <br />
+              방명록을 남겨주세요.
             </p>
           </>
         )}
         <VisitorForm
           mutateData={mutate}
+          refName={refName}
           open={open}
           setOpen={setOpen}
           inputFocuses={inputFocuses}
           setInputFocuses={setInputFocuses}
           handleClose={handleClose}
         />
-        {!withLayout && (
-          <CSSTransition
-            in={open}
-            timeout={300}
-            unmountOnExit
-            classNames="signPad"
-          >
-            <VisitorSignPad />
-          </CSSTransition>
-        )}
+        <p>
+          지금까지{' '}
+          <Countup
+            className="counter"
+            start={counter}
+            end={counts}
+            duration={3}
+            delay={0.2}
+            separator=","
+            // onStart={() => {}}
+            onEnd={() => {
+              setCounter(counts);
+            }}
+          />
+          명이 방명록을 남겨주셨어요!
+        </p>
+        {withLayout || !open ? <></> : <></>}
+        {/* {!withLayout && open && <VisitorSignPad refName={refName} />} */}
       </Root>
     </>
   );
