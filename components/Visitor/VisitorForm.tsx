@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Modal from '../Modal/Modal';
+// import Modal from '../Modal/Modal';
 
 import fetcher from '../../lib/fetcher';
 
@@ -53,6 +54,8 @@ const Container = styled.div<ContainerProps>`
   color: white;
   h4.title {
     margin: 0;
+    color: white;
+    font-weight: normal;
     &:hover {
       cursor: default;
     }
@@ -126,13 +129,13 @@ const MyButton = styled(Button)`
   }
 `;
 
-const ResModal = styled(Modal)`
-  width: 500px;
-  max-width: 80%;
-  button {
-    float: right;
-  }
-`;
+// const ResModal = styled(Modal)`
+//   width: 500px;
+//   max-width: 80%;
+//   button {
+//     float: right;
+//   }
+// `;
 
 interface MyInputProps {
   name: boolean;
@@ -144,6 +147,7 @@ interface Props {
     data?: any,
     shouldRevalidate?: boolean | undefined,
   ) => Promise<any>;
+  refName: React.RefObject<HTMLInputElement>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   inputFocuses: MyInputProps;
@@ -152,6 +156,7 @@ interface Props {
 }
 const VisitorForm: React.FC<Props> = ({
   mutateData,
+  refName,
   open,
   setOpen,
   inputFocuses,
@@ -159,6 +164,7 @@ const VisitorForm: React.FC<Props> = ({
   handleClose,
   ...props
 }) => {
+  const router = useRouter();
   const [name, setName] = React.useState<string>('');
   const [content, setContent] = React.useState<string>('');
   const [timer, setTimer] = React.useState<NodeJS.Timeout | null>(null);
@@ -199,6 +205,13 @@ const VisitorForm: React.FC<Props> = ({
     setContent('');
   };
 
+  const setColor = () => {
+    if (res) return '#ff3100';
+    if (res !== null) return '#4eaf41';
+    if (!open || enabled) return COLORS.primary;
+    return COLORS.disabled;
+  };
+
   // TODO: input maxlength.
   return (
     <Root {...props}>
@@ -209,7 +222,7 @@ const VisitorForm: React.FC<Props> = ({
           </Button>
         </ExitHeader>
       )}
-      <ResModal visible={res !== null}>
+      {/* <ResModal visible={res !== null}>
         <h3>성공적으로 업로드하였습니다.</h3>
         <Button
           variant="contained"
@@ -223,19 +236,21 @@ const VisitorForm: React.FC<Props> = ({
         >
           확인
         </Button>
-      </ResModal>
+      </ResModal> */}
       <Container
         color="white"
         position={{ x: 0, y: open ? 25 : -10 }}
         zIndex={5}
       >
         <MyInput
+          inputRef={refName}
           id="nameInput"
           name="name"
           autoComplete="off"
           type="text"
           variant="outlined"
           value={name}
+          inputProps={{ maxLength: 20 }}
           placeholder={inputFocuses.name ? '' : '이름을 입력해주세요'}
           onClick={(e) => e.preventDefault()}
           onFocus={(e) => {
@@ -244,6 +259,7 @@ const VisitorForm: React.FC<Props> = ({
             } else {
               setInputFocuses({ name: true, content: false });
             }
+            window.scroll({ top: 0, left: 0 });
             setOpen(true);
           }}
           focused={inputFocuses.name}
@@ -271,13 +287,17 @@ const VisitorForm: React.FC<Props> = ({
           rows={4}
           rowsMax={4}
           value={content}
-          placeholder={inputFocuses.content ? '' : '전하고 싶은 말을 써주세요'}
+          inputProps={{ maxLength: 480 }}
+          placeholder={
+            inputFocuses.content ? '' : '작가님께 전하고 싶은 말을 써주세요'
+          }
           onFocus={(e) => {
             if (!open && !withLayout) {
               e.target.blur();
             } else {
               setInputFocuses({ name: false, content: true });
             }
+            window.scroll({ top: 0, left: 0 });
             setOpen(true);
           }}
           focused={inputFocuses.content}
@@ -293,25 +313,68 @@ const VisitorForm: React.FC<Props> = ({
         />
       </Container>
       <Container
-        color={!open || enabled ? COLORS.primary : COLORS.disabled}
+        // color={!open || enabled ? COLORS.primary : COLORS.disabled}
+        color={setColor()}
         position={{ x: 0, y: open ? -25 : 35 }}
         zIndex={4}
       >
-        <h4 className="title">방명록</h4>
-        {enabled ? (
-          <MyButton
-            onClick={() => {
-              sendData();
-              handleEnable(false);
-              handleClose();
-            }}
-          >
-            <span>보내기</span>
-          </MyButton>
+        <h4 className="title">방명록 남기기</h4>
+        {res !== null ? (
+          <>
+            {res ? (
+              <MyButton
+                onClick={async () => {
+                  await sendData();
+                  if (withLayout) {
+                    router.push('/about');
+                  } else {
+                    mutateData(`${API_URL}/signature/count`);
+                    setTimeout(() => {
+                      clearInputs();
+                      handleEnable(false);
+                      handleClose();
+                      setRes(null);
+                      window.scroll({ behavior: 'smooth', top: 450, left: 0 });
+                    }, 1000);
+                  }
+                }}
+              >
+                <span>전송실패. 잠시 뒤 다시 시도해주세요.</span>
+              </MyButton>
+            ) : (
+              <MyButton disabled>
+                <span>보냈습니다!</span>
+              </MyButton>
+            )}
+          </>
         ) : (
-          <MyButton disabled>
-            <span>이름을 입력해주세요</span>
-          </MyButton>
+          <>
+            {enabled ? (
+              <MyButton
+                onClick={async () => {
+                  await sendData();
+                  if (withLayout) {
+                    router.push('/about');
+                  } else {
+                    mutateData(`${API_URL}/signature/count`);
+                    setTimeout(() => {
+                      clearInputs();
+                      handleEnable(false);
+                      handleClose();
+                      setRes(null);
+                      window.scroll({ behavior: 'smooth', top: 450, left: 0 });
+                    }, 1000);
+                  }
+                }}
+              >
+                <span>보내기</span>
+              </MyButton>
+            ) : (
+              <MyButton disabled>
+                <span>이름을 입력해주세요</span>
+              </MyButton>
+            )}
+          </>
         )}
       </Container>
     </Root>

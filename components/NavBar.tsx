@@ -31,8 +31,9 @@ interface MenuProps {
 const MenuItem = styled.a<MenuProps>`
   margin: 1rem 0;
   color: ${(props) => (props.current ? COLORS.primary : '#7D7D7D')};
-  font-size: ${(props) => (props.current ? 1.1 : 1)}rem;
-  font-weight: ${(props) => (props.current ? 'bolder' : 'normal')};
+  /* font-size: ${(props) => (props.current ? 1.1 : 1)}rem; */
+  font-size: 1rem;
+  font-weight: ${(props) => (props.current ? '500' : 'normal')};
   &:hover {
     cursor: pointer;
     color: ${(props) => (props.current ? COLORS.primary : 'white')};
@@ -50,9 +51,9 @@ const NavBar: React.FC = ({ ...props }) => {
         <MenuItem current={router.pathname === PAGE_ARRAY[0]}>
           관악미술협회
           <br />
-          창립 15주년 기념전:
+          창립15주년 기념展
           <br />
-          나의 이야기
+          “나의 이야기”
         </MenuItem>
       </Link>
       {!ISTEST && (

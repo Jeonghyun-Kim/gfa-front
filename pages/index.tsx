@@ -94,7 +94,7 @@ const Root = styled.div<RootProps>`
             margin: 0 10px;
             color: white;
             font-size: 2rem;
-            font-weight: bolder;
+            font-weight: 500;
           }
           span.space {
             margin: 0 20px;
@@ -109,7 +109,7 @@ const Root = styled.div<RootProps>`
         span.MuiButton-label {
           color: ${COLORS.primary};
           font-size: 1.5rem;
-          font-weight: bolder;
+          font-weight: 500;
         }
       }
     }
@@ -160,7 +160,7 @@ const Root = styled.div<RootProps>`
               margin: 0 10px;
               color: white;
               font-size: 1.5rem;
-              font-weight: bolder;
+              font-weight: 500;
             }
             span.space {
               margin: 0 15px;
@@ -226,7 +226,7 @@ const Root = styled.div<RootProps>`
 
     * {
       margin: 0 auto;
-      max-width: 600px;
+      max-width: 800px;
     }
   }
 
@@ -241,9 +241,9 @@ const Root = styled.div<RootProps>`
     justify-content: center;
     iframe {
       width: 100%;
-      max-width: 600px;
+      max-width: 800px;
       height: ${(props) => (props.videoWidth * 1080) / 1920}px;
-      max-height: ${(600 * 1080) / 1920}px;
+      max-height: ${(800 * 1080) / 1920}px;
     }
   }
 
@@ -251,7 +251,7 @@ const Root = styled.div<RootProps>`
     .title {
       font-size: 1.4rem;
       color: ${COLORS.primary};
-      font-weight: bolder;
+      font-weight: 500;
       margin-bottom: 40px;
       word-break: keep-all;
     }
@@ -270,7 +270,7 @@ const Root = styled.div<RootProps>`
       margin-bottom: 40px;
       h4 {
         font-size: 1rem;
-        font-weight: bolder;
+        font-weight: 500;
         margin-bottom: 10px;
       }
       ol {
@@ -292,7 +292,7 @@ const Root = styled.div<RootProps>`
     background-color: #dbdbdb;
     .title {
       font-size: 1rem;
-      font-weight: bolder;
+      font-weight: 500;
       margin-bottom: 30px;
     }
     div,
@@ -300,8 +300,11 @@ const Root = styled.div<RootProps>`
       font-size: 0.75rem;
       word-break: keep-all;
     }
+    div {
+      margin: 15px 0;
+    }
     .division {
-      font-weight: bolder;
+      font-weight: 500;
       margin-bottom: 0;
       margin-right: 5px;
     }
@@ -313,23 +316,26 @@ const Root = styled.div<RootProps>`
 
   section.footer {
     background-color: #dbdbdb;
+    padding-top: 15px;
     padding-bottom: 100px;
     .divider {
-      margin-bottom: 60px;
+      margin-bottom: 20px;
       width: 100%;
       border-top: 1px solid #b1b1b1;
     }
     .infoBlock {
+      b {
+        color: #1e1e1e;
+      }
       p {
         margin: 5px 0;
         font-size: 0.75rem;
         color: #686868;
       }
-      .socialBlock {
-      }
     }
     div.logo {
       margin: 0;
+      margin-bottom: 10px;
     }
   }
 
@@ -363,7 +369,7 @@ const Root = styled.div<RootProps>`
         font-size: 1.2rem;
       }
       div {
-        margin: 10px auto;
+        margin: 25px auto;
         font-size: 1rem;
         .division {
           font-size: 1.1rem;
@@ -474,7 +480,7 @@ const EnterButton = styled(Button)`
   z-index: 2;
   span {
     color: ${COLORS.primary};
-    font-weight: bolder;
+    font-weight: 500;
   }
 
   &.stickBottom {
@@ -556,25 +562,20 @@ const GoDownIconButton = styled(IconButton)`
 `;
 
 const GoTopButton = styled(Button)`
-  position: absolute !important;
-  bottom: 120px;
-  right: 20px;
+  position: fixed !important;
+  right: 60px;
+  bottom: calc(60px + ${PLAYBAR_HEIGHT}px);
   width: 64px;
   height: 64px;
   background-color: white !important;
   border-radius: 50% !important;
+  font-size: 1rem !important;
   z-index: 0;
   padding: 0 !important;
   span.MuiButton-label {
     width: 64px;
     margin: 0;
     color: ${COLORS.primary};
-  }
-
-  &.withLayout {
-    position: fixed !important;
-    right: 60px;
-    bottom: calc(60px + ${PLAYBAR_HEIGHT}px);
   }
 `;
 
@@ -584,7 +585,7 @@ interface Props {
 const HomePage: React.FC<Props> = ({ artists }) => {
   const router = useRouter();
   const { y } = useWindowScroll();
-  const { innerWidth, innerHeight } = useWindowSize();
+  const { innerWidth, innerHeight, isPortrait } = useWindowSize();
   const { withLayout, setIndex } = React.useContext(IndexContext);
   const { data: visitor } = useSWR(`${API_URL}/counter`);
   const { data: signature } = useSWR(`${API_URL}/signature/count`);
@@ -610,6 +611,7 @@ const HomePage: React.FC<Props> = ({ artists }) => {
       );
       if (startArtist) {
         sessionStorage.setItem('@artistId', `${startArtist.id}`);
+        sessionStorage.setItem('@artistName', startArtist.artistName);
         setIndex(startArtist.id);
         router.replace('/', undefined, { shallow: true });
       }
@@ -649,13 +651,22 @@ const HomePage: React.FC<Props> = ({ artists }) => {
         >
           {!withLayout ? (
             <>
-              <img
-                className="mobilePoster unselectable"
-                alt="나의 이야기"
-                src="images/mobile_poster.jpg"
-                height={innerHeight}
-              />
-              {y <= 120 && (
+              {isPortrait ? (
+                <img
+                  className="mobilePoster unselectable"
+                  alt="나의 이야기"
+                  src="images/mobile_poster.jpg"
+                  height={innerHeight}
+                />
+              ) : (
+                <img
+                  className="mobilePoster unselectable"
+                  alt="나의 이야기"
+                  src="images/mobile_poster_land.png"
+                  height={innerHeight}
+                />
+              )}
+              {y <= 60 && (
                 <div className="counters">
                   <p>
                     방문자{' '}
@@ -760,7 +771,7 @@ const HomePage: React.FC<Props> = ({ artists }) => {
           </section>
           <section className="summary">
             <h2 className="title">
-              이번 전시는 온라인으로만 진행되는 비대면 전시회입니다
+              이번 전시는 온라인으로만 진행되는 비대면 전시회입니다.
             </h2>
             <div className="quoteBlock">
               <p className="quote">
@@ -775,18 +786,18 @@ const HomePage: React.FC<Props> = ({ artists }) => {
               <ol>
                 <li>
                   전시소개에서 15주년을 맞은 관악미술협회의 이야기를 동영상으로
-                  만나보세요
+                  만나보세요.
                 </li>
                 <li>
-                  전시장에서 노련하고 개성 넘치는 64인 작가의 작품을 감상하세요
+                  전시장에서 노련하고 개성 넘치는 64인 작가의 작품을 감상하세요.
                 </li>
-                <li>마지막 방명록에서 여러분의 흔적을 남겨주세요</li>
+                <li>마지막 방명록에서 여러분의 흔적을 남겨주세요.</li>
               </ol>
             </div>
             <p className="ps">
-              작품을 실제로 감상하고 작가와 연락하고 싶으신 분, 또는 온라인 전시
+              작품을 실제로 감상하거나 작가와 연락하고 싶으신 분, 온라인 전시
               개최에 관심이 있으신 분들은 본 페이지 하단의 onDisplay 대표전화
-              또는 이메일로 연락 주시기 바랍니다
+              또는 이메일로 연락 주시기 바랍니다.
             </p>
           </section>
           <section className="acknowledgement">
@@ -795,11 +806,11 @@ const HomePage: React.FC<Props> = ({ artists }) => {
               <br />제 16회 관악미술협회 展
             </h2>
             <div>
-              <span className="division">장소</span>
+              <p className="division">장소</p>
               gfaa.ondisplay.co.kr
             </div>
             <div>
-              <span className="division">기간</span>
+              <p className="division">기간</p>
               2020년 9월 11일 - 24일
             </div>
             <div>
@@ -830,21 +841,22 @@ const HomePage: React.FC<Props> = ({ artists }) => {
           <section className="footer">
             <div className="divider" />
             <Footer />
-            <GoTopButton
-              className={`${withLayout && 'withLayout'}`}
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                window.scroll({ behavior: 'smooth', top: 0, left: 0 });
-                refRoot.current?.scroll({
-                  behavior: 'smooth',
-                  top: 0,
-                  left: 0,
-                });
-              }}
-            >
-              Top
-            </GoTopButton>
+            {withLayout && (
+              <GoTopButton
+                className={`${withLayout && 'withLayout'}`}
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  refRoot.current?.scroll({
+                    behavior: 'smooth',
+                    top: 0,
+                    left: 0,
+                  })
+                }
+              >
+                TOP
+              </GoTopButton>
+            )}
           </section>
         </Root>
       )}

@@ -25,42 +25,47 @@ const Picture = styled.picture<PictureProps>`
 `;
 
 interface Props {
-  artistData: Artist;
+  artistData?: Artist;
   onClick?: () => void;
+  children?: React.ReactNode;
 }
 const RenderedImage: React.FC<Props> = ({
   artistData = { id: 0, artistName: 'UNKNOWN' },
   onClick = () => {},
+  children = <></>,
   ...props
 }) => {
   const { ratio } = useMobileOrientation();
   const { portraitFileName, landscapeFileName } = artistData;
 
   return (
-    <Picture
-      onClick={() => onClick()}
-      className="unselectable"
-      ratio={ratio}
-      {...props}
-    >
-      <source
-        media={`(max-width: ${TABLET_BREAKPOINT}px) and (orientation: portrait)`}
-        srcSet={
-          portraitFileName
-            ? `${BUCKET_URL}/rendered/${artistData.portraitFileName}`
-            : '/images/empty_portrait.jpg'
-        }
-      />
-      <img
-        alt="artwork"
-        src={
-          landscapeFileName
-            ? `${BUCKET_URL}/rendered/${artistData.landscapeFileName}`
-            : '/images/empty_landscape.jpg'
-        }
-        className="rendered"
-      />
-    </Picture>
+    <>
+      <Picture
+        onClick={() => onClick()}
+        className="unselectable"
+        ratio={ratio}
+        {...props}
+      >
+        <source
+          media={`(max-width: ${TABLET_BREAKPOINT}px) and (orientation: portrait)`}
+          srcSet={
+            portraitFileName
+              ? `${BUCKET_URL}/rendered/${artistData.portraitFileName}`
+              : '/images/port.jpg'
+          }
+        />
+        <img
+          alt="artwork"
+          src={
+            landscapeFileName
+              ? `${BUCKET_URL}/rendered/${artistData.landscapeFileName}`
+              : '/images/land.jpg'
+          }
+          className="rendered"
+        />
+      </Picture>
+      {children}
+    </>
   );
 };
 

@@ -25,13 +25,15 @@ import ZoomInModal from '../components/Modal/ZoomInModal';
 import DesktopDetail from '../components/DesktopDetail';
 import DetailGroup from '../components/DetailGroup';
 import ManualModal from '../components/Modal/ManualModal';
+import EdgeModal from '../components/Modal/EdgeModal';
+import InvitedModal from '../components/Modal/InvitedModal';
 
 import { artistHit } from '../lib/utils';
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
 
 // import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
-import { API_URL, HEADER_HEIGHT } from '../defines';
+import { API_URL, HEADER_HEIGHT, NUM_ARTISTS } from '../defines';
 
 import IndexContext from '../IndexContext';
 
@@ -103,6 +105,11 @@ const Root = styled.div`
   height: 100%;
   box-sizing: border-box;
 
+  .lastModal {
+    width: 100%;
+    height: 100%;
+  }
+
   .withLayoutBox {
     position: absolute;
     width: 100%;
@@ -129,10 +136,8 @@ const Root = styled.div`
     position: absolute;
   }
 
-  .slick-slide {
-    div {
-      height: 100%;
-    }
+  .slick-slide > div {
+    height: 100%;
   }
 
   .mobile-modal-enter {
@@ -218,6 +223,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     index,
     setIndex,
     refSlider,
+    refMain,
     withLayout,
     listModalFlag,
     setListModalFlag,
@@ -225,12 +231,18 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     setDetailModalFlag,
     zoomInModal,
     setZoomInModal,
+    lastModal,
+    setLastModal,
   } = React.useContext(IndexContext);
   // Use screen size and orientation (hooks)
   const { isPortrait } = useMobileOrientation();
   // For detecting orientation change
   const [ori, setOri] = React.useState<boolean | null>(null);
   const [firstDist, setFirstDist] = React.useState<number | null>(null);
+  const invitedArtistName = sessionStorage.getItem('@artistName');
+  const [firstModal, setFirstModal] = React.useState<boolean>(
+    Boolean(invitedArtistName),
+  );
   const refBox = React.useRef<HTMLDivElement>(null);
 
   const artwork = artists[index - 1].artworks[0];
@@ -291,15 +303,6 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       const { keyCode } = e;
 
       switch (keyCode) {
-        case 9:
-          if (withLayout || isIOS) {
-            setListModalFlag(!listModalFlag);
-          } else if (router.query.listOpen) router.back();
-          else
-            router.push('?listOpen=1', undefined, {
-              shallow: true,
-            });
-          break;
         case 27:
           if (withLayout || isIOS) {
             if (zoomInModal) setZoomInModal(0);
@@ -327,6 +330,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         //   break;
         case 40:
           handleDetailOpen();
+          break;
+        case 84:
+          refMain.current?.scroll({ behavior: 'smooth', top: 0, left: 0 });
           break;
         default:
           break;
@@ -364,6 +370,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       }
       if (zoomInModal) {
         setZoomInModal(0);
+      }
+      if (lastModal) {
+        setLastModal(false);
       }
       if (
         router.query.listOpen ||
@@ -465,7 +474,14 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       />
       <Root>
         <>
-          {withLayout && <div ref={refBox} className="withLayoutBox" />}
+          {withLayout && !firstModal && !lastModal && (
+            <div ref={refBox} className="withLayoutBox" />
+          )}
+          <InvitedModal
+            open={firstModal}
+            setOpen={setFirstModal}
+            artistName={invitedArtistName || ''}
+          />
           <div className="sliderContainer" {...handleSwipe} {...handlePinch()}>
             <Slider
               ref={refSlider}
@@ -481,24 +497,28 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               speed={180}
               waitForAnimate
               beforeChange={(_, afterSlide) => {
-                artistHit(afterSlide + 1);
-                if (withLayout) {
-                  sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
-                  setSlideChangedFlag(false);
-                  setIndex(afterSlide + 1);
-                } else {
-                  setTimeout(() => {
+                if (afterSlide < NUM_ARTISTS) {
+                  setLastModal(false);
+                  artistHit(afterSlide + 1);
+                  if (withLayout) {
                     sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
                     setSlideChangedFlag(false);
                     setIndex(afterSlide + 1);
-                  }, 180);
+                  } else {
+                    setTimeout(() => {
+                      sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
+                      setSlideChangedFlag(false);
+                      setIndex(afterSlide + 1);
+                    }, 180);
+                  }
+                } else {
+                  setLastModal(true);
                 }
               }}
               onSwipe={() => setSlideChangedFlag(true)}
-              onEdge={(swipeDirection) => {
-                if (swipeDirection === 'left') router.push('/visitor');
-                else router.push('/video');
-              }}
+              // onEdge={(swipeDirection) => {
+              //   if (swipeDirection === 'left') router.push('/visitor');
+              // }}
               accessibility={!detailModalFlag && !zoomInModal}
             >
               {artists.map((artist) => {
@@ -510,38 +530,42 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   />
                 );
               })}
+              <div className="lastModal">
+                <EdgeModal />
+              </div>
             </Slider>
           </div>
-          {withLayout ? (
-            <>
-              <ZoomInButton
-                className="desktop"
-                onClick={() => {
-                  handleModalOpen();
-                }}
-              >
-                <ZoomIn />
-              </ZoomInButton>
-              <MyDetailGroup />
-            </>
-          ) : (
-            <>
-              <CSSTransition
-                in={headerFlag}
-                timeout={300}
-                // unmountOnExit
-                classNames="header-toggle"
-              >
+          {!lastModal &&
+            (withLayout ? (
+              <>
                 <ZoomInButton
-                  className={headerFlag ? 'headerFlag mobile' : 'mobile'}
+                  className="desktop"
                   onClick={() => {
                     handleModalOpen();
                   }}
                 >
-                  <SvgIcon component={ZoomInShadow} viewBox="0 0 24 24" />
+                  <ZoomIn />
                 </ZoomInButton>
-              </CSSTransition>
-              {/* <CSSTransition
+                <MyDetailGroup />
+              </>
+            ) : (
+              <>
+                <CSSTransition
+                  in={headerFlag}
+                  timeout={300}
+                  // unmountOnExit
+                  classNames="header-toggle"
+                >
+                  <ZoomInButton
+                    className={headerFlag ? 'headerFlag mobile' : 'mobile'}
+                    onClick={() => {
+                      handleModalOpen();
+                    }}
+                  >
+                    <SvgIcon component={ZoomInShadow} viewBox="0 0 24 24" />
+                  </ZoomInButton>
+                </CSSTransition>
+                {/* <CSSTransition
                 in={headerFlag}
                 timeout={300}
                 unmountOnExit
@@ -559,7 +583,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   <SvgIcon component={LeftArrow} viewBox="0 0 24 24" />
                 </ArrowButton>
               </CSSTransition> */}
-              {/* <CSSTransition
+                {/* <CSSTransition
                 in={headerFlag}
                 timeout={300}
                 unmountOnExit
@@ -577,8 +601,8 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                   <SvgIcon component={RightArrow} viewBox="0 0 24 24" />
                 </ArrowButton>
               </CSSTransition> */}
-            </>
-          )}
+              </>
+            ))}
           {!withLayout ? (
             <>
               <ManualModal />
@@ -587,30 +611,21 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 onClick={() => toggleHeader()}
               />
               <CSSTransition
-                in={!isIOS ? Boolean(router.query.listOpen) : listModalFlag}
+                in={Boolean(router.query.listOpen) || listModalFlag}
                 timeout={100}
                 unmountOnExit
                 classNames="mobile-modal"
               >
-                {(!isIOS ? Boolean(router.query.listOpen) : listModalFlag) ? (
-                  <ArtistsModal artists={artists} />
-                ) : (
-                  <></>
-                )}
+                <ArtistsModal artists={artists} />
               </CSSTransition>
               <CSSTransition
-                in={!isIOS ? Boolean(router.query.detailOpen) : detailModalFlag}
+                in={Boolean(router.query.detailOpen) || detailModalFlag}
                 timeout={100}
                 unmountOnExit
                 classNames="mobile-modal"
+                mountOnEnter
               >
-                {(
-                  !isIOS ? Boolean(router.query.detailOpen) : detailModalFlag
-                ) ? (
-                  <MobileDetailModal artist={artists[index - 1]} />
-                ) : (
-                  <></>
-                )}
+                <MobileDetailModal artist={artists[index - 1]} />
               </CSSTransition>
             </>
           ) : (
@@ -622,7 +637,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 unmountOnExit
                 classNames="list-desktop"
               >
-                {listModalFlag ? <DesktopList artists={artists} /> : <></>}
+                <DesktopList artists={artists} />
               </CSSTransition>
             </>
           )}

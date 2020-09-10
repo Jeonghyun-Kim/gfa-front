@@ -53,11 +53,12 @@ const Root = styled.div`
     background-color: #ededed;
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px;
     z-index: 999;
-
+    h4 {
+      font-weight: 500;
+    }
     svg {
       font-size: 1.8rem;
     }
-
     button {
       position: absolute;
       left: 0;

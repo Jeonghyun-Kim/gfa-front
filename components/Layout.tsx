@@ -77,6 +77,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [zoomInModal, setZoomInModal] = React.useState<number>(0);
   // MainRef
   const refMain = React.createRef<HTMLDivElement>();
+  const [lastModal, setLastModal] = React.useState<boolean>(false);
 
   // Set initial index with router.query.id if exists.
   React.useEffect(() => {
@@ -134,7 +135,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <Root
       className={`${
         !withLayout &&
-        (router.pathname === '/' || router.pathname === '/video') &&
+        (router.pathname === '/' ||
+          router.pathname === '/video' ||
+          router.pathname === '/visitor') &&
         'rootScroll'
       }`}
       grid={withLayout}
@@ -153,6 +156,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             zoomInModal,
             setZoomInModal,
             refMain,
+            lastModal,
+            setLastModal,
           }}
         >
           {withLayout && <NavBar />}

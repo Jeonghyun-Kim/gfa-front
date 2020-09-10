@@ -55,6 +55,7 @@ const Root = styled(Modal)<RootProps>`
     }
     svg {
       color: white;
+      font-size: ${(props) => (props.withLayout ? 2.5 : 1.5)}rem;
     }
   }
 `;

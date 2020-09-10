@@ -66,6 +66,7 @@ const Root = styled.div<RootProps>`
     .title {
       margin-top: 0;
       font-size: 1.5rem;
+      font-weight: 500;
       word-break: keep-all;
     }
     .content {
@@ -73,7 +74,7 @@ const Root = styled.div<RootProps>`
     }
     .name {
       font-size: 0.875rem;
-      font-weight: bolder;
+      font-weight: 500;
     }
   }
   /* section.welcomeGuide {
@@ -84,11 +85,11 @@ const Root = styled.div<RootProps>`
     .title {
       margin-top: 10px;
       font-size: 1.1rem;
-      font-weight: bolder;
+      font-weight: 500;
     }
     .name {
       font-size: 0.875rem;
-      font-weight: bolder;
+      font-weight: 500;
     }
     .content {
       margin: 5px;
@@ -145,7 +146,7 @@ const EnterButton = styled(Button)`
   span.MuiButton-label {
     color: white;
     margin: 0;
-    font-weight: bolder;
+    font-weight: 500;
   }
   z-index: 0;
 

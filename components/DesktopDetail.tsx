@@ -50,7 +50,7 @@ const Root = styled.div<RootProps>`
       .sectionTitle {
         color: #1e1e1e;
         font-size: 1.5rem;
-        font-weight: bolder;
+        font-weight: 500;
         margin-top: 0;
         margin-bottom: 10px;
       }
@@ -72,7 +72,7 @@ const Root = styled.div<RootProps>`
         overflow-y: scroll;
         color: #7d7d7d;
         font-size: 0.9rem;
-        padding-top: 10px;
+        padding: 10px 0;
         border-top: 1px solid #707070;
         border-bottom: 1px solid #707070;
 
@@ -138,7 +138,7 @@ const GoUpButtonGroup = styled.div`
     .goUpTitle {
       margin: 5px;
       font-size: 1.5rem;
-      font-weight: bolder;
+      font-weight: 500;
     }
   }
 

@@ -69,9 +69,15 @@ const Header: React.FC<Props> = ({
           <div className="grow" />
           {!ISTEST && (
             <>
-              <MenuItem href={PAGE_ARRAY[1]}>전시소개</MenuItem>
-              <MenuItem href={PAGE_ARRAY[2]}>전시장</MenuItem>
-              <MenuItem href={PAGE_ARRAY[3]}>방명록</MenuItem>
+              <MenuItem length={4} href={PAGE_ARRAY[1]}>
+                전시소개
+              </MenuItem>
+              <MenuItem length={3} href={PAGE_ARRAY[2]}>
+                전시장
+              </MenuItem>
+              <MenuItem length={3} href={PAGE_ARRAY[3]}>
+                방명록
+              </MenuItem>
             </>
           )}
         </FixedHeader>

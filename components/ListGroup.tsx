@@ -105,11 +105,11 @@ const ListGroup: React.FC<Props> = ({ ...props }) => {
       className={withLayout ? 'withLayout' : ''}
       {...props}
     >
-      {withLayout && <p className="listTextDesktop">작품목록</p>}
+      {withLayout && <p className="listTextDesktop">전체작품</p>}
       <IconButton>
         <Apps />
       </IconButton>
-      {!withLayout && <p className="listText">작품목록</p>}
+      {!withLayout && <p className="listText">전체작품</p>}
     </Root>
   );
 };

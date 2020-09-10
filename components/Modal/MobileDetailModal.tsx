@@ -36,26 +36,14 @@ const Root = styled.div<RootProps>`
     height: calc(100% - 46px);
     background-color: white;
     overflow: scroll;
-    scroll-behavior: smooth;
     margin-top: 46px;
     /* padding: 0 16px; */
-
-    /* Hide scrollbar for IE, Edge and Firefox */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    &::-webkit-scrollbar {
-      /* display: none; */
-      scrollbar-width: auto;
-    }
 
     section {
       margin-bottom: 20px;
 
       .sectionTitle {
-        color: #1e1e1e;
-        font-weight: normal;
+        font-weight: 500;
         margin-bottom: 5px;
       }
     }
@@ -109,14 +97,15 @@ const Root = styled.div<RootProps>`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ededed;
+    background-color: white;
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px;
     z-index: 999;
-
+    h4 {
+      font-weight: 500;
+    }
     svg {
       font-size: 1.8rem;
     }
-
     button {
       position: absolute;
       left: 0;
@@ -132,9 +121,7 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
   const [seeMore, setSeeMore] = React.useState<boolean>(false);
   const { innerWidth } = useWindowSize();
 
-  const { detailModalFlag, setDetailModalFlag } = React.useContext(
-    IndexContext,
-  );
+  const { setDetailModalFlag } = React.useContext(IndexContext);
 
   const refContainer = React.useRef<HTMLDivElement>(null);
 
@@ -154,13 +141,9 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
     detailHit(artist.id);
   }, [artist.id]);
 
-  React.useEffect(() => {
-    if (detailModalFlag || router.query.detailOpen) {
-      setTimeout(() => {
-        refContainer.current?.focus();
-      }, 100);
-    }
-  }, [detailModalFlag, router.query]);
+  // React.useEffect(() => {
+  //   refContainer.current?.focus();
+  // });
 
   const detail = artist.detail ? artist.detail.split('\n') : [''];
   const isLong = detail.length > 4;
@@ -177,11 +160,7 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
         </IconButton>
         <h4>작가 상세페이지</h4>
       </div>
-      <div
-        ref={refContainer}
-        className="container unselectable"
-        onTouchStart={(e) => e.currentTarget.focus()}
-      >
+      <div ref={refContainer} className="container unselectable">
         <section className="profile">
           <Profile artist={artist} />
         </section>

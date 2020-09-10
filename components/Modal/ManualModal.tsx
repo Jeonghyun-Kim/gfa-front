@@ -9,14 +9,14 @@ const Root = styled.div`
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: 9;
   display: grid;
   place-items: center;
 
   img.manualImage {
     /* margin: 150px auto; */
-    width: 250px;
-    height: 250px;
+    width: 125px;
+    height: 125px;
   }
 
   &.manual-modal-enter {
