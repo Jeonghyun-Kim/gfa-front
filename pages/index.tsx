@@ -766,7 +766,7 @@ const HomePage: React.FC<Props> = ({ artists }) => {
               allow="autoplay; encrypted-media"
               allowFullScreen
               title="관악미술협회 15주년 기념전"
-              src="https://www.youtube.com/embed/xXf40_TTVHw?enablejsapi=1"
+              src="https://www.youtube.com/embed/HpajfGemjO8?enablejsapi=1"
             />
           </section>
           <section className="summary">
