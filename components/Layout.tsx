@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Slider from 'react-slick';
-import { isIE, isEdgeChromium } from 'react-device-detect';
+import { isIE, isEdge, isEdgeChromium } from 'react-device-detect';
 import smoothscroll from 'smoothscroll-polyfill';
 
 import NavBar from './NavBar';
@@ -115,7 +115,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }
   }, [router.asPath]);
 
-  if (!isEdgeChromium) {
+  if (isEdge && !isEdgeChromium) {
     return (
       <ForIE>
         <h2>예전 엣지 브라우저에서는 전시를 감상할 수 없어요ㅜ.ㅜ</h2>
