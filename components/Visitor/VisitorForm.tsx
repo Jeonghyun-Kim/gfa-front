@@ -53,6 +53,8 @@ const Container = styled.div<ContainerProps>`
   color: white;
   h4.title {
     margin: 0;
+    color: white;
+    font-weight: normal;
     &:hover {
       cursor: default;
     }
@@ -144,6 +146,7 @@ interface Props {
     data?: any,
     shouldRevalidate?: boolean | undefined,
   ) => Promise<any>;
+  refName: React.RefObject<HTMLInputElement>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   inputFocuses: MyInputProps;
@@ -152,6 +155,7 @@ interface Props {
 }
 const VisitorForm: React.FC<Props> = ({
   mutateData,
+  refName,
   open,
   setOpen,
   inputFocuses,
@@ -230,6 +234,7 @@ const VisitorForm: React.FC<Props> = ({
         zIndex={5}
       >
         <MyInput
+          inputRef={refName}
           id="nameInput"
           name="name"
           autoComplete="off"
@@ -271,7 +276,9 @@ const VisitorForm: React.FC<Props> = ({
           rows={4}
           rowsMax={4}
           value={content}
-          placeholder={inputFocuses.content ? '' : '전하고 싶은 말을 써주세요'}
+          placeholder={
+            inputFocuses.content ? '' : '작가님께 전하고 싶은 말을 써주세요'
+          }
           onFocus={(e) => {
             if (!open && !withLayout) {
               e.target.blur();
@@ -297,7 +304,7 @@ const VisitorForm: React.FC<Props> = ({
         position={{ x: 0, y: open ? -25 : 35 }}
         zIndex={4}
       >
-        <h4 className="title">방명록</h4>
+        <h4 className="title">방명록 남기기</h4>
         {enabled ? (
           <MyButton
             onClick={() => {
