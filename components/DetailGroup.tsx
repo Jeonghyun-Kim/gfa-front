@@ -9,6 +9,10 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import DesktopDetailIcon from '../public/icons/go_down.svg';
 import MobileDetailIcon from '../public/icons/mobile_detail.svg';
 
+import useWindowSize from '../lib/hooks/useWindowSize';
+
+import { PLAYBAR_HEIGHT } from '../defines';
+
 import IndexContext from '../IndexContext';
 
 const Root = styled.div`
@@ -46,9 +50,10 @@ const Root = styled.div`
 
 const DetailGroup: React.FC = ({ ...props }) => {
   const router = useRouter();
+  const { innerHeight } = useWindowSize();
   const {
     withLayout,
-    detailModalFlag,
+    refMain,
     setDetailModalFlag,
     lastModal,
   } = React.useContext(IndexContext);
@@ -78,12 +83,15 @@ const DetailGroup: React.FC = ({ ...props }) => {
       className="unselectable"
       onClick={() => {
         if (!lastModal) {
-          if (withLayout || isIOS) setDetailModalFlag(!detailModalFlag);
-          else if (router.query.listOpen) {
-            router.back();
-          } else {
+          if (withLayout || isIOS) setDetailModalFlag(true);
+          else if (!router.query.listOpen) {
             router.push('?detailOpen=1', undefined, { shallow: true });
           }
+          refMain.current?.scroll({
+            behavior: 'smooth',
+            top: innerHeight - PLAYBAR_HEIGHT,
+            left: 0,
+          });
         }
       }}
       {...handleSwipe}
@@ -94,7 +102,9 @@ const DetailGroup: React.FC = ({ ...props }) => {
           <SvgIcon component={MobileDetailIcon} viewBox="0 0 32.2 13.3" />
         </IconButton>
       )}
-      <p className={`detailText ${withLayout && 'withLayout'}`}>자세히 보기</p>
+      <p className={`detailText ${withLayout && 'withLayout'}`}>
+        작가 작품 더보기
+      </p>
       {withLayout && (
         <IconButton>
           <SvgIcon component={DesktopDetailIcon} viewBox="0 0 56.9 22.1" />

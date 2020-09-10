@@ -12,7 +12,7 @@ const Root = styled.div`
   text-align: right;
 
   p {
-    display: inline;
+    display: inline-block;
     font-size: 1rem;
     color: white;
     margin-left: 1rem;
@@ -35,8 +35,8 @@ const Status: React.FC<Props> = ({ index, ...props }) => {
     case PAGE_ARRAY[2]:
       content = !lastModal ? (
         <>
-          <p>전시장</p>
-          <p>
+          <p style={{ width: 50 }}>전시장</p>
+          <p style={{ width: 50 }}>
             {index} / {NUM_ARTISTS}
           </p>
         </>

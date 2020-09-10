@@ -223,6 +223,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
     index,
     setIndex,
     refSlider,
+    refMain,
     withLayout,
     listModalFlag,
     setListModalFlag,
@@ -302,15 +303,6 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
       const { keyCode } = e;
 
       switch (keyCode) {
-        case 9:
-          if (withLayout || isIOS) {
-            setListModalFlag(!listModalFlag);
-          } else if (router.query.listOpen) router.back();
-          else
-            router.push('?listOpen=1', undefined, {
-              shallow: true,
-            });
-          break;
         case 27:
           if (withLayout || isIOS) {
             if (zoomInModal) setZoomInModal(0);
@@ -338,6 +330,9 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
         //   break;
         case 40:
           handleDetailOpen();
+          break;
+        case 84:
+          refMain.current?.scroll({ behavior: 'smooth', top: 0, left: 0 });
           break;
         default:
           break;

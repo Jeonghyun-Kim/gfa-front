@@ -66,6 +66,7 @@ const Root = styled.div<RootProps>`
     .title {
       margin-top: 0;
       font-size: 1.5rem;
+      font-weight: 500;
       word-break: keep-all;
     }
     .content {

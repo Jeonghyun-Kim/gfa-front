@@ -54,8 +54,7 @@ const Root = styled.div<RootProps>`
       margin-bottom: 20px;
 
       .sectionTitle {
-        color: #1e1e1e;
-        font-weight: normal;
+        font-weight: 500;
         margin-bottom: 5px;
       }
     }
@@ -109,14 +108,15 @@ const Root = styled.div<RootProps>`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ededed;
+    background-color: white;
     box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px;
     z-index: 999;
-
+    h4 {
+      font-weight: 500;
+    }
     svg {
       font-size: 1.8rem;
     }
-
     button {
       position: absolute;
       left: 0;

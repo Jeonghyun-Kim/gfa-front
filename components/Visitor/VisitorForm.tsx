@@ -2,6 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import ScrollLock from 'react-scrolllock';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -237,6 +238,7 @@ const VisitorForm: React.FC<Props> = ({
           확인
         </Button>
       </ResModal> */}
+      <ScrollLock isActive={open} />
       <Container
         color="white"
         position={{ x: 0, y: open ? 25 : -10 }}
@@ -250,6 +252,7 @@ const VisitorForm: React.FC<Props> = ({
           type="text"
           variant="outlined"
           value={name}
+          inputProps={{ maxLength: 20 }}
           placeholder={inputFocuses.name ? '' : '이름을 입력해주세요'}
           onClick={(e) => e.preventDefault()}
           onFocus={(e) => {
@@ -285,6 +288,7 @@ const VisitorForm: React.FC<Props> = ({
           rows={4}
           rowsMax={4}
           value={content}
+          inputProps={{ maxLength: 480 }}
           placeholder={
             inputFocuses.content ? '' : '작가님께 전하고 싶은 말을 써주세요'
           }

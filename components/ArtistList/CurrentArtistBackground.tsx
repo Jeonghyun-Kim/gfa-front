@@ -15,8 +15,8 @@ const Root = styled.div`
   place-items: center;
 
   img.nowPlaying {
-    width: 80%;
-    height: 80%;
+    width: 50%;
+    height: 50%;
     object-fit: contain;
   }
 `;

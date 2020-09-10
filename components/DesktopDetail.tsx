@@ -72,7 +72,7 @@ const Root = styled.div<RootProps>`
         overflow-y: scroll;
         color: #7d7d7d;
         font-size: 0.9rem;
-        padding-top: 10px;
+        padding: 10px 0;
         border-top: 1px solid #707070;
         border-bottom: 1px solid #707070;
 

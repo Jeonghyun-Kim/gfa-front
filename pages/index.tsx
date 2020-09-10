@@ -226,7 +226,7 @@ const Root = styled.div<RootProps>`
 
     * {
       margin: 0 auto;
-      max-width: 600px;
+      max-width: 800px;
     }
   }
 
@@ -241,9 +241,9 @@ const Root = styled.div<RootProps>`
     justify-content: center;
     iframe {
       width: 100%;
-      max-width: 600px;
+      max-width: 800px;
       height: ${(props) => (props.videoWidth * 1080) / 1920}px;
-      max-height: ${(600 * 1080) / 1920}px;
+      max-height: ${(800 * 1080) / 1920}px;
     }
   }
 
@@ -300,6 +300,9 @@ const Root = styled.div<RootProps>`
       font-size: 0.75rem;
       word-break: keep-all;
     }
+    div {
+      margin: 15px 0;
+    }
     .division {
       font-weight: 500;
       margin-bottom: 0;
@@ -321,12 +324,13 @@ const Root = styled.div<RootProps>`
       border-top: 1px solid #b1b1b1;
     }
     .infoBlock {
+      b {
+        color: #1e1e1e;
+      }
       p {
         margin: 5px 0;
         font-size: 0.75rem;
         color: #686868;
-      }
-      .socialBlock {
       }
     }
     div.logo {
@@ -365,7 +369,7 @@ const Root = styled.div<RootProps>`
         font-size: 1.2rem;
       }
       div {
-        margin: 10px auto;
+        margin: 25px auto;
         font-size: 1rem;
         .division {
           font-size: 1.1rem;
@@ -557,26 +561,20 @@ const GoDownIconButton = styled(IconButton)`
   }
 `;
 
-const GoTopButton = styled(Button)`
-  position: absolute !important;
-  bottom: 120px;
-  right: 20px;
-  width: 64px;
-  height: 64px;
+const DesktopEnterButton = styled(Button)`
+  position: fixed !important;
+  right: 60px;
+  bottom: calc(60px + ${PLAYBAR_HEIGHT}px);
+  width: 100px;
+  height: 50px;
   background-color: white !important;
-  border-radius: 50% !important;
+  border-radius: 10px !important;
   z-index: 0;
   padding: 0 !important;
   span.MuiButton-label {
     width: 64px;
     margin: 0;
     color: ${COLORS.primary};
-  }
-
-  &.withLayout {
-    position: fixed !important;
-    right: 60px;
-    bottom: calc(60px + ${PLAYBAR_HEIGHT}px);
   }
 `;
 
@@ -658,7 +656,7 @@ const HomePage: React.FC<Props> = ({ artists }) => {
                 src="images/mobile_poster.jpg"
                 height={innerHeight}
               />
-              {y <= 120 && (
+              {y <= 60 && (
                 <div className="counters">
                   <p>
                     방문자{' '}
@@ -833,21 +831,17 @@ const HomePage: React.FC<Props> = ({ artists }) => {
           <section className="footer">
             <div className="divider" />
             <Footer />
-            <GoTopButton
-              className={`${withLayout && 'withLayout'}`}
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                window.scroll({ behavior: 'smooth', top: 0, left: 0 });
-                refRoot.current?.scroll({
-                  behavior: 'smooth',
-                  top: 0,
-                  left: 0,
-                });
-              }}
-            >
-              Top
-            </GoTopButton>
+            {withLayout && (
+              <Link href="/video">
+                <DesktopEnterButton
+                  className={`${withLayout && 'withLayout'}`}
+                  variant="contained"
+                  color="primary"
+                >
+                  전시 입장
+                </DesktopEnterButton>
+              </Link>
+            )}
           </section>
         </Root>
       )}

@@ -83,7 +83,13 @@ const AboutPage: React.FC = () => {
         </div>
         <div className="grow" />
         <div className="contactBox">
-          <img id="insta-logo" alt="instagram" src="/icons/instagram.png" />
+          <a
+            href="https://www.instagram.com/ondisplay.art/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img id="insta-logo" alt="instagram" src="/icons/instagram.png" />
+          </a>
           <a
             href="https://www.instagram.com/ondisplay.art/"
             target="_blank"
