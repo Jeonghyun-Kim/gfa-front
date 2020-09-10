@@ -261,6 +261,7 @@ const VisitorForm: React.FC<Props> = ({
             } else {
               setInputFocuses({ name: true, content: false });
             }
+            window.scroll({ top: 0, left: 0 });
             setOpen(true);
           }}
           focused={inputFocuses.name}
@@ -298,6 +299,7 @@ const VisitorForm: React.FC<Props> = ({
             } else {
               setInputFocuses({ name: false, content: true });
             }
+            window.scroll({ top: 0, left: 0 });
             setOpen(true);
           }}
           focused={inputFocuses.content}

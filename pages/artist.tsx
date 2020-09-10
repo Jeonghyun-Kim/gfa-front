@@ -611,30 +611,21 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 onClick={() => toggleHeader()}
               />
               <CSSTransition
-                in={!isIOS ? Boolean(router.query.listOpen) : listModalFlag}
+                in={Boolean(router.query.listOpen) || listModalFlag}
                 timeout={100}
                 unmountOnExit
                 classNames="mobile-modal"
               >
-                {(!isIOS ? Boolean(router.query.listOpen) : listModalFlag) ? (
-                  <ArtistsModal artists={artists} />
-                ) : (
-                  <></>
-                )}
+                <ArtistsModal artists={artists} />
               </CSSTransition>
               <CSSTransition
-                in={!isIOS ? Boolean(router.query.detailOpen) : detailModalFlag}
+                in={Boolean(router.query.detailOpen) || detailModalFlag}
                 timeout={100}
                 unmountOnExit
                 classNames="mobile-modal"
+                mountOnEnter
               >
-                {(
-                  !isIOS ? Boolean(router.query.detailOpen) : detailModalFlag
-                ) ? (
-                  <MobileDetailModal artist={artists[index - 1]} />
-                ) : (
-                  <></>
-                )}
+                <MobileDetailModal artist={artists[index - 1]} />
               </CSSTransition>
             </>
           ) : (
@@ -646,7 +637,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
                 unmountOnExit
                 classNames="list-desktop"
               >
-                {listModalFlag ? <DesktopList artists={artists} /> : <></>}
+                <DesktopList artists={artists} />
               </CSSTransition>
             </>
           )}
