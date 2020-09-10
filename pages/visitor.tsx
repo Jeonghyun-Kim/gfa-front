@@ -185,7 +185,7 @@ const VisitorPage: React.FC = () => {
   //     }, 100);
   // }, [withLayout, inputFocuses]);
 
-  if (!data && !error) return <Loading />;
+  if (!data && !error) return <Loading full />;
   if (error)
     return (
       <h3>

@@ -2,7 +2,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import ScrollLock from 'react-scrolllock';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -238,7 +237,6 @@ const VisitorForm: React.FC<Props> = ({
           확인
         </Button>
       </ResModal> */}
-      <ScrollLock isActive={open} />
       <Container
         color="white"
         position={{ x: 0, y: open ? 25 : -10 }}

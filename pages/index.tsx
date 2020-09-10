@@ -585,7 +585,7 @@ interface Props {
 const HomePage: React.FC<Props> = ({ artists }) => {
   const router = useRouter();
   const { y } = useWindowScroll();
-  const { innerWidth, innerHeight } = useWindowSize();
+  const { innerWidth, innerHeight, isPortrait } = useWindowSize();
   const { withLayout, setIndex } = React.useContext(IndexContext);
   const { data: visitor } = useSWR(`${API_URL}/counter`);
   const { data: signature } = useSWR(`${API_URL}/signature/count`);
@@ -651,12 +651,21 @@ const HomePage: React.FC<Props> = ({ artists }) => {
         >
           {!withLayout ? (
             <>
-              <img
-                className="mobilePoster unselectable"
-                alt="나의 이야기"
-                src="images/mobile_poster.jpg"
-                height={innerHeight}
-              />
+              {isPortrait ? (
+                <img
+                  className="mobilePoster unselectable"
+                  alt="나의 이야기"
+                  src="images/mobile_poster.jpg"
+                  height={innerHeight}
+                />
+              ) : (
+                <img
+                  className="mobilePoster unselectable"
+                  alt="나의 이야기"
+                  src="images/mobile_poster_land.png"
+                  height={innerHeight}
+                />
+              )}
               {y <= 60 && (
                 <div className="counters">
                   <p>
