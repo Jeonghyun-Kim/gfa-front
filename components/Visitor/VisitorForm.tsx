@@ -354,7 +354,9 @@ const VisitorForm: React.FC<Props> = ({
                 onClick={async () => {
                   await sendData();
                   if (withLayout) {
-                    router.push('/about');
+                    setTimeout(() => {
+                      router.push('/about');
+                    }, 750);
                   } else {
                     mutateData(`${API_URL}/signature/count`);
                     setTimeout(() => {
@@ -363,7 +365,7 @@ const VisitorForm: React.FC<Props> = ({
                       handleClose();
                       setRes(null);
                       window.scroll({ behavior: 'smooth', top: 450, left: 0 });
-                    }, 1000);
+                    }, 750);
                   }
                 }}
               >
