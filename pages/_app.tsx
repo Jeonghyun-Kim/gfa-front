@@ -4,7 +4,7 @@ import { SWRConfig } from 'swr';
 import App from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from 'styled-components';
-import { browserName, isAndroid } from 'react-device-detect';
+import { browserName, isAndroid, getUA } from 'react-device-detect';
 
 import Layout from '../components/Layout';
 
@@ -28,7 +28,7 @@ export default class MyApp extends App {
     if (/Web/.test(browserName)) {
       if (isAndroid)
         window.location.href = `intent://gfaa.ondisplay.co.kr${Router.asPath}#Intent;scheme=https;package=com.android.chrome;end`;
-      else
+      else if (/KAKAO/.test(getUA))
         window.location.href = `https://urlopen.link/gfaa.ondisplay.co.kr${Router.asPath}`;
     }
   }
