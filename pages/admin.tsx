@@ -106,12 +106,15 @@ const AdminPage: React.FC = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `${token}`,
+            Authorization: token,
           },
         });
         if (signatures) {
           setSignatureData(signatures);
-          router.replace(router.pathname, undefined, { shallow: true });
+          setTimeout(
+            () => router.replace(router.pathname, undefined, { shallow: true }),
+            0,
+          );
         }
       } catch (err) {
         console.error(err);
