@@ -140,6 +140,7 @@ const AdminPage: React.FC = () => {
               </Button>
               {signatureData.map((signature) => (
                 <div key={signature.id} className="signature">
+                  <p className="index">번호: {signature.id}</p>
                   <p className="name">이름: {signature.name}</p>
                   <p className="content">내용: {signature.content}</p>
                   <p className="createdAt">작성 일시: {signature.createdAt}</p>
