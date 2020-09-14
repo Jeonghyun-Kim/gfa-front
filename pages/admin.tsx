@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 import styled from 'styled-components';
 
@@ -51,7 +50,6 @@ const Root = styled.div`
 `;
 
 const AdminPage: React.FC = () => {
-  const router = useRouter();
   const [resError, setResError] = React.useState<string>('');
   const [inputs, setInputs] = React.useState<{ id: string; password: string }>({
     id: '',
@@ -111,10 +109,6 @@ const AdminPage: React.FC = () => {
         });
         if (signatures) {
           setSignatureData(signatures);
-          setTimeout(
-            () => router.replace(router.pathname, undefined, { shallow: true }),
-            0,
-          );
         }
       } catch (err) {
         console.error(err);
@@ -124,13 +118,7 @@ const AdminPage: React.FC = () => {
     if (token) {
       getData();
     }
-  }, [token, router]);
-
-  // React.useEffect(() => {
-  //   if (router.query) {
-  //     router.replace(router.pathname, undefined, { shallow: true });
-  //   }
-  // }, [router.query]);
+  }, [token]);
 
   return (
     <>
@@ -173,6 +161,11 @@ const AdminPage: React.FC = () => {
                     id: e.target.value,
                   })
                 }
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSubmit();
+                  }
+                }}
               />
               <TextField
                 label="비밀번호"
@@ -188,9 +181,13 @@ const AdminPage: React.FC = () => {
                     password: e.target.value,
                   })
                 }
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSubmit();
+                  }
+                }}
               />
               <Button
-                type="submit"
                 variant="contained"
                 color="primary"
                 onClick={() => handleSubmit()}
