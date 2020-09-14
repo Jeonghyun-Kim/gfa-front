@@ -124,7 +124,7 @@ const AdminPage: React.FC = () => {
     if (token) {
       getData();
     }
-  }, [token]);
+  }, [token, router]);
 
   // React.useEffect(() => {
   //   if (router.query) {
