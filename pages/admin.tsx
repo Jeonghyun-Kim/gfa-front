@@ -90,6 +90,7 @@ const AdminPage: React.FC = () => {
     }
 
     if (signaturePassword) {
+      setInputs({ id: '', password: '' });
       sessionStorage.setItem('@signaturePassword', signaturePassword);
       return setToken(signaturePassword);
     }
