@@ -108,8 +108,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, []);
 
   React.useEffect(() => {
-    sendCounter();
     if (process.env.NODE_ENV === 'production') {
+      sendCounter();
       logPageView();
     }
   }, [router.asPath]);
