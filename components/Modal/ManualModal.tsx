@@ -50,10 +50,14 @@ const ManualMModal: React.FC<Props> = ({ className, ...props }) => {
     >
       <Root
         className={className}
-        onClick={() => {
+        onTouchStart={() => {
           sessionStorage.setItem('@manual', 'seen');
           setOpen(false);
         }}
+        // onClick={() => {
+        //   sessionStorage.setItem('@manual', 'seen');
+        //   setOpen(false);
+        // }}
         {...props}
       >
         <ScrollLock isActive={open} />
