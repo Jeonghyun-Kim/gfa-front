@@ -156,6 +156,12 @@ const Root = styled.div<RootProps>`
   }
 `;
 
+const EndRoot = styled.div`
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+`;
+
 interface MyInputProps {
   name: boolean;
   content: boolean;
@@ -184,6 +190,18 @@ const VisitorPage: React.FC = () => {
   //       handleClose();
   //     }, 100);
   // }, [withLayout, inputFocuses]);
+
+  return (
+    <>
+      <Head>
+        <title>onDisplay - 방명록</title>
+      </Head>
+      {!withLayout && !open && <Header />}
+      <EndRoot>
+        <h2 className="instruction">전시가 종료되었습니다.</h2>
+      </EndRoot>
+    </>
+  );
 
   if (!data && !error) return <Loading full />;
   if (error)

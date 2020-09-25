@@ -12,7 +12,7 @@ import Close from '@material-ui/icons/Close';
 import Profile from '../Profile';
 import Artwork from '../Artwork';
 
-import { detailHit } from '../../lib/utils';
+// import { detailHit } from '../../lib/utils';
 import useWindowSize from '../../lib/hooks/useWindowSize';
 
 import { BUCKET_URL } from '../../defines';
@@ -137,9 +137,9 @@ const MobileDetailModal: React.FC<Props> = ({ artist, ...props }) => {
     onSwipedDown: () => handleClose(),
   });
 
-  React.useEffect(() => {
-    detailHit(artist.id);
-  }, [artist.id]);
+  // React.useEffect(() => {
+  //   detailHit(artist.id);
+  // }, [artist.id]);
 
   // React.useEffect(() => {
   //   refContainer.current?.focus();

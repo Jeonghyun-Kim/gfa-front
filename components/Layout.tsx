@@ -9,8 +9,8 @@ import NavBar from './NavBar';
 import PlayBar from './PlayBar';
 import Loading from './Loading';
 
-import { logPageView } from '../lib/analytics';
-import { sendCounter } from '../lib/utils';
+// import { logPageView } from '../lib/analytics';
+// import { sendCounter } from '../lib/utils';
 import useWindowSize from '../lib/hooks/useWindowSize';
 
 import { PLAYBAR_HEIGHT, NAVBAR_WIDTH, NUM_ARTISTS } from '../defines';
@@ -107,12 +107,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     smoothscroll.polyfill();
   }, []);
 
-  React.useEffect(() => {
-    if (process.env.NODE_ENV === 'production') {
-      sendCounter();
-      logPageView();
-    }
-  }, [router.asPath]);
+  // React.useEffect(() => {
+  //   if (process.env.NODE_ENV === 'production') {
+  //     sendCounter();
+  //     logPageView();
+  //   }
+  // }, [router.asPath]);
 
   if (isEdge && !isEdgeChromium) {
     return (

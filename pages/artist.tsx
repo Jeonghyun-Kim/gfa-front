@@ -28,7 +28,7 @@ import ManualModal from '../components/Modal/ManualModal';
 import EdgeModal from '../components/Modal/EdgeModal';
 import InvitedModal from '../components/Modal/InvitedModal';
 
-import { artistHit } from '../lib/utils';
+// import { artistHit } from '../lib/utils';
 import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
 
@@ -509,7 +509,7 @@ const ArtistPage: React.FC<Props> = ({ artists }) => {
               beforeChange={(_, afterSlide) => {
                 if (afterSlide < NUM_ARTISTS) {
                   setLastModal(false);
-                  artistHit(afterSlide + 1);
+                  // artistHit(afterSlide + 1);
                   if (withLayout) {
                     sessionStorage.setItem('@artistId', `${afterSlide + 1}`);
                     setSlideChangedFlag(false);
