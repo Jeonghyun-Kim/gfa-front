@@ -9,7 +9,7 @@ import { browserName, isAndroid, getUA } from 'react-device-detect';
 import Layout from '../components/Layout';
 
 import fetcher from '../lib/fetcher';
-import { initGA } from '../lib/analytics';
+// import { initGA } from '../lib/analytics';
 
 import '../public/css/global.css';
 
@@ -21,9 +21,9 @@ const theme = {
 
 export default class MyApp extends App {
   componentDidMount(): void {
-    if (process.env.NODE_ENV === 'production') {
-      initGA();
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //   initGA();
+    // }
 
     if (/Web/.test(browserName)) {
       if (isAndroid)
