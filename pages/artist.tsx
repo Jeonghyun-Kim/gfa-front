@@ -29,13 +29,16 @@ import EdgeModal from '../components/Modal/EdgeModal';
 import InvitedModal from '../components/Modal/InvitedModal';
 
 // import { artistHit } from '../lib/utils';
-import fetcher from '../lib/fetcher';
+// import fetcher from '../lib/fetcher';
 import useMobileOrientation from '../lib/hooks/useWindowSize';
 
 // import { API_URL, BUCKET_URL, NUM_ARTISTS } from '../defines';
-import { API_URL, HEADER_HEIGHT, NUM_ARTISTS } from '../defines';
+// import { API_URL, HEADER_HEIGHT, NUM_ARTISTS } from '../defines';
+import { HEADER_HEIGHT, NUM_ARTISTS } from '../defines';
 
 import IndexContext from '../IndexContext';
+
+import artistsJson from '../artists.json';
 
 const ZoomInButton = styled(IconButton)`
   position: absolute !important;
@@ -665,7 +668,8 @@ export async function getStaticProps(): Promise<{
   };
 }> {
   try {
-    const { artists } = await fetcher(`${API_URL}/artist`);
+    // const { artists } = await fetcher(`${API_URL}/artist`);
+    const artists: Artist[] = artistsJson;
 
     return {
       props: {

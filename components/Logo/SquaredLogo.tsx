@@ -16,7 +16,7 @@ const Root = styled.div`
     cursor: pointer;
   }
 
-  button: {
+  button {
     padding: 0;
   }
 
