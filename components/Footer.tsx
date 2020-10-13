@@ -39,7 +39,7 @@ const Footer: React.FC = ({ ...props }) => {
   return (
     <Root {...props}>
       <div className="infoBlock">
-        <Logo />
+        <Logo href="https://home.ondisplay.co.kr/" />
         <p>
           <b>주식회사 온디스플레이</b>
         </p>

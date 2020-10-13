@@ -22,6 +22,10 @@ const Root = styled.div`
     width: 100%;
     border-top: 1px solid #4b4b4b;
   }
+
+  a {
+    margin: 25px 0;
+  }
 `;
 
 interface MenuProps {
@@ -77,11 +81,11 @@ const NavBar: React.FC = ({ ...props }) => {
       )}
       <div className="grow" />
       <div className="divider" />
-      <Link href={PAGE_ARRAY[4]}>
+      <a href="https://home.ondisplay.co.kr/" target="_blank" rel="noreferrer">
         <MenuItem current={router.pathname === PAGE_ARRAY[4]}>
           About onDisplay
         </MenuItem>
-      </Link>
+      </a>
     </Root>
   );
 };

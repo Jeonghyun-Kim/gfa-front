@@ -30,10 +30,24 @@ const Root = styled.div`
   }
 `;
 
-const OneLineLogo: React.FC = ({ ...props }) => {
+interface Props {
+  href?: string;
+}
+const OneLineLogo: React.FC<Props> = ({ href, ...props }) => {
+  if (href)
+    return (
+      <Root className="logo" {...props}>
+        <a href={href} target="_blank" rel="noreferrer">
+          <IconButton>
+            <SvgIcon component={Logo} viewBox="0 0 1175.09 255.33" />
+          </IconButton>
+        </a>
+      </Root>
+    );
+
   return (
     <Root className="logo" {...props}>
-      <Link href="/">
+      <Link href={href ?? '/'}>
         <IconButton>
           <SvgIcon component={Logo} viewBox="0 0 1175.09 255.33" />
         </IconButton>
