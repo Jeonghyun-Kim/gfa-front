@@ -18,6 +18,7 @@ const Root = styled.div`
 
   button {
     padding: 0;
+    border-radius: 0;
   }
 
   svg {
